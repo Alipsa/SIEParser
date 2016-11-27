@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2015 Johan Idstam
@@ -20,3 +21,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package alipsa.sieparser;
+
+
+public class SieInvalidFeatureException extends Exception {
+    public SieInvalidFeatureException(String description) throws Exception {
+        super(description);
+    }
+
+}
+
+

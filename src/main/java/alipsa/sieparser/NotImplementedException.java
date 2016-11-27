@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2015 Johan Idstam
@@ -20,3 +21,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package alipsa.sieparser;
+
+public class NotImplementedException extends Exception {
+    public NotImplementedException() {
+        super();
+    }
+
+    /**
+     * @param arg0
+     */
+    public NotImplementedException(String arg0) {
+        super(arg0);
+    }
+
+    /**
+     * @param arg0
+     */
+    public NotImplementedException(Throwable arg0) {
+        super(arg0);
+    }
+
+    /**
+     * @param arg0
+     * @param arg1
+     */
+    public NotImplementedException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
+}

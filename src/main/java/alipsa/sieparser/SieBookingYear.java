@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2015 Johan Idstam
@@ -20,3 +21,45 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package alipsa.sieparser;
+
+import java.util.Date;
+
+/**
+ * #RAR
+ */
+public class SieBookingYear {
+    private int id;
+    private Date start;
+    private Date end;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int value) {
+        id = value;
+    }
+
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date value) {
+        start = value;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date value) {
+        end = value;
+    }
+
+}
+
+

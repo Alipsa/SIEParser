@@ -1,0 +1,1696 @@
+#FLAGGA 0
+#PROGRAM "e-conomic" "1.0"
+#FORMAT PC8
+#GEN 20110915
+#SIETYP 4
+#ORGNR 121212-1212
+#FNAMN "LillakonsultbyrÜn"
+#RAR 0 20100101 20101231
+#RAR -1 20090101 20091231
+#ADRESS "Demofirman" "Kungsgatan 11" "890 11 Svavelholmen" "08-12345678"
+#KONTO 1010 "Balanserade utgifter"
+#KTYP 1010 T
+#SRU 1010 234
+#KONTO 1030 "Patent"
+#KTYP 1030 T
+#SRU 1030 234
+#KONTO 1039 "Ack avskrivn patent"
+#KTYP 1039 T
+#SRU 1039 234
+#KONTO 1060 "HyresrÑtt"
+#KTYP 1060 T
+#SRU 1060 234
+#KONTO 1069 "Ack avskrivn hyresrÑtt"
+#KTYP 1069 T
+#SRU 1069 234
+#KONTO 1070 "Goodwill"
+#KTYP 1070 T
+#SRU 1070 234
+#KONTO 1079 "Ack avskrivn goodwill"
+#KTYP 1079 T
+#SRU 1079 234
+#KONTO 1110 "Byggnader"
+#KTYP 1110 T
+#SRU 1110 237
+#KONTO 1118 "Ack nedskrivn byggnader"
+#KTYP 1118 T
+#SRU 1118 237
+#KONTO 1119 "Ack avskrivn byggnader"
+#KTYP 1119 T
+#SRU 1119 237
+#KONTO 1130 "Mark"
+#KTYP 1130 T
+#SRU 1130 235
+#KONTO 1140 "Tomter, markomr obebyggda"
+#KTYP 1140 T
+#SRU 1140 235
+#KONTO 1150 "MarkanlÑggningar"
+#KTYP 1150 T
+#SRU 1150 237
+#KONTO 1158 "Ack nedskrivn markanlÑggn"
+#KTYP 1158 T
+#SRU 1158 237
+#KONTO 1159 "Ack avskrivn markanlÑggn"
+#KTYP 1159 T
+#SRU 1159 237
+#KONTO 1210 "Maskiner och andra tekniska anlÑggningar"
+#KTYP 1210 T
+#SRU 1210 236
+#KONTO 1211 "Arbetsmaskiner"
+#KTYP 1211 T
+#SRU 1211 236
+#KONTO 1218 "Ack nerskrivn maskiner/tekn anl"
+#KTYP 1218 T
+#SRU 1218 236
+#KONTO 1219 "Ack avskrivn arb.maskiner"
+#KTYP 1219 T
+#SRU 1219 236
+#KONTO 1220 "Inventarier och verktyg"
+#KTYP 1220 T
+#SRU 1220 236
+#KONTO 1221 "Inventarier"
+#KTYP 1221 T
+#SRU 1221 236
+#KONTO 1222 "Byggnadsinventarier"
+#KTYP 1222 T
+#SRU 1222 236
+#KONTO 1223 "Markinventarier"
+#KTYP 1223 T
+#SRU 1223 236
+#KONTO 1225 "Verktyg"
+#KTYP 1225 T
+#SRU 1225 236
+#KONTO 1228 "Ack nedskrivn inv/verktyg"
+#KTYP 1228 T
+#SRU 1228 236
+#KONTO 1229 "Ack avskrivn inv/verktyg"
+#KTYP 1229 T
+#SRU 1229 236
+#KONTO 1240 "Bilar och andra transportmedel"
+#KTYP 1240 T
+#SRU 1240 236
+#KONTO 1241 "Personbilar"
+#KTYP 1241 T
+#SRU 1241 236
+#KONTO 1242 "Lastbilar"
+#KTYP 1242 T
+#SRU 1242 236
+#KONTO 1243 "Truckar"
+#KTYP 1243 T
+#SRU 1243 236
+#KONTO 1244 "Arbetsmaskiner"
+#KTYP 1244 T
+#SRU 1244 236
+#KONTO 1245 "Traktorer"
+#KTYP 1245 T
+#SRU 1245 236
+#KONTO 1246 "Motorcyklar, mopeder och skotrar"
+#KTYP 1246 T
+#SRU 1246 236
+#KONTO 1247 "BÜtar"
+#KTYP 1247 T
+#SRU 1247 236
+#KONTO 1248 "Flygplan och helikoptrar"
+#KTYP 1248 T
+#SRU 1248 236
+#KONTO 1249 "Ack avskr bilar/transportmedel"
+#KTYP 1249 T
+#SRU 1249 236
+#KONTO 1250 "Datorer"
+#KTYP 1250 T
+#SRU 1250 236
+#KONTO 1251 "Datorer, fîretaget"
+#KTYP 1251 T
+#SRU 1251 236
+#KONTO 1257 "Datorer, personal"
+#KTYP 1257 T
+#SRU 1257 236
+#KONTO 1258 "Ack nedskrivn datorer"
+#KTYP 1258 T
+#SRU 1258 236
+#KONTO 1259 "Ack avskrivn datorer"
+#KTYP 1259 T
+#SRU 1259 236
+#KONTO 1291 "Konst o ej avskrivn invent"
+#KTYP 1291 T
+#SRU 1291 235
+#KONTO 1298 "Ack nedskrivn îvr maskiner/inv"
+#KTYP 1298 T
+#SRU 1298 236
+#KONTO 1311 "Aktier sv dotterfîretag"
+#KTYP 1311 T
+#SRU 1311 230
+#KONTO 1312 "Aktier utl dotterfîretag"
+#KTYP 1312 T
+#SRU 1312 231
+#KONTO 1314 "Aktier/and îvr utl konc.ftg"
+#KTYP 1314 T
+#SRU 1314 231
+#KONTO 1318 "Ack nedskrivn andelar koncern"
+#KTYP 1318 T
+#SRU 1318 231
+#KONTO 1330 "Aktier, andra sv fîretag"
+#KTYP 1330 T
+#SRU 1330 230
+#KONTO 1338 "Ack nedskrivn andelar int.ftg"
+#KTYP 1338 T
+#SRU 1338 230
+#KONTO 1350 "Aktier, andra utl fîretag"
+#KTYP 1350 T
+#SRU 1350 233
+#KONTO 1354 "Obligationer, vÑrdepapper"
+#KTYP 1354 T
+#SRU 1354 233
+#KONTO 1358 "Ack nedskrivn andel/vÑrdepapper"
+#KTYP 1358 T
+#SRU 1358 233
+#KONTO 1360 "Finansiella instrument"
+#KTYP 1360 T
+#KONTO 1368 "Ack nedskrvn îvr finans instr"
+#KTYP 1368 T
+#SRU 1368 233
+#KONTO 1369 "VÑrdereg finans instrument"
+#KTYP 1369 T
+#KONTO 1370 "Uppskjuten skattefordran"
+#KTYP 1370 T
+#SRU 1370 233
+#KONTO 1380 "LÜngfristiga fordringar"
+#KTYP 1380 T
+#SRU 1380 233
+#KONTO 1382 "Fordringar hos anstÑllda"
+#KTYP 1382 T
+#SRU 1382 233
+#KONTO 1383 "Depositioner"
+#KTYP 1383 T
+#SRU 1383 233
+#KONTO 1390 "VÑrderegl lÜngfr fordr"
+#KTYP 1390 T
+#SRU 1390 233
+#KONTO 1400 "Lager"
+#KTYP 1400 T
+#SRU 1400 219
+#KONTO 1402 "Varor pÜ vÑg"
+#KTYP 1402 T
+#SRU 1402 219
+#KONTO 1440 "Produkter i arbete"
+#KTYP 1440 T
+#SRU 1440 219
+#KONTO 1470 "PÜgÜende arbete"
+#KTYP 1470 T
+#SRU 1470 219
+#KONTO 1478 "PÜgÜende arbete, fakturering"
+#KTYP 1478 T
+#SRU 1478 219
+#KONTO 1480 "Fîrskott till leverantîr"
+#KTYP 1480 T
+#SRU 1480 219
+#KONTO 1510 "Kundfordringar"
+#KTYP 1510 T
+#SRU 1510 204
+#KONTO 1512 "BelÜnade fordringar"
+#KTYP 1512 T
+#SRU 1512 204
+#KONTO 1515 "OsÑkra kundfordringar"
+#KTYP 1515 T
+#SRU 1515 204
+#KONTO 1517 "Kvittning av kundfaktura"
+#KTYP 1517 T
+#SRU 1517 204
+#KONTO 1580 "Kontokort och kuponger"
+#KTYP 1580 T
+#SRU 1580 204
+#KONTO 1610 "Fîrskott"
+#KTYP 1610 T
+#SRU 1610 220
+#KONTO 1611 "Resefîrskott"
+#KTYP 1611 T
+#SRU 1611 220
+#KONTO 1613 "ôvriga fîrskott"
+#KTYP 1613 T
+#SRU 1613 220
+#KONTO 1619 "ôvr fordringar hos anstÑllda"
+#KTYP 1619 T
+#SRU 1619 220
+#KONTO 1630 "AvrÑkn skatter och avgifter"
+#KTYP 1630 T
+#SRU 1630 220
+#KONTO 1640 "Skattefordringar"
+#KTYP 1640 T
+#SRU 1640 206
+#KONTO 1650 "Fordran moms"
+#KTYP 1650 T
+#SRU 1650 207
+#KONTO 1680 "ôvr kortfristiga fordr"
+#KTYP 1680 T
+#SRU 1680 220
+#KONTO 1684 "Fordring hos leverantîr"
+#KTYP 1684 T
+#SRU 1684 220
+#KONTO 1685 "Fordring hos nÑrstÜende"
+#KTYP 1685 T
+#SRU 1685 220
+#KONTO 1710 "Fîrutbetalda hyror"
+#KTYP 1710 T
+#SRU 1710 205
+#KONTO 1740 "Fîrutbet rÑnteutgifter"
+#KTYP 1740 T
+#SRU 1740 205
+#KONTO 1750 "Upplupna hyresinkomster"
+#KTYP 1750 T
+#SRU 1750 205
+#KONTO 1760 "Upplupna inkomstrÑntor"
+#KTYP 1760 T
+#SRU 1760 205
+#KONTO 1790 "ôvr interimsfordringar"
+#KTYP 1790 T
+#SRU 1790 205
+#KONTO 1820 "Obligationer, vÑrdepapper"
+#KTYP 1820 T
+#SRU 1820 203
+#KONTO 1860 "Finansiella instrument"
+#KTYP 1860 T
+#SRU 1860 203
+#KONTO 1869 "VÑrderegl finans instr"
+#KTYP 1869 T
+#SRU 1869 203
+#KONTO 1910 "Kassa"
+#KTYP 1910 T
+#SRU 1910 200
+#KONTO 1920 "PlusGiro"
+#KTYP 1920 T
+#SRU 1920 200
+#KONTO 1930 "CheckrÑkningskonto"
+#KTYP 1930 T
+#SRU 1930 200
+#KONTO 1940 "ôvriga bankkonto"
+#KTYP 1940 T
+#SRU 1940 200
+#KONTO 1980 "Valutakonton"
+#KTYP 1980 T
+#SRU 1980 200
+#KONTO 2081 "Aktiekapital"
+#KTYP 2081 T
+#SRU 2081 350
+#KONTO 2086 "Reservfond"
+#KTYP 2086 T
+#SRU 2086 351
+#KONTO 2091 "Balanserad vinst/fîrlust"
+#KTYP 2091 T
+#SRU 2091 354
+#KONTO 2094 "Egna aktier"
+#KTYP 2094 T
+#SRU 2094 354
+#KONTO 2098 "Vinst/fîrlust fîreg Ür"
+#KTYP 2098 T
+#SRU 2098 354
+#KONTO 2099 "Redovisat resultat"
+#KTYP 2099 T
+#SRU 2099 354
+#KONTO 2150 "Ack îveravskrivningar"
+#KTYP 2150 T
+#SRU 2150 330
+#KONTO 2151 "Ack îveravskr imm anl.tillg"
+#KTYP 2151 T
+#SRU 2151 330
+#KONTO 2152 "Ack îveravskr pÜ byggn/markanl"
+#KTYP 2152 T
+#SRU 2152 330
+#KONTO 2153 "Ack îveravskr maskiner/inv"
+#KTYP 2153 T
+#SRU 2153 330
+#KONTO 2190 "ôvr obeskattade reserver"
+#KTYP 2190 T
+#SRU 2190 339
+#KONTO 2195 "Valutakursreserv"
+#KTYP 2195 T
+#SRU 2195 337
+#KONTO 2196 "Lagerreserv"
+#KTYP 2196 T
+#SRU 2196 339
+#KONTO 2210 "Avsatt till pensioner"
+#KTYP 2210 T
+#SRU 2210 320
+#KONTO 2211 "AvsÑttningar fîr PRI-pensioner"
+#KTYP 2211 T
+#SRU 2211 320
+#KONTO 2219 "AvsÑttningar fîr îvr pensioner"
+#KTYP 2219 T
+#SRU 2219 320
+#KONTO 2220 "Garantiskulder"
+#KTYP 2220 T
+#SRU 2220 304
+#KONTO 2330 "CheckrÑkningskredit"
+#KTYP 2330 T
+#SRU 2330 329
+#KONTO 2350 "ReverslÜn"
+#KTYP 2350 T
+#SRU 2350 329
+#KONTO 2355 "LÜn i utlÑndsk valuta"
+#KTYP 2355 T
+#SRU 2355 329
+#KONTO 2393 "LÜn frÜn aktieÑgare"
+#KTYP 2393 T
+#SRU 2393 321
+#KONTO 2395 "Andra lÜn i utl valuta"
+#KTYP 2395 T
+#SRU 2395 329
+#KONTO 2399 "ôvr lÜngfristiga skulder"
+#KTYP 2399 T
+#SRU 2399 329
+#KONTO 2420 "Fîrskott frÜn kunder"
+#KTYP 2420 T
+#SRU 2420 310
+#KONTO 2440 "Leverantîrsskulder"
+#KTYP 2440 T
+#SRU 2440 300
+#KONTO 2449 "Kvittning av leverantîrsfakturor"
+#KTYP 2449 T
+#SRU 2449 300
+#KONTO 2499 "Andra îvr kortfrist skulder"
+#KTYP 2499 T
+#SRU 2499 300
+#KONTO 2510 "Skatteskulder"
+#KTYP 2510 T
+#SRU 2510 301
+#KONTO 2611 "Utg moms fîrsÑljning 25% sv"
+#KTYP 2611 T
+#SRU 2611 307
+#KONTO 2612 "Utg moms egna uttag 25%"
+#KTYP 2612 T
+#SRU 2612 307
+#KONTO 2613 "Utg moms uthyrning ored"
+#KTYP 2613 T
+#SRU 2613 307
+#KONTO 2614 "Ber moms tjfîrv 25% utl"
+#KTYP 2614 T
+#SRU 2614 307
+#KONTO 2615 "Ber moms varufîrv 25% EU"
+#KTYP 2615 T
+#SRU 2615 307
+#KONTO 2621 "Utg moms fîrsÑljning 12% Sv"
+#KTYP 2621 T
+#SRU 2621 307
+#KONTO 2622 "Utg moms egna uttag 12%"
+#KTYP 2622 T
+#SRU 2622 307
+#KONTO 2624 "Ber moms tjfîrv 12% utl"
+#KTYP 2624 T
+#SRU 2624 307
+#KONTO 2631 "Utg moms fîrsÑljning 6% Sv"
+#KTYP 2631 T
+#SRU 2631 307
+#KONTO 2632 "Utg moms egna uttag 6%"
+#KTYP 2632 T
+#SRU 2632 307
+#KONTO 2634 "Ber moms tjfîrv 6% utl"
+#KTYP 2634 T
+#SRU 2634 307
+#KONTO 2641 "IngÜende moms"
+#KTYP 2641 T
+#SRU 2641 307
+#KONTO 2645 "IngÜende moms utland"
+#KTYP 2645 T
+#SRU 2645 307
+#KONTO 2646 "Ing moms uthyrning"
+#KTYP 2646 T
+#SRU 2646 307
+#KONTO 2650 "Moms redovisningskonto"
+#KTYP 2650 T
+#SRU 2650 307
+#KONTO 2660 "SÑrskilda punktskatter"
+#KTYP 2660 T
+#SRU 2660 301
+#KONTO 2710 "Personalens kÑllskatt"
+#KTYP 2710 T
+#SRU 2710 301
+#KONTO 2731 "AvrÑkn sociala avgifter"
+#KTYP 2731 T
+#SRU 2731 301
+#KONTO 2732 "AvrÑkn sÑrsk lînesk pens"
+#KTYP 2732 T
+#SRU 2732 301
+#KONTO 2750 "UtmÑtning i lîn mm"
+#KTYP 2750 T
+#SRU 2750 319
+#KONTO 2790 "ôvriga lîneavdrag"
+#KTYP 2790 T
+#SRU 2790 319
+#KONTO 2792 "Lînsparande"
+#KTYP 2792 T
+#SRU 2792 319
+#KONTO 2793 "KollektivfîrsÑkring mm"
+#KTYP 2793 T
+#SRU 2793 319
+#KONTO 2794 "Fackfîreningsavgifter"
+#KTYP 2794 T
+#SRU 2794 319
+#KONTO 2795 "Granskningsavgifter"
+#KTYP 2795 T
+#SRU 2795 319
+#KONTO 2840 "LÜneskulder"
+#KTYP 2840 T
+#SRU 2840 319
+#KONTO 2850 "AvrÑkn skatter/avgifter"
+#KTYP 2850 T
+#SRU 2850 319
+#KONTO 2890 "ôvr kortfr skulder"
+#KTYP 2890 T
+#SRU 2890 319
+#KONTO 2893 "Skulder nÑrstÜende personer"
+#KTYP 2893 T
+#SRU 2893 321
+#KONTO 2910 "Upplupna lîner"
+#KTYP 2910 T
+#SRU 2910 305
+#KONTO 2920 "Upplupna semlîner"
+#KTYP 2920 T
+#SRU 2920 305
+#KONTO 2921 "Upplupna soc.avg sem.lîn"
+#KTYP 2921 T
+#SRU 2921 305
+#KONTO 2941 "Upplupna sociala avgifter"
+#KTYP 2941 T
+#SRU 2941 305
+#KONTO 2950 "Upplupna avtalade soc avg"
+#KTYP 2950 T
+#SRU 2950 305
+#KONTO 2960 "Upplupna utgiftsrÑntor"
+#KTYP 2960 T
+#SRU 2960 305
+#KONTO 2970 "Fîrutbetalda hyresinkomster"
+#KTYP 2970 T
+#SRU 2970 305
+#KONTO 2990 "ôvr interimsskulder"
+#KTYP 2990 T
+#SRU 2990 305
+#KONTO 2995 "Skuld inkomna fîljesedlar"
+#KTYP 2995 T
+#SRU 2995 305
+#KONTO 3020 "FîrsÑljning VMB varor"
+#KTYP 3020 I
+#SRU 3020 400
+#KONTO 3028 "Positiv VM omfîringskonto"
+#KTYP 3028 I
+#SRU 3028 400
+#KONTO 3030 "Positiv VM"
+#KTYP 3030 I
+#SRU 3030 400
+#KONTO 3041 "KonsultfîrsÑljning"
+#KTYP 3041 K
+#SRU 3041 400
+#KONTO 3042 "LicensfîrsÑljning"
+#KTYP 3042 K
+#SRU 3042 400
+#KONTO 3043 "FîrsÑljn tjÑnst 6% sv"
+#KTYP 3043 K
+#SRU 3043 400
+#KONTO 3044 "FîrsÑljn tjÑnst sv momsfri"
+#KTYP 3044 K
+#SRU 3044 400
+#KONTO 3045 "FîrsÑlj tjÑnst utanfîr EU"
+#KTYP 3045 K
+#SRU 3045 400
+#KONTO 3046 "FîrsÑljn tjÑnst till EU"
+#KTYP 3046 K
+#SRU 3046 400
+#KONTO 3048 "FîrsÑljn tjÑnst EU momsfri"
+#KTYP 3048 K
+#SRU 3048 400
+#KONTO 3050 "ôver-, undertÑckning konsultfîrsÑljning"
+#KTYP 3050 K
+#SRU 3050 400
+#KONTO 3051 "FîrsÑljn varor 25% sv"
+#KTYP 3051 K
+#SRU 3051 400
+#KONTO 3052 "FîrsÑljn varor 12% sv"
+#KTYP 3052 K
+#SRU 3052 400
+#KONTO 3053 "FîrsÑljn varor 6% sv"
+#KTYP 3053 K
+#SRU 3053 400
+#KONTO 3054 "FîrsÑljn varor sv momsfri"
+#KTYP 3054 K
+#SRU 3054 400
+#KONTO 3055 "FîrsÑljn varor utanfîr EU"
+#KTYP 3055 K
+#SRU 3055 400
+#KONTO 3056 "FîrsÑljn varor till EU"
+#KTYP 3056 K
+#SRU 3056 400
+#KONTO 3058 "FîrsÑljn varor EU momsfri"
+#KTYP 3058 K
+#SRU 3058 400
+#KONTO 3059 "Momspl uttag av fast.tj"
+#KTYP 3059 K
+#SRU 3059 400
+#KONTO 3062 "Fîrs varor nÑrst fîretag"
+#KTYP 3062 K
+#SRU 3062 400
+#KONTO 3100 "HyresintÑkt skattepl"
+#KTYP 3100 K
+#SRU 3100 400
+#KONTO 3510 "Emballage"
+#KTYP 3510 K
+#SRU 3510 400
+#KONTO 3520 "Frakter"
+#KTYP 3520 K
+#SRU 3520 400
+#KONTO 3521 "Frakter export"
+#KTYP 3521 K
+#SRU 3521 400
+#KONTO 3522 "Frakter EU"
+#KTYP 3522 K
+#SRU 3522 400
+#KONTO 3530 "Fakt tull och spedition"
+#KTYP 3530 K
+#SRU 3530 400
+#KONTO 3540 "Faktureringsavgifter"
+#KTYP 3540 K
+#SRU 3540 400
+#KONTO 3541 "Faktureringsavgifter export"
+#KTYP 3541 K
+#SRU 3541 400
+#KONTO 3542 "Faktureringsavgifter EU"
+#KTYP 3542 K
+#SRU 3542 400
+#KONTO 3550 "Vidarefakturerade reskostnader"
+#KTYP 3550 K
+#SRU 3550 400
+#KONTO 3561 "Fakt kostn moderftg"
+#KTYP 3561 K
+#SRU 3561 400
+#KONTO 3562 "Fakt kostn dotterftg"
+#KTYP 3562 K
+#SRU 3562 400
+#KONTO 3563 "Fakt kostn andra koncernftg"
+#KTYP 3563 K
+#SRU 3563 400
+#KONTO 3590 "ôvr fakt kostnader"
+#KTYP 3590 K
+#SRU 3590 400
+#KONTO 3610 "FîrsÑljning material"
+#KTYP 3610 K
+#SRU 3610 400
+#KONTO 3670 "IntÑkt vÑrdepapper"
+#KTYP 3670 K
+#SRU 3670 400
+#KONTO 3671 "FîrsÑljning vÑrdepapper"
+#KTYP 3671 K
+#SRU 3671 400
+#KONTO 3672 "Utdeln vÑrdepapper"
+#KTYP 3672 K
+#SRU 3672 400
+#KONTO 3679 "ôvr intÑkter vÑrdepapper"
+#KTYP 3679 K
+#SRU 3679 400
+#KONTO 3690 "ôvriga sidointÑker"
+#KTYP 3690 K
+#SRU 3690 400
+#KONTO 3731 "Kassarabatter"
+#KTYP 3731 K
+#SRU 3731 400
+#KONTO 3736 "Kassarabatter export"
+#KTYP 3736 K
+#SRU 3736 400
+#KONTO 3737 "Kassarabatter EU"
+#KTYP 3737 K
+#SRU 3737 400
+#KONTO 3740 "ôresutjÑmning"
+#KTYP 3740 K
+#SRU 3740 400
+#KONTO 3840 "Aktiverat arbete (material)"
+#KTYP 3840 K
+#SRU 3840 402
+#KONTO 3850 "Aktiverat arbete (omkostnader)"
+#KTYP 3850 K
+#SRU 3850 402
+#KONTO 3870 "Aktiverat arbete (lîner)"
+#KTYP 3870 K
+#SRU 3870 402
+#KONTO 3911 "HyresintÑkter"
+#KTYP 3911 K
+#SRU 3911 401
+#KONTO 3921 "ProvisionsintÑkter"
+#KTYP 3921 K
+#SRU 3921 401
+#KONTO 3950 "ètervunna kundfîrluster"
+#KTYP 3950 K
+#SRU 3950 401
+#KONTO 3960 "Kursvinst rîrelsen"
+#KTYP 3960 K
+#SRU 3960 401
+#KONTO 3970 "Vinst avyttr imm/mat anl.tillg"
+#KTYP 3970 K
+#SRU 3970 552
+#KONTO 3972 "Vinst avyttr fastigheter"
+#KTYP 3972 K
+#SRU 3972 552
+#KONTO 3973 "Vinst avyttr maskiner/inv"
+#KTYP 3973 K
+#SRU 3973 552
+#KONTO 3985 "ErhÜllna statliga bidrag"
+#KTYP 3985 K
+#SRU 3985 401
+#KONTO 3987 "ErhÜllna kommunala bidrag"
+#KTYP 3987 K
+#SRU 3987 401
+#KONTO 3989 "ôvriga erhÜllna bidrag"
+#KTYP 3989 K
+#SRU 3989 401
+#KONTO 3990 "ôvr ersÑttn och intÑker"
+#KTYP 3990 K
+#SRU 3990 401
+#KONTO 3994 "FîrsÑkringsersÑttningar"
+#KTYP 3994 K
+#SRU 3994 401
+#KONTO 3999 "PÜminnelseavgift"
+#KTYP 3999 K
+#SRU 3999 401
+#KONTO 4010 "Inkîp materiel och varor"
+#KTYP 4010 I
+#SRU 4010 500
+#KONTO 4020 "Inkîp VMB varor"
+#KTYP 4020 I
+#SRU 4020 500
+#KONTO 4028 "Negativ VM omfîringskonto"
+#KTYP 4028 I
+#SRU 4028 500
+#KONTO 4030 "Negativ VM"
+#KTYP 4030 I
+#SRU 4030 500
+#KONTO 4055 "Trepartsfîrv varor fr EU"
+#KTYP 4055 I
+#SRU 4055 500
+#KONTO 4056 "Inkîp varor 25% EU"
+#KTYP 4056 I
+#SRU 4056 500
+#KONTO 4057 "Inkîp varor 12% EU"
+#KTYP 4057 I
+#SRU 4057 500
+#KONTO 4058 "Inkîp varor EU momsfri"
+#KTYP 4058 I
+#SRU 4058 500
+#KONTO 4100 "Kostn uthyrn lokal sk.pl"
+#KTYP 4100 I
+#SRU 4100 500
+#KONTO 4500 "Projektomkostnader"
+#KTYP 4500 I
+#SRU 4500 501
+#KONTO 4600 "Legoarbeten, underentrepr"
+#KTYP 4600 I
+#SRU 4600 501
+#KONTO 4731 "ErhÜllna kassarabatter"
+#KTYP 4731 I
+#SRU 4731 500
+#KONTO 4733 "ErhÜllet aktivitetsstîd"
+#KTYP 4733 I
+#SRU 4733 500
+#KONTO 4940 "FîrÑndr produkter i arbete"
+#KTYP 4940 I
+#SRU 4940 509
+#KONTO 4950 "FîrÑndr lager fÑrdigvaror"
+#KTYP 4950 I
+#SRU 4950 509
+#KONTO 4970 "FîrÑndr pÜg arbete"
+#KTYP 4970 I
+#SRU 4970 509
+#KONTO 4980 "FîrÑndr VÑrdepapper"
+#KTYP 4980 I
+#SRU 4980 509
+#KONTO 4981 "SÜlda VÑrdepappers ansk.kostn"
+#KTYP 4981 I
+#SRU 4981 509
+#KONTO 4987 "Nedskrivn VÑrdepapper"
+#KTYP 4987 I
+#SRU 4987 509
+#KONTO 4990 "LagerfîrÑndring"
+#KTYP 4990 I
+#SRU 4990 509
+#KONTO 5010 "Lokalhyra"
+#KTYP 5010 I
+#SRU 5010 528
+#KONTO 5020 "El hyrd lokal"
+#KTYP 5020 I
+#SRU 5020 528
+#KONTO 5030 "VÑrme hyrd lokal"
+#KTYP 5030 I
+#SRU 5030 528
+#KONTO 5050 "Lokaltillbehîr hyrd lokal"
+#KTYP 5050 I
+#SRU 5050 528
+#KONTO 5060 "StÑdning, renhÜllning hyrd lokal"
+#KTYP 5060 I
+#SRU 5060 528
+#KONTO 5070 "Reparationer hyrd lokal"
+#KTYP 5070 I
+#SRU 5070 528
+#KONTO 5090 "ôvr kostnader hyrd lokal"
+#KTYP 5090 I
+#SRU 5090 528
+#KONTO 5120 "Belysning"
+#KTYP 5120 I
+#SRU 5120 528
+#KONTO 5130 "VÑrme"
+#KTYP 5130 I
+#SRU 5130 528
+#KONTO 5132 "Sotning"
+#KTYP 5132 I
+#SRU 5132 528
+#KONTO 5140 "Vatten och avlopp"
+#KTYP 5140 I
+#SRU 5140 528
+#KONTO 5160 "RenhÜlln och stÑdning"
+#KTYP 5160 I
+#SRU 5160 528
+#KONTO 5170 "Rep och underhÜll fastighet"
+#KTYP 5170 I
+#SRU 5170 526
+#KONTO 5191 "Fastighetsskatt"
+#KTYP 5191 I
+#SRU 5191 528
+#KONTO 5192 "FîrsÑkringsprem fastighet"
+#KTYP 5192 I
+#SRU 5192 528
+#KONTO 5193 "Fastighetsskîtsel och fîrvaltn"
+#KTYP 5193 I
+#SRU 5193 528
+#KONTO 5199 "ôvr fastighetskostnader"
+#KTYP 5199 I
+#SRU 5199 528
+#KONTO 5210 "Hyra arbetsmaskiner"
+#KTYP 5210 I
+#SRU 5210 529
+#KONTO 5220 "Hyra inventarier"
+#KTYP 5220 I
+#SRU 5220 529
+#KONTO 5290 "ôvr hyreskostn anl tillg"
+#KTYP 5290 I
+#SRU 5290 529
+#KONTO 5310 "El fîr drift"
+#KTYP 5310 I
+#SRU 5310 530
+#KONTO 5380 "Vatten"
+#KTYP 5380 I
+#SRU 5380 530
+#KONTO 5390 "ôvriga brÑnslen"
+#KTYP 5390 I
+#SRU 5390 530
+#KONTO 5410 "Fîrbrukningsinventarier"
+#KTYP 5410 I
+#SRU 5410 531
+#KONTO 5460 "Fîrbrukningsmaterial"
+#KTYP 5460 I
+#SRU 5460 531
+#KONTO 5480 "ArbetsklÑder o skyddsmtrl"
+#KTYP 5480 I
+#SRU 5480 531
+#KONTO 5500 "Reparation och underhÜll"
+#KTYP 5500 I
+#SRU 5500 530
+#KONTO 5611 "Drivmedel personbilar"
+#KTYP 5611 I
+#SRU 5611 536
+#KONTO 5612 "Skatt fîrsÑkr personbilar"
+#KTYP 5612 I
+#SRU 5612 536
+#KONTO 5613 "Reparation personbilar"
+#KTYP 5613 I
+#SRU 5613 536
+#KONTO 5615 "Leasingavg personbilar"
+#KTYP 5615 I
+#SRU 5615 536
+#KONTO 5690 "ôvr transportmedel"
+#KTYP 5690 I
+#SRU 5690 538
+#KONTO 5710 "Frakt och transport"
+#KTYP 5710 I
+#SRU 5710 538
+#KONTO 5720 "Tull- och speditionskost"
+#KTYP 5720 I
+#SRU 5720 538
+#KONTO 5800 "Resekostnader"
+#KTYP 5800 I
+#SRU 5800 538
+#KONTO 5810 "Konsultresekostnader"
+#KTYP 5810 I
+#SRU 5810 538
+#KONTO 5910 "Annonsering"
+#KTYP 5910 I
+#SRU 5910 541
+#KONTO 5930 "Reklamtrycksaker"
+#KTYP 5930 I
+#SRU 5930 541
+#KONTO 5940 "UtstÑllning och mÑssor"
+#KTYP 5940 I
+#SRU 5940 541
+#KONTO 5990 "ôvrig reklam"
+#KTYP 5990 I
+#SRU 5990 541
+#KONTO 6010 "Kataloger och prislistor"
+#KTYP 6010 I
+#SRU 6010 530
+#KONTO 6040 "Kontokortsavgifter"
+#KTYP 6040 I
+#SRU 6040 530
+#KONTO 6050 "FîrsÑljningsprovision"
+#KTYP 6050 I
+#SRU 6050 530
+#KONTO 6060 "KreditfîrsÑljningskostnad"
+#KTYP 6060 I
+#SRU 6060 530
+#KONTO 6063 "KreditfîrsÑkringspremier"
+#KTYP 6063 I
+#SRU 6063 530
+#KONTO 6064 "Factoringavgifter"
+#KTYP 6064 I
+#SRU 6064 530
+#KONTO 6069 "ôvr kreditfîrsÑljnkostnader"
+#KTYP 6069 I
+#SRU 6069 530
+#KONTO 6071 "Repr avdr.gill"
+#KTYP 6071 I
+#SRU 6071 530
+#KONTO 6072 "Repr ej avdr.gill"
+#KTYP 6072 I
+#SRU 6072 530
+#KONTO 6080 "Bankgarantier"
+#KTYP 6080 I
+#SRU 6080 530
+#KONTO 6090 "ôvr fîrsÑljningskostnader"
+#KTYP 6090 I
+#SRU 6090 530
+#KONTO 6110 "Kontorsmaterial"
+#KTYP 6110 I
+#SRU 6110 530
+#KONTO 6150 "Trycksaker"
+#KTYP 6150 I
+#SRU 6150 530
+#KONTO 6211 "Telefon"
+#KTYP 6211 I
+#SRU 6211 530
+#KONTO 6212 "Mobiltelefon"
+#KTYP 6212 I
+#SRU 6212 530
+#KONTO 6213 "Mobilsîkning"
+#KTYP 6213 I
+#SRU 6213 530
+#KONTO 6214 "Fax"
+#KTYP 6214 I
+#SRU 6214 530
+#KONTO 6250 "Porto"
+#KTYP 6250 I
+#SRU 6250 530
+#KONTO 6310 "FîretagsfîrsÑkringar"
+#KTYP 6310 I
+#SRU 6310 530
+#KONTO 6320 "SjÑlvrisker"
+#KTYP 6320 I
+#SRU 6320 530
+#KONTO 6350 "Kundfîrluster"
+#KTYP 6350 I
+#SRU 6350 530
+#KONTO 6390 "ôvriga riskkostnader"
+#KTYP 6390 I
+#SRU 6390 530
+#KONTO 6410 "Styrelsearvode"
+#KTYP 6410 I
+#SRU 6410 530
+#KONTO 6420 "Revisionsarvode"
+#KTYP 6420 I
+#SRU 6420 530
+#KONTO 6430 "Management fees"
+#KTYP 6430 I
+#SRU 6430 530
+#KONTO 6440 "èrsredovisn, delÜrsrapporter"
+#KTYP 6440 I
+#SRU 6440 530
+#KONTO 6450 "BolagsstÑmma"
+#KTYP 6450 I
+#SRU 6450 530
+#KONTO 6490 "ôvr fîrvaltningskostnader"
+#KTYP 6490 I
+#SRU 6490 530
+#KONTO 6530 "RedovisningstjÑnster"
+#KTYP 6530 I
+#SRU 6530 530
+#KONTO 6540 "IT-tjÑnster"
+#KTYP 6540 I
+#SRU 6540 530
+#KONTO 6550 "Konsultarvoden"
+#KTYP 6550 I
+#SRU 6550 530
+#KONTO 6570 "Bankkostnader"
+#KTYP 6570 I
+#SRU 6570 530
+#KONTO 6580 "Advokatkostnader"
+#KTYP 6580 I
+#SRU 6580 530
+#KONTO 6590 "ôvr frÑmmande tjÑnster"
+#KTYP 6590 I
+#SRU 6590 530
+#KONTO 6800 "Inhyrd personal"
+#KTYP 6800 I
+#SRU 6800 530
+#KONTO 6970 "Tidningar, facklitteratur"
+#KTYP 6970 I
+#SRU 6970 530
+#KONTO 6981 "Fîreningsavg avdr gill"
+#KTYP 6981 I
+#SRU 6981 530
+#KONTO 6982 "Fîreningsavg ej avdr gill"
+#KTYP 6982 I
+#SRU 6982 530
+#KONTO 6991 "ôvr avdr gill kostn"
+#KTYP 6991 I
+#SRU 6991 530
+#KONTO 6992 "ôvr ej avdr gill kostn"
+#KTYP 6992 I
+#SRU 6992 530
+#KONTO 6993 "LÑmnade bidrag och gÜvor"
+#KTYP 6993 I
+#SRU 6993 530
+#KONTO 7010 "Lîn kollektivanstÑllda"
+#KTYP 7010 I
+#SRU 7010 512
+#KONTO 7013 "Lîn kollektivanst utland"
+#KTYP 7013 I
+#SRU 7013 512
+#KONTO 7081 "Sjuklîn kollektivanstÑllda"
+#KTYP 7081 I
+#SRU 7081 512
+#KONTO 7082 "Semesterlîn"
+#KTYP 7082 I
+#SRU 7082 512
+#KONTO 7083 "FîrÑldraers kollektivanstÑllda"
+#KTYP 7083 I
+#SRU 7083 512
+#KONTO 7089 "ôvr lîner kollektivanst ej arb tid"
+#KTYP 7089 I
+#SRU 7089 512
+#KONTO 7090 "FîrÑndr sem lîneskuld"
+#KTYP 7090 I
+#SRU 7090 512
+#KONTO 7210 "Lîn tjÑnstemÑn"
+#KTYP 7210 I
+#SRU 7210 512
+#KONTO 7211 "Lîn Extra sÑljare"
+#KTYP 7211 I
+#SRU 7211 512
+#KONTO 7213 "Lîn tjÑnsteman, utland"
+#KTYP 7213 I
+#SRU 7213 512
+#KONTO 7220 "Lîn fîretagsledare"
+#KTYP 7220 I
+#SRU 7220 512
+#KONTO 7223 "Lîn fîretagsledare, utland"
+#KTYP 7223 I
+#SRU 7223 512
+#KONTO 7225 "Lîn fîretagsledare, lîneskatt"
+#KTYP 7225 I
+#SRU 7225 512
+#KONTO 7281 "Sjuklîn tjÑnstemÑn"
+#KTYP 7281 I
+#SRU 7281 512
+#KONTO 7282 "Sjuklîner till ftgledare"
+#KTYP 7282 I
+#SRU 7282 512
+#KONTO 7283 "FîrÑldraers tjÑnstemÑn"
+#KTYP 7283 I
+#SRU 7283 512
+#KONTO 7284 "FîrÑldraers ftgledare"
+#KTYP 7284 I
+#SRU 7284 512
+#KONTO 7285 "Semesterlîn tjÑnstemÑn"
+#KTYP 7285 I
+#SRU 7285 512
+#KONTO 7286 "Semesterlîn ftgledare"
+#KTYP 7286 I
+#SRU 7286 512
+#KONTO 7288 "ôvr lîner tjÑnstemÑn ej arb tid"
+#KTYP 7288 I
+#SRU 7288 512
+#KONTO 7289 "ôvr lîner ftgledare ej arb tid"
+#KTYP 7289 I
+#SRU 7289 512
+#KONTO 7290 "FîrÑndr sem lîneskuld"
+#KTYP 7290 I
+#SRU 7290 512
+#KONTO 7310 "Kontanta extra ersÑttn"
+#KTYP 7310 I
+#SRU 7310 514
+#KONTO 7321 "Skattefria trakt Sverige"
+#KTYP 7321 I
+#SRU 7321 514
+#KONTO 7322 "Skattepl trakt Sverige"
+#KTYP 7322 I
+#SRU 7322 514
+#KONTO 7323 "Skattefria trakt utland"
+#KTYP 7323 I
+#SRU 7323 514
+#KONTO 7324 "Skattepl trakt utland"
+#KTYP 7324 I
+#SRU 7324 514
+#KONTO 7331 "Skattefri bilersÑttning"
+#KTYP 7331 I
+#SRU 7331 514
+#KONTO 7332 "Skattepl bilersÑttning"
+#KTYP 7332 I
+#SRU 7332 514
+#KONTO 7381 "Kostn fîr fri bostad"
+#KTYP 7381 I
+#SRU 7381 514
+#KONTO 7382 "Kostn fria/subv mÜltider"
+#KTYP 7382 I
+#SRU 7382 514
+#KONTO 7385 "Kostn fîr fri bil"
+#KTYP 7385 I
+#SRU 7385 514
+#KONTO 7389 "ôvriga kostn naturafîrm"
+#KTYP 7389 I
+#SRU 7389 514
+#KONTO 7390 "ôvr kostnadsersÑttningar"
+#KTYP 7390 I
+#SRU 7390 514
+#KONTO 7399 "Motkontering av fîrmÜn"
+#KTYP 7399 I
+#SRU 7399 514
+#KONTO 7411 "Kollektiv pensionsfîrsÑkr"
+#KTYP 7411 I
+#SRU 7411 524
+#KONTO 7412 "Indiv pensionsfîrsÑkring"
+#KTYP 7412 I
+#SRU 7412 524
+#KONTO 7490 "ôvriga pensionskostnader"
+#KTYP 7490 I
+#SRU 7490 524
+#KONTO 7510 "Arbetsgivaravgifter"
+#KTYP 7510 I
+#SRU 7510 520
+#KONTO 7519 "Soc.avgifter semesterlîn"
+#KTYP 7519 I
+#SRU 7519 520
+#KONTO 7531 "Lîneskatt"
+#KTYP 7531 I
+#SRU 7531 520
+#KONTO 7533 "SÑrsk lîneskatt pensionsk"
+#KTYP 7533 I
+#SRU 7533 520
+#KONTO 7570 "AMF enl avtal"
+#KTYP 7570 I
+#SRU 7570 511
+#KONTO 7583 "GruppolycksfallsfîrsÑkringspremier"
+#KTYP 7583 I
+#SRU 7583 520
+#KONTO 7589 "ôvr gruppfîrsÑkringspremier"
+#KTYP 7589 I
+#SRU 7589 520
+#KONTO 7610 "Utbildning"
+#KTYP 7610 I
+#SRU 7610 527
+#KONTO 7620 "Sjuk- och hÑlsovÜrd"
+#KTYP 7620 I
+#SRU 7620 527
+#KONTO 7650 "SjuklînefîrsÑkring"
+#KTYP 7650 I
+#SRU 7650 527
+#KONTO 7690 "ôvr personalkostnader"
+#KTYP 7690 I
+#SRU 7690 527
+#KONTO 7699 "ôvriga Personalkostnader"
+#KTYP 7699 I
+#KONTO 7813 "Avskrivningar patent"
+#KTYP 7813 I
+#SRU 7813 561
+#KONTO 7816 "Avskrivningar hyresrÑtt"
+#KTYP 7816 I
+#SRU 7816 561
+#KONTO 7817 "Avskrivningar goodwill"
+#KTYP 7817 I
+#SRU 7817 561
+#KONTO 7821 "Avskrivn byggnader"
+#KTYP 7821 I
+#SRU 7821 560
+#KONTO 7822 "Avskrivn byggnadsinv"
+#KTYP 7822 I
+#SRU 7822 560
+#KONTO 7824 "Avskrivn markanlÑggn"
+#KTYP 7824 I
+#SRU 7824 560
+#KONTO 7831 "Avskrivn arbetsmaskiner"
+#KTYP 7831 I
+#SRU 7831 559
+#KONTO 7832 "Avskrivn inventarier"
+#KTYP 7832 I
+#SRU 7832 559
+#KONTO 7834 "Avskrivn bilar"
+#KTYP 7834 I
+#SRU 7834 559
+#KONTO 7960 "Kursfîrluster"
+#KTYP 7960 I
+#SRU 7960 530
+#KONTO 7972 "Fîrlust avyttr fastigheter"
+#KTYP 7972 I
+#SRU 7972 556
+#KONTO 7973 "Fîrlust avyttr maskiner/inv"
+#KTYP 7973 I
+#SRU 7973 556
+#KONTO 7974 "Fîrlust avyttr aktier/andel"
+#KTYP 7974 I
+#SRU 7974 556
+#KONTO 8012 "Utdeln sv/utl dotterbolag"
+#KTYP 8012 I
+#SRU 8012 564
+#KONTO 8014 "Koncernbidrag"
+#KTYP 8014 I
+#SRU 8014 564
+#KONTO 8019 "ôvr utdeln andelar koncernftg"
+#KTYP 8019 I
+#SRU 8019 564
+#KONTO 8210 "Utdeln andra sv/utl fîretag"
+#KTYP 8210 I
+#SRU 8210 565
+#KONTO 8230 "Valutakursdiff lÜngfr fordr"
+#KTYP 8230 I
+#SRU 8230 566
+#KONTO 8270 "Nedskr andel/lf fordr îvr ftg"
+#KTYP 8270 I
+#SRU 8270 570
+#KONTO 8280 "èterf nedskr and/lf ford î ftg"
+#KTYP 8280 I
+#SRU 8280 571
+#KONTO 8300 "RÑnteintÑkter"
+#KTYP 8300 I
+#SRU 8300 568
+#KONTO 8313 "RÑnteintÑkter kundfordringar"
+#KTYP 8313 I
+#SRU 8313 568
+#KONTO 8330 "Valutakursdifferens kunder"
+#KTYP 8330 I
+#SRU 8330 566
+#KONTO 8390 "ôvr finansiella intÑkter"
+#KTYP 8390 I
+#SRU 8390 568
+#KONTO 8400 "RÑntekostnader"
+#KTYP 8400 I
+#SRU 8400 569
+#KONTO 8422 "RÑntekostnader levskulder"
+#KTYP 8422 I
+#SRU 8422 569
+#KONTO 8430 "Valutakursdifferens leverantîrer"
+#KTYP 8430 I
+#SRU 8430 566
+#KONTO 8490 "ôvr finansiella kostnader"
+#KTYP 8490 I
+#SRU 8490 569
+#KONTO 8811 "AvsÑttning per fond"
+#KTYP 8811 I
+#SRU 8811 586
+#KONTO 8819 "èterfîring av per fond"
+#KTYP 8819 I
+#SRU 8819 589
+#KONTO 8850 "Avskrivn îver/under plan"
+#KTYP 8850 I
+#SRU 8850 578
+#KONTO 8896 "FîrÑndring lagerreserv"
+#KTYP 8896 I
+#SRU 8896 593
+#KONTO 8897 "èterfîring av SURV"
+#KTYP 8897 I
+#SRU 8897 591
+#KONTO 8910 "èrets skattekostnad"
+#KTYP 8910 I
+#SRU 8910 598
+#KONTO 8999 "Redovisat resultat"
+#KTYP 8999 I
+#SRU 8999 599
+#KONTO 9900 "Felkonto"
+#KTYP 9900 T
+#DIM 1 "Avdelning"
+#DIM 6 "Projekt"
+#OBJEKT 1 "1" "Anders Andersson"
+#OBJEKT 1 "2" "Bengan Bengtsson"
+#OBJEKT 6 "102" "RutinfîrbÑttringar"
+#OBJEKT 6 "103" "Nyinstallation"
+#IB 0 1221 50000
+#IB 0 1400 45000
+#IB 0 1470 166400
+#IB 0 1478 -147200
+#IB 0 1510 154692.3
+#IB 0 1630 -3000
+#IB 0 1650 3800
+#IB 0 1710 12500
+#IB 0 1910 2310
+#IB 0 1920 390244.41
+#IB 0 1930 -86644.8
+#IB 0 2081 -100000
+#IB 0 2099 -215367.91
+#IB 0 2440 -128086
+#IB 0 2510 -3900
+#IB 0 2611 -30780.6
+#IB 0 2615 -3076.23
+#IB 0 2641 -48911.2
+#IB 0 2645 3076.23
+#IB 0 2650 -25596.2
+#IB 0 2710 -14400
+#IB 0 2920 -12840
+#IB 0 2990 -8220
+#UB 0 1221 50000
+#UB 0 1400 45000
+#UB 0 1470 178500
+#UB 0 1478 815570
+#UB 0 1510 96361.25
+#UB 0 1630 -6000
+#UB 0 1650 3800
+#UB 0 1710 12500
+#UB 0 1910 7230
+#UB 0 1920 271191.91
+#UB 0 1930 -27644.8
+#UB 0 2081 -100000
+#UB 0 2099 -215367.91
+#UB 0 2440 -180008.61
+#UB 0 2510 -3900
+#UB 0 2611 -64252.85
+#UB 0 2615 -3076.23
+#UB 0 2641 -38530.68
+#UB 0 2645 3076.23
+#UB 0 2650 -25596.2
+#UB 0 2710 -136200
+#UB 0 2731 -97260
+#UB 0 2920 -60360
+#UB 0 2941 -11671.2
+#UB 0 2950 -30720
+#UB 0 2990 -8220
+#RES 0 3041 -1081700
+#RES 0 3042 -25569
+#RES 0 3051 -1490
+#RES 0 3550 -155.2
+#RES 0 5010 22400
+#RES 0 5020 803.28
+#RES 0 5410 1920
+#RES 0 5810 15134.81
+#RES 0 6110 464
+#RES 0 6211 4000
+#RES 0 6250 800
+#RES 0 7210 396000
+#RES 0 7290 36000
+#RES 0 7510 127980
+#RES 0 7519 23191.2
+#RES 0 7699 2800
+#RES 0 8910 3000
+#IB -1 1221 50000
+#IB -1 1400 45000
+#IB -1 1470 166400
+#IB -1 1478 -147200
+#IB -1 1510 215747.5
+#IB -1 1630 -3000
+#IB -1 1650 3800
+#IB -1 1710 12500
+#IB -1 1910 2310
+#IB -1 1920 348544.41
+#IB -1 1930 -106000
+#IB -1 2081 -100000
+#IB -1 2099 -215367.91
+#IB -1 2440 -128086
+#IB -1 2510 -3900
+#IB -1 2611 -30780.6
+#IB -1 2615 -3076.23
+#IB -1 2641 -48911.2
+#IB -1 2645 3076.23
+#IB -1 2650 -25596.2
+#IB -1 2710 -14400
+#IB -1 2920 -12840
+#IB -1 2990 -8220
+#UB -1 1221 50000
+#UB -1 1400 45000
+#UB -1 1470 178500
+#UB -1 1478 815570
+#UB -1 1510 96361.25
+#UB -1 1630 -6000
+#UB -1 1650 3800
+#UB -1 1710 12500
+#UB -1 1910 7230
+#UB -1 1920 271191.91
+#UB -1 1930 -27644.8
+#UB -1 2081 -100000
+#UB -1 2099 -215367.91
+#UB -1 2440 -180008.61
+#UB -1 2510 -3900
+#UB -1 2611 -64252.85
+#UB -1 2615 -3076.23
+#UB -1 2641 -38530.68
+#UB -1 2645 3076.23
+#UB -1 2650 -25596.2
+#UB -1 2710 -136200
+#UB -1 2731 -97260
+#UB -1 2920 -60360
+#UB -1 2941 -11671.2
+#UB -1 2950 -30720
+#UB -1 2990 -8220
+#RES -1 3041 -1081700
+#RES -1 3042 -25569
+#RES -1 3051 -1490
+#RES -1 3550 -155.2
+#RES -1 5010 22400
+#RES -1 5020 803.28
+#RES -1 5410 1920
+#RES -1 5810 15134.81
+#RES -1 6110 464
+#RES -1 6211 4000
+#RES -1 6250 800
+#RES -1 7210 396000
+#RES -1 7290 36000
+#RES -1 7510 127980
+#RES -1 7519 23191.2
+#RES -1 7699 2800
+#RES -1 8910 3000
+#VER "" 1 20100104 "Papper mm till kontoret"
+{
+#TRANS 1920 {} -1200 20100104 "Papper mm till kontoret"
+#TRANS 5410 {} 960 20100104 "Papper mm till kontoret"
+#TRANS 2641 {} 240 20100104 "Papper mm till kontoret"
+}
+#VER "" 2 20100104 "Inkîp av kontorsmaterial"
+{
+#TRANS 1910 {} -290 20100104 "Inkîp av kontorsmaterial"
+#TRANS 2641 {} 58 20100104 "Inkîp av kontorsmaterial"
+#TRANS 6110 {} 232 20100104 "Inkîp av kontorsmaterial"
+}
+#VER "" 3 20100107 "Inkîp frimÑrken"
+{
+#TRANS 1910 {} -500 20100107 "Inkîp frimÑrken"
+#TRANS 6250 {} 400 20100107 "Inkîp frimÑrken"
+#TRANS 2641 {} 100 20100107 "Inkîp frimÑrken"
+}
+#VER "" 4 20100130 ""
+{
+#TRANS 1478 {} 73600 20100130 ""
+#TRANS 3041 {} -73600 20100130 ""
+}
+#VER "" 5 20100130 ""
+{
+#TRANS 3041 {} -33360 20100130 ""
+#TRANS 1478 {} 33360 20100130 ""
+}
+#VER "" 6 20100220 "ôverfîring"
+{
+#TRANS 1920 {} -500 20100220 "ôverfîring"
+#TRANS 1930 {} 500 20100220 "ôverfîring"
+}
+#VER "" 7 20100228 ""
+{
+#TRANS 3041 {} -73600 20100228 ""
+#TRANS 1478 {} 73600 20100228 ""
+}
+#VER "" 8 20100228 ""
+{
+#TRANS 1478 {} 33360 20100228 ""
+#TRANS 3041 {} -33360 20100228 ""
+}
+#VER "" 9 20100330 ""
+{
+#TRANS 1478 {} 73600 20100330 ""
+#TRANS 3041 {} -73600 20100330 ""
+}
+#VER "" 10 20100330 ""
+{
+#TRANS 3041 {} -33360 20100330 ""
+#TRANS 1478 {} 33360 20100330 ""
+}
+#VER "" 11 20100430 ""
+{
+#TRANS 1478 {} 33360 20100430 ""
+#TRANS 3041 {} -33360 20100430 ""
+}
+#VER "" 12 20100430 ""
+{
+#TRANS 3041 {} -73600 20100430 ""
+#TRANS 1478 {} 73600 20100430 ""
+}
+#VER "" 13 20100520 "ôverfîring"
+{
+#TRANS 1910 {} 5000 20100520 "ôverfîring"
+#TRANS 1930 {} -5000 20100520 "ôverfîring"
+}
+#VER "" 14 20100530 ""
+{
+#TRANS 1478 {} 73600 20100530 ""
+#TRANS 3041 {} -73600 20100530 ""
+}
+#VER "" 15 20100530 ""
+{
+#TRANS 3041 {} -33360 20100530 ""
+#TRANS 1478 {} 33360 20100530 ""
+}
+#VER "" 16 20100630 ""
+{
+#TRANS 3041 {} -73600 20100630 ""
+#TRANS 1478 {} 73600 20100630 ""
+}
+#VER "" 17 20100630 ""
+{
+#TRANS 1478 {} 33360 20100630 ""
+#TRANS 3041 {} -33360 20100630 ""
+}
+#VER "" 18 20100720 "ôverfîring till handkassa"
+{
+#TRANS 1930 {} -1000 20100720 "ôverfîring till handkassa"
+#TRANS 1910 {} 1000 20100720 "ôverfîring till handkassa"
+}
+#VER "" 19 20100806 ""
+
+#TRANS 8910 {} 3000 20100806 ""
+#TRANS 1630 {} -3000 20100806 ""
+}
+#VER "" 20 20100830 ""
+{
+#TRANS 1478 {} 73600 20100830 ""
+#TRANS 3041 {} -73600 20100830 ""
+}
+#VER "" 21 20100830 ""
+{
+#TRANS 3041 {} -33360 20100830 ""
+#TRANS 1478 {} 33360 20100830 ""
+}
+#VER "" 22 20100920 "ôverfîring till handkassa"
+{
+#TRANS 1930 {} -500 20100920 "ôverfîring till handkassa"
+#TRANS 1910 {} 500 20100920 "ôverfîring till handkasa"
+}
+#VER "" 23 20101004 "Papper mm till kontoret"
+{
+#TRANS 1920 {} -1200 20101004 "Papper mm till kontoret"
+#TRANS 5410 {} 960 20101004 "Papper mm till kontoret"
+#TRANS 2641 {} 240 20101004 "Papper mm till kontoret"
+}
+#VER "" 24 20101005 "Inkîp av kontorsmaterial"
+{
+#TRANS 1910 {} -290 20101005 "Inkîp av kontorsmaterial"
+#TRANS 2641 {} 58 20101005 "Inkîp av kontorsmaterial"
+#TRANS 6110 {} 232 20101005 "Inkîp av kontorsmaterial"
+}
+#VER "" 25 20101007 "Inkîp frimÑrken"
+{
+#TRANS 1910 {} -500 20101007 "Inkîp frimÑrken"
+#TRANS 6250 {} 400 20101007 "Inkîp frimÑrken"
+#TRANS 2641 {} 100 20101007 "Inkîp frimÑrken"
+}
+#VER "" 26 20101030 ""
+{
+#TRANS 1478 {} 73600 20101030 ""
+#TRANS 3041 {} -73600 20101030 ""
+}
+#VER "" 27 20101030 ""
+{
+#TRANS 3041 {} -33360 20101030 ""
+#TRANS 1478 {} 33360 20101030 ""
+}
+#VER "" 28 20101120 "ôverfîring"
+{
+#TRANS 1920 {} 50000 20101120 "ôverfîring"
+#TRANS 1930 {} -50000 20101120 "ôverfîring"
+}
+#VER "" 29 20101128 ""
+{
+#TRANS 3041 {} -73600 20101128 ""
+#TRANS 1478 {} 73600 20101128 ""
+}
+#VER "" 30 20101128 ""
+{
+#TRANS 1478 {} 33360 20101128 ""
+#TRANS 3041 {} -33360 20101128 ""
+}
+#VER "" 31 20101230 ""
+{
+#TRANS 1478 {} 73600 20101230 ""
+#TRANS 3041 {} -73600 20101230 ""
+}
+#VER "" 32 20101230 ""
+{
+#TRANS 3041 {} -33360 20101230 ""
+#TRANS 1478 {} 33360 20101230 ""
+}
+#VER "" 33 20101231 "îverfîring konton"
+{
+#TRANS 1920 {} -200000 20101101 "îverfîring konton"
+#TRANS 1930 {} 200000 20101101 "îverfîring konton"
+}
+#VER "" 10038 20100115 "Nyinstallation"
+{
+#TRANS 1478 {6 "103"} -15360 20100115 "Nyinstallation"
+#TRANS 3550 {6 "103"} -155.2 20100115 "Nyinstallation"
+#TRANS 2611 {} -3840 20100115 "Nyinstallation"
+#TRANS 1510 {} 19355.2 20100115 "Nyinstallation"
+}
+#VER "" 10039 20100115 ""
+{
+#TRANS 3042 {} -13200 20100115 ""
+#TRANS 2611 {} -3300 20100115 ""
+#TRANS 1510 {} 16500 20100115 ""
+}
+#VER "" 10040 20100131 ""
+{
+#TRANS 1478 {} -10560 20100131 ""
+#TRANS 2611 {} -2640 20100131 ""
+#TRANS 1510 {} 13200 20100131 ""
+}
+#VER "" 10041 20100330 ""
+{
+#TRANS 3042 {} -5985 20100330 ""
+#TRANS 2611 {} -1496.25 20100330 ""
+#TRANS 1510 {} 7481.25 20100330 ""
+}
+#VER "" 10042 20100213 ""
+{
+#TRANS 3042 {} -5985 20100213 ""
+#TRANS 2611 {} -1496.25 20100213 ""
+#TRANS 1510 {} 7481.25 20100213 ""
+}
+#VER "" 10043 20100223 ""
+{
+#TRANS 1478 {} -910 20100223 ""
+#TRANS 2611 {} -227.5 20100223 ""
+#TRANS 1510 {} 1137.5 20100223 ""
+}
+#VER "" 10044 20100330 ""
+{
+#TRANS 3042 {} -399 20100330 ""
+#TRANS 2611 {} -99.75 20100330 ""
+#TRANS 1510 {} 498.75 20100330 ""
+}
+#VER "" 10045 20100820 "Faktura"
+{
+#TRANS 3051 {} -1490 20100820 "Faktura"
+#TRANS 2611 {} -372.5 20100820 "Faktura"
+#TRANS 1510 {} 1862.5 20100820 "Faktura"
+}
+#VER "" 10046 20100725 "lîn juli"
+{
+#TRANS 1478 {} -80000 20100914 "Faktura"
+#TRANS 2611 {} -20000 20100914 "Faktura"
+#TRANS 1510 {} 100000 20100914 "Faktura"
+}
+#VER "" 10047 20100825 "lîn aug"
+{
+#TRANS 1930 {1 "1"} -69000 20100825 "lîn aug"
+#TRANS 2710 {1 "1"} -31000 20100825 "lîn aug"
+#TRANS 7210 {1 "1"} 100000 20100825 "lîn aug"
+#TRANS 7510 {1 "1"} 32420 20100825 "lîn aug"
+#TRANS 2731 {1 "1"} -32420 20100825 "lîn aug"
+#TRANS 2920 {1 "1"} -12000 20100825 "lîn aug"
+#TRANS 7290 {1 "1"} 12000 20100825 "lîn aug"
+#TRANS 2941 {1 "1"} -3890.4 20100825 "lîn aug"
+#TRANS 7519 {1 "1"} 3890.4 20100825 "lîn aug"
+}
+#VER "" 10048 20100725 "lîn juli"
+{
+#TRANS 1930 {1 "1"} -69000 20100725 "lîn juli"
+#TRANS 2710 {1 "1"} -31000 20100725 "lîn juli"
+#TRANS 7210 {1 "1"} 100000 20100725 "lîn juli"
+#TRANS 7510 {1 "1"} 32420 20100725 "lîn juli"
+#TRANS 2731 {1 "1"} -32420 20100725 "lîn juli"
+#TRANS 2920 {1 "1"} -12000 20100725 "lîn juli"
+#TRANS 7290 {1 "1"} 12000 20100725 "lîn juli"
+#TRANS 2941 {1 "1"} -3890.4 20100725 "lîn juli"
+#TRANS 7519 {1 "1"} 3890.4 20100725 "lîn juli"
+}
+#VER "" 10049 20100825 "Lîn Aug"
+{
+#TRANS 7210 {1 "2"} 48000 20100825 "Lîn Aug"
+#TRANS 2950 {1 "2"} -15360 20100825 "Lîn Aug"
+#TRANS 7510 {1 "2"} 15360 20100825 "Lîn Aug"
+#TRANS 2920 {1 "2"} -5760 20100825 "Lîn Aug"
+#TRANS 7519 {1 "2"} 5760 20100825 "Lîn Aug"
+#TRANS 2710 {1 "2"} -14400 20100825 "Lîn Aug"
+#TRANS 1930 {1 "2"} -35000 20100825 "Lîn Aug"
+#TRANS 7699 {1 "2"} 1400 20100825 "lîn Aug"
+}
+#VER "" 10050 20100925 "lîn sept"
+{
+#TRANS 1930 {1 "1"} -69000 20100925 "lîn sept"
+#TRANS 2710 {1 "1"} -31000 20100925 "lîn sept"
+#TRANS 7210 {1 "1"} 100000 20100925 "lîn sept"
+#TRANS 7510 {1 "1"} 32420 20100925 "lîn sept"
+#TRANS 2731 {1 "1"} -32420 20100925 "lîn sept"
+#TRANS 2920 {1 "1"} -12000 20100925 "lîn sept"
+#TRANS 7290 {1 "1"} 12000 20100925 "lîn sept"
+#TRANS 2941 {1 "1"} -3890.4 20100925 "lîn sept"
+#TRANS 7519 {1 "1"} 3890.4 20100925 "lîn sept"
+}
+#VER "" 20030 20100820 "ElrÑkning"
+{
+#TRANS 2440 {} -1004.1 20100820 "ElrÑkning"
+#TRANS 5020 {} 803.28 20100820 "ElrÑkning"
+#TRANS 2641 {} 200.82 20100820 "ElrÑkning"
+}
+#VER "" 20031 20100820 "Telefoni"
+{
+#TRANS 2440 {} -4000 20100820 "Telefoni"
+#TRANS 6211 {} 4000 20100820 "Telefoni"
+}
+#VER "" 20032 20100820 "Material till projekt"
+{
+#TRANS 2440 {6 "102"} -18918.51 20100820 "Material till projekt"
+#TRANS 5810 {6 "102"} 15134.81 20100820 "Material till projekt"
+#TRANS 2641 {} 3783.7 20100820 "Material till projekt"
+}
+#VER "" 20033 20100820 "lokalhyra"
+{
+#TRANS 2440 {} -28000 20100820 "lokalhyra"
+#TRANS 5010 {} 22400 20100820 "lokalhyra"
+#TRANS 2641 {} 5600 20100820 "lokalhyra"
+}
+#VER "" 40028 20100820 "Faktura: 10031, Kund: 1004 - Fackverkskonstruktîren = Kundnamn"
+{
+#TRANS 1510 {} -13612.5 20100820 "Faktura: 10031, Kund: 1004 - Fackverkskonstruktîren = Kundnamn"
+#TRANS 1920 {} 13612.5 20100820 "Faktura: 10031, Kund: 1004 - Fackverkskonstruktîren = Kundnamn"
+}
+#VER "" 40029 20100820 "Faktura: 10035, Kund: 1004 - Fackverkskonstruktîren = Kundnamn"
+{
+#TRANS 1510 {} -13612.5 20100820 "Faktura: 10035, Kund: 1004 - Fackverkskonstruktîren = Kundnamn"
+#TRANS 1920 {} 13612.5 20100820 "Faktura: 10035, Kund: 1004 - Fackverkskonstruktîren = Kundnamn"
+}
+#VER "" 40030 20100820 "Faktura: 10034, Kund: 1007 - Cementlagret AB = Kundnamn"
+{
+#TRANS 1510 {} -6622.5 20100820 "Faktura: 10034, Kund: 1007 - Cementlagret AB = Kundnamn"
+#TRANS 1920 {} 6622.5 20100820 "Faktura: 10034, Kund: 1007 - Cementlagret AB = Kundnamn"
+}
+#VER "" 40031 20101014 "Faktura: 10046, Kund: 1007 - Cementlagret AB = Kundnamn"
+{
+#TRANS 1510 {} -100000 20101014 "Faktura: 10046, Kund: 1007 - Cementlagret AB = Kundnamn"
+#TRANS 1930 {} 100000 20101014 "Faktura: 10046, Kund: 1007 - Cementlagret AB = Kundnamn"
+}
+#VER "" 40032 20100114 "Faktura: 10037, Kund: 1001 - Brîderna Olssons AB = Kundnamn"
+{
+#TRANS 1510 {} -92000 20100114 "Faktura: 10037, Kund: 1001 - Brîderna Olssons AB = Kundnamn"
+#TRANS 1930 {} 92000 20100114 "Faktura: 10037, Kund: 1001 - Brîderna Olssons AB = Kundnamn"
+}
+#VER "" 600008 20100820 "Tidsreg, Kalle Svensson - 2010-08-20"
+{
+#TRANS 1470 {6 "102"} 7500 20100820 "Tidsreg, Kalle Svensson - 2010-08-20"
+#TRANS 3041 {6 "102"} -7500 20100820 "Tidsreg, Kalle Svensson - 2010-08-20"
+}
+#VER "" 600009 20100820 "Tidsreg, Jenny Persson - 2010-08-20"
+{
+#TRANS 1470 {6 "102"} 4600 20100820 "Tidsreg, Jenny Persson - 2010-08-20"
+#TRANS 3041 {6 "102"} -4600 20100820 "Tidsreg, Jenny Persson - 2010-08-20"
+}

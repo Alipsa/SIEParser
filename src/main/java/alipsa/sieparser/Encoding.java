@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2015 Johan Idstam
@@ -20,3 +21,41 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package alipsa.sieparser;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class Encoding {
+
+    Logger logger = LoggerFactory.getLogger(Encoding.class);
+
+    private static Charset defaultCharset=Charset.forName("IBM437");
+
+    public static Charset getCharset() {
+        return defaultCharset;
+    }
+
+    public static Collection<Byte> getBytes(String value) {
+        byte[] byteArray =  value.getBytes(getCharset());
+        List<Byte> byteList = new ArrayList<>();
+        for (byte b : byteArray) {
+            byteList.add(Byte.valueOf(b));
+        }
+        return byteList;
+    }
+
+    /*
+    public byte[] getByteArray(String value) {
+        return value.getBytes(getCharset());
+    }
+    */
+}

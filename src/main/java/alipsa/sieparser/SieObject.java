@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2015 Johan Idstam
@@ -20,3 +21,45 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package alipsa.sieparser;
+
+public class SieObject {
+    private SieDimension dimension;
+    private String number;
+    private String name;
+
+    public SieObject(SieDimension dimension, String number, String name) {
+        setDimension(dimension);
+        setNumber(number);
+        setName(name);
+    }
+
+    public SieDimension getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(SieDimension value) {
+        dimension = value;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String value) {
+        number = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String value) {
+        name = value;
+    }
+
+}
+
+

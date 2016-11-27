@@ -1,0 +1,81 @@
+/*
+MIT License
+
+Copyright (c) 2015 Johan Idstam
+Modifications by Per Nyfelt Copyright (c) 2016 Alipsa HB
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+package alipsa.sieparser;
+
+import java.util.HashMap;
+import java.util.HashSet;
+
+public class SieDimension {
+    public boolean isDefault;
+    public HashSet<SieDimension> subDim = new HashSet<SieDimension>();
+    public HashMap<String, SieObject> objects = new HashMap<String, SieObject>();
+    private String number;
+    private String name;
+    private SieDimension parent = null;
+
+    public SieDimension(String num, String aName, boolean defaultVal) {
+        number = num;
+        name = aName;
+        isDefault = defaultVal;
+    }
+
+    public SieDimension(String num, String aName) {
+        number = num;
+        name = aName;
+        isDefault = false;
+    }
+
+    public SieDimension(String number) {
+        this(number, "");
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String value) {
+        number = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String value) {
+        name = value;
+    }
+
+    public SieDimension getSuperDim() throws Exception {
+        return parent;
+    }
+
+    public void setSuperDim(SieDimension value) throws Exception {
+        parent = value;
+        parent.subDim.add(this);
+    }
+}
+
+
