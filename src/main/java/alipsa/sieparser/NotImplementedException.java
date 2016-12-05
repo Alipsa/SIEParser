@@ -26,27 +26,30 @@ SOFTWARE.
 package alipsa.sieparser;
 
 public class NotImplementedException extends Exception {
+    /**
+     * Default no argument constructor.
+     */
     public NotImplementedException() {
         super();
     }
 
     /**
-     * @param arg0
+     * @param arg0 the exception message
      */
     public NotImplementedException(String arg0) {
         super(arg0);
     }
 
     /**
-     * @param arg0
+     * @param arg0 the exception to embed
      */
     public NotImplementedException(Throwable arg0) {
         super(arg0);
     }
 
     /**
-     * @param arg0
-     * @param arg1
+     * @param arg0 the exception message
+     * @param arg1 the exception to embed
      */
     public NotImplementedException(String arg0, Throwable arg1) {
         super(arg0, arg1);

@@ -50,6 +50,7 @@ public class SieCompany {
 
     /**
      * #BKOD
+     * @return the Sni code (#BKOD)
      */
     public int getSni() {
         return sni;
@@ -61,6 +62,7 @@ public class SieCompany {
 
     /**
      * #FNAMN
+     * @return the company name (#FNAMN)
      */
     public String getName() {
         return name;
@@ -72,6 +74,7 @@ public class SieCompany {
 
     /**
      * #FNR
+     * @return the code (#FNR)
      */
     public String getCode() {
         return code;
@@ -83,6 +86,7 @@ public class SieCompany {
 
     /**
      * #FTYP
+     * @return the organization type (#FTYP)
      */
     public String getOrgType() {
         return orgType;
@@ -94,6 +98,7 @@ public class SieCompany {
 
     /**
      * #ORGNR
+     * @return the organization id (#ORGNR)
      */
     public String getOrgIdentifier() {
         return orgIdentifier;
@@ -105,6 +110,7 @@ public class SieCompany {
 
     /**
      * #ADRESS
+     * @return the contact address (#ADRESS)
      */
     public String getContact() {
         return contact;

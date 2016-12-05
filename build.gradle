@@ -1,10 +1,14 @@
 /*
- * Gradle 3.1 build script
+ * Gradle 3.2.1 build script
  *
  */
 
+def releaseVersion = '1.0'
+//def releaseVersion = '1.1-SNAPSHOT'
+
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 def defaultEncoding = 'UTF-8'
 
@@ -43,3 +47,98 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
 }
+
+task myJavadocs(type: Javadoc) {
+    classpath = configurations.compile
+    source = sourceSets.main.allJava
+    exclude '**/org/slf4j/**'
+}
+
+task packageJavadoc(type: Jar, dependsOn: 'myJavadocs') {
+    from javadoc.destinationDir
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+def pomConfig = {
+    name 'SIEParser'
+    packaging 'jar'
+    description 'A Java parser for SIE files that can read files of version 1 to 4 (including 4i)'
+    url 'http://github.com/perNyfelt/SIEParser'
+
+    organization {
+        name 'Alipsa HB'
+        url 'http://www.alipsa.se'
+    }
+    issueManagement {
+        system 'github'
+        url 'http://github.com/perNyfelt/SIEParser/issues'
+    }
+
+    scm {
+        url 'http://github.com/perNyfelt/SIEParser'
+        connection '"scm:git:http://github.com/perNyfelt/SIEParser.git'
+        developerConnection 'scm:git:git@github.com:perNyfelt/SIEParser.git'
+    }
+    licenses {
+        license {
+            name 'MIT License'
+            url 'http://opensource.org/licenses/MIT'
+        }
+    }
+    developers {
+        developer {
+            id 'perNyfelt'
+            name 'Per Nyfelt'
+            organization 'Alipsa HB'
+            organizationUrl 'http://www.alipsa.se'
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'com.github.pernyfelt.sieparser'
+            artifactId 'SieParser'
+            version releaseVersion
+
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+
+            artifact packageJavadoc {
+                classifier = 'javadoc'
+            }
+
+            pom.withXml {
+                asNode().children().last() + pomConfig
+            }
+        }
+    }
+}
+
+publishing {
+
+    def repoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    if(releaseVersion.endsWith('-SNAPSHOT')) {
+        repoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+
+    repositories {
+        maven {
+            //url '$buildDir/repo'
+            url repoUrl
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+
+        }
+    }
+}
+

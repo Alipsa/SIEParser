@@ -71,7 +71,8 @@ public class SieDocumentReader {
     /**
      * Does a fast scan of the file to get the Sie version it adheres to.
      *
-     * @param fileName
+     * @param fileName the file name to parse
+     * @throws Exception if a parsing problem occurred
      * @return -1 if no SIE version was found in the file else SIETYPE is returned.
      */
     public static int getSieVersion(String fileName) throws Exception {
