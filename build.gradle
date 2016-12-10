@@ -3,8 +3,8 @@
  *
  */
 
-def releaseVersion = '1.0'
-//def releaseVersion = '1.1-SNAPSHOT'
+//def releaseVersion = '1.0'
+def releaseVersion = '1.1-SNAPSHOT'
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
