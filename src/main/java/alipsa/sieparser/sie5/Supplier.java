@@ -54,6 +54,9 @@ public class Supplier {
     @XmlAttribute(name = "IBAN")
     private String iban;
 
+
+    /** Creates a new instance. */
+    public Supplier() {}
     /**
      * Returns the unique supplier identifier (required).
      * @return the unique supplier identifier (required)

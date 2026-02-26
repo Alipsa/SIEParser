@@ -6,6 +6,9 @@ package alipsa.sieparser;
 public class WriteOptions {
     private boolean writeKSUMMA = false;
 
+    /** Creates a new instance. */
+    public WriteOptions() {}
+
     /**
      * Returns whether the KSUMMA checksum should be written.
      * @return {@code true} if KSUMMA should be included in the output

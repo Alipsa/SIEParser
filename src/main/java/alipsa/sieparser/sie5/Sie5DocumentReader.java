@@ -32,6 +32,9 @@ public class Sie5DocumentReader {
         }
     }
 
+    /** Creates a new instance. */
+    public Sie5DocumentReader() {}
+
     /**
      * Reads a full SIE 5 document from a file path.
      *

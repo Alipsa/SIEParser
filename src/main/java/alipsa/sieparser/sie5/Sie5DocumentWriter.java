@@ -30,6 +30,9 @@ public class Sie5DocumentWriter {
         }
     }
 
+    /** Creates a new instance. */
+    public Sie5DocumentWriter() {}
+
     /**
      * Writes a full SIE 5 document to a file.
      *

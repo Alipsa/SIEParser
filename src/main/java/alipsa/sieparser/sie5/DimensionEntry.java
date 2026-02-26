@@ -27,6 +27,9 @@ public class DimensionEntry {
     @XmlElement(name = "Object")
     private List<DimensionObject> objects = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public DimensionEntry() {}
     /**
      * Returns the dimension id as a string.
      * @return the dimension id as a string

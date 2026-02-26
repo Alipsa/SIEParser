@@ -29,6 +29,9 @@ public class OriginalAmount {
     @XmlElement(name = "ForeignCurrencyAmount")
     private ForeignCurrencyAmount foreignCurrencyAmount;
 
+
+    /** Creates a new instance. */
+    public OriginalAmount() {}
     /**
      * Returns the date of the original amount.
      * @return the date of the original amount

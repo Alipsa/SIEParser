@@ -45,6 +45,9 @@ public class LedgerEntryEntry {
     @XmlElement(name = "SubdividedAccountObjectReference")
     private SubdividedAccountObjectReference subdividedAccountObjectReference;
 
+
+    /** Creates a new instance. */
+    public LedgerEntryEntry() {}
     /**
      * Returns the account identifier (required).
      * @return the account identifier (required)

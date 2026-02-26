@@ -31,6 +31,9 @@ public class CustomerInvoiceEntry extends SubdividedAccountObjectEntry {
     @XmlSchemaType(name = "date")
     private LocalDate dueDate;
 
+
+    /** Creates a new instance. */
+    public CustomerInvoiceEntry() {}
     /**
      * Returns the customer identifier (required).
      * @return the customer identifier (required)

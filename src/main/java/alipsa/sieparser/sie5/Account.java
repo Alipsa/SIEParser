@@ -46,6 +46,9 @@ public class Account {
     })
     private List<Object> balancesAndBudgets = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public Account() {}
     /**
      * Returns the account ID (account number).
      *

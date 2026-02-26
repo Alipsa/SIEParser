@@ -21,6 +21,9 @@ public class FileReference {
     @XmlAttribute(name = "URI", required = true)
     private String uri;
 
+
+    /** Creates a new instance. */
+    public FileReference() {}
     /**
      * Returns the file reference identifier (xsd:positiveInteger.
      * @return the file reference identifier (xsd:positiveInteger, required)

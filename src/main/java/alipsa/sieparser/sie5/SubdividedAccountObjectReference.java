@@ -18,6 +18,9 @@ public class SubdividedAccountObjectReference {
     @XmlAttribute(name = "objectId", required = true)
     private String objectId;
 
+
+    /** Creates a new instance. */
+    public SubdividedAccountObjectReference() {}
     /**
      * Returns the object identifier within the subdivided account.
      * @return the object identifier within the subdivided account

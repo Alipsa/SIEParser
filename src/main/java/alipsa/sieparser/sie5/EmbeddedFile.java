@@ -26,6 +26,9 @@ public class EmbeddedFile {
     @XmlValue
     private byte[] content;
 
+
+    /** Creates a new instance. */
+    public EmbeddedFile() {}
     /**
      * Returns the file identifier (xsd:positiveInteger.
      * @return the file identifier (xsd:positiveInteger, required)

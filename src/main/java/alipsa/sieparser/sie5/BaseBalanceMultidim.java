@@ -38,6 +38,9 @@ public class BaseBalanceMultidim {
     @XmlElement(name = "ObjectReference")
     private List<ObjectReference> objectReferences = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public BaseBalanceMultidim() {}
     /**
      * Returns the balance month as a {@code gYearMonth} value.
      * @return the balance month as a {@code gYearMonth} value

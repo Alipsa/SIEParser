@@ -54,6 +54,9 @@ public class JournalEntry {
     @XmlElement(name = "CorrectedBy")
     private List<CorrectedBy> correctedBy = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public JournalEntry() {}
     /**
      * Returns the journal entry id (xsd:nonNegativeInteger.
      * @return the journal entry id (xsd:nonNegativeInteger, required)

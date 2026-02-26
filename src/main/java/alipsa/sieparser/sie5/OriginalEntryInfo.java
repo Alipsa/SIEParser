@@ -24,6 +24,9 @@ public class OriginalEntryInfo {
     @XmlAttribute(name = "by", required = true)
     private String by;
 
+
+    /** Creates a new instance. */
+    public OriginalEntryInfo() {}
     /**
      * Returns the date when the record was originally entered (required).
      * @return the date when the record was originally entered (required)

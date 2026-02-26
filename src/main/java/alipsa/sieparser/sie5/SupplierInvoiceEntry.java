@@ -31,6 +31,9 @@ public class SupplierInvoiceEntry extends SubdividedAccountObjectEntry {
     @XmlSchemaType(name = "date")
     private LocalDate dueDate;
 
+
+    /** Creates a new instance. */
+    public SupplierInvoiceEntry() {}
     /**
      * Returns the supplier identifier (required).
      * @return the supplier identifier (required)

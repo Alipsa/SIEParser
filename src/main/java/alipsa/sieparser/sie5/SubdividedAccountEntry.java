@@ -21,6 +21,9 @@ public abstract class SubdividedAccountEntry {
     @XmlAttribute(name = "name")
     private String name;
 
+
+    /** Creates a new instance. */
+    protected SubdividedAccountEntry() {}
     /**
      * Returns the primary account identifier (required).
      * @return the primary account identifier (required)

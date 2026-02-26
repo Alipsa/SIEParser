@@ -23,6 +23,9 @@ public class Overstrike {
     @XmlAttribute(name = "by", required = true)
     private String by;
 
+
+    /** Creates a new instance. */
+    public Overstrike() {}
     /**
      * Returns the date when the ledger entry was struck through (required).
      * @return the date when the ledger entry was struck through (required)

@@ -17,6 +17,9 @@ public class AccountingCurrency {
     @XmlAttribute(name = "currency", required = true)
     private String currency;
 
+
+    /** Creates a new instance. */
+    public AccountingCurrency() {}
     /**
      * Returns the ISO 4217 currency code.
      *

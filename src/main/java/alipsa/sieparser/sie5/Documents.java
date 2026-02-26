@@ -24,6 +24,9 @@ public class Documents {
     })
     private List<Object> items = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public Documents() {}
     /**
      * Returns the raw list of document items ({@link EmbeddedFile} and/or {@link FileReference}).
      * @return the raw list of document items ({@link EmbeddedFile} and/or {@link FileReference})

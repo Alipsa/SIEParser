@@ -21,6 +21,9 @@ public class ObjectReference {
     @XmlAttribute(name = "objectId", required = true)
     private String objectId;
 
+
+    /** Creates a new instance. */
+    public ObjectReference() {}
     /**
      * Returns the dimension identifier.
      * @return the dimension identifier

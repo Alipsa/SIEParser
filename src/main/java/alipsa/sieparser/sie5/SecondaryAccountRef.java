@@ -15,6 +15,9 @@ public class SecondaryAccountRef {
     @XmlAttribute(name = "accountId")
     private String accountId;
 
+
+    /** Creates a new instance. */
+    public SecondaryAccountRef() {}
     /**
      * Returns the account identifier of the secondary account.
      * @return the account identifier of the secondary account

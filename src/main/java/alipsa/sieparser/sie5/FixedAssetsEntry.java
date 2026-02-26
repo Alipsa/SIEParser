@@ -21,6 +21,9 @@ public class FixedAssetsEntry extends SubdividedAccountEntry {
     @XmlElement(name = "FixedAsset")
     private List<FixedAssetEntry> fixedAssets = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public FixedAssetsEntry() {}
     /**
      * Returns the list of fixed asset entries in this container.
      * @return the list of fixed asset entries in this container

@@ -16,4 +16,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GeneralObject extends SubdividedAccountObject {
+
+    /** Creates a new instance. */
+    public GeneralObject() {}
 }

@@ -22,6 +22,9 @@ public class FileCreation {
     @XmlAttribute(name = "by", required = true)
     private String by;
 
+
+    /** Creates a new instance. */
+    public FileCreation() {}
     /**
      * Returns the date and time when the file was created.
      *

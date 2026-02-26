@@ -27,6 +27,9 @@ public abstract class SubdividedAccount {
     @XmlElement(name = "SecondaryAccountRef")
     private List<SecondaryAccountRef> secondaryAccountRefs = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    protected SubdividedAccount() {}
     /**
      * Returns the primary account identifier (required).
      * @return the primary account identifier (required)

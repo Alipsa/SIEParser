@@ -42,6 +42,9 @@ public class Customer {
     @XmlAttribute(name = "country")
     private String country;
 
+
+    /** Creates a new instance. */
+    public Customer() {}
     /**
      * Returns the unique customer identifier (required).
      * @return the unique customer identifier (required)

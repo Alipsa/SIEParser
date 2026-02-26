@@ -19,6 +19,9 @@ public class ForeignCurrencyAmount {
     @XmlAttribute(name = "currency", required = true)
     private String currency;
 
+
+    /** Creates a new instance. */
+    public ForeignCurrencyAmount() {}
     /**
      * Returns the amount in the foreign currency.
      * @return the amount in the foreign currency

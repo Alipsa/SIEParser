@@ -28,6 +28,9 @@ public class CorrectedBy {
     @XmlAttribute(name = "journalEntryId", required = true)
     private BigInteger journalEntryId;
 
+
+    /** Creates a new instance. */
+    public CorrectedBy() {}
     /**
      * Returns the optional fiscal year of the correcting entry (xsd:gYearMonth).
      * @return the optional fiscal year of the correcting entry (xsd:gYearMonth)

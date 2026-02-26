@@ -28,7 +28,10 @@ public final class AccountBalanceMultidim {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "AccountOpeningBalanceMultidim")
-    public static class Opening extends BaseBalanceMultidim {}
+    public static class Opening extends BaseBalanceMultidim {
+        /** Creates a new instance. */
+        public Opening() {}
+    }
 
     /**
      * Multidimensional closing balance for an account.
@@ -36,5 +39,8 @@ public final class AccountBalanceMultidim {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "AccountClosingBalanceMultidim")
-    public static class Closing extends BaseBalanceMultidim {}
+    public static class Closing extends BaseBalanceMultidim {
+        /** Creates a new instance. */
+        public Closing() {}
+    }
 }

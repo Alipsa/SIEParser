@@ -31,6 +31,9 @@ public class SubdividedAccountObject {
     @XmlElement(name = "OriginalAmount", required = true)
     private OriginalAmount originalAmount;
 
+
+    /** Creates a new instance. */
+    public SubdividedAccountObject() {}
     /**
      * Returns the unique object identifier (required).
      * @return the unique object identifier (required)

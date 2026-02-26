@@ -8,6 +8,9 @@ import java.time.LocalDate;
  */
 public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
+
+    /** Creates a new instance. */
+    public LocalDateAdapter() {}
     /**
      * Converts an xsd:date string (e.g. "2024-01-15") to a {@link LocalDate}.
      *

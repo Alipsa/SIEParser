@@ -64,6 +64,9 @@ public class Sie5Entry {
     @XmlElement(name = "Documents")
     private Documents documents;
 
+
+    /** Creates a new instance. */
+    public Sie5Entry() {}
     /**
      * Returns the file information metadata for this entry document.
      *

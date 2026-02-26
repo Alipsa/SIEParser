@@ -26,6 +26,9 @@ public class Journal {
     @XmlElement(name = "JournalEntry")
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public Journal() {}
     /**
      * Returns the journal identifier (required).
      * @return the journal identifier (required)

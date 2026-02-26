@@ -24,6 +24,9 @@ public class AccountAggregationTag {
     @XmlElement(name = "AccountRef")
     private List<AccountRef> accountRefs = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public AccountAggregationTag() {}
     /**
      * Returns the tag name.
      * @return the tag name

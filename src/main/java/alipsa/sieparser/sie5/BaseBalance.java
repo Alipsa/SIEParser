@@ -35,6 +35,9 @@ public class BaseBalance {
     @XmlElement(name = "ObjectReference")
     private ObjectReference objectReference;
 
+
+    /** Creates a new instance. */
+    public BaseBalance() {}
     /**
      * Returns the balance month as a {@code gYearMonth} value.
      * @return the balance month as a {@code gYearMonth} value

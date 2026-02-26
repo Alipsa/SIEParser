@@ -31,6 +31,9 @@ public class CustomerInvoice extends SubdividedAccountObject {
     @XmlSchemaType(name = "date")
     private LocalDate dueDate;
 
+
+    /** Creates a new instance. */
+    public CustomerInvoice() {}
     /**
      * Returns the customer identifier (required).
      * @return the customer identifier (required)

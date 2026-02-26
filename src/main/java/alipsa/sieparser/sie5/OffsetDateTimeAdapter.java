@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
 
+
+    /** Creates a new instance. */
+    public OffsetDateTimeAdapter() {}
     /**
      * Converts an xsd:dateTime string (e.g. "2024-01-15T10:30:00+01:00") to an {@link OffsetDateTime}.
      *

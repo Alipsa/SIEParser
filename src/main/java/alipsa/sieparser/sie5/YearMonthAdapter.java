@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class YearMonthAdapter extends XmlAdapter<String, YearMonth> {
 
+
+    /** Creates a new instance. */
+    public YearMonthAdapter() {}
     /**
      * Converts an xsd:gYearMonth string (e.g. "2024-01") to a {@link YearMonth}.
      *

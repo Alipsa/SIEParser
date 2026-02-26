@@ -18,6 +18,9 @@ public class AccountRef {
     @XmlAttribute(name = "accountId", required = true)
     private String accountId;
 
+
+    /** Creates a new instance. */
+    public AccountRef() {}
     /**
      * Returns the referenced account identifier.
      * @return the referenced account identifier

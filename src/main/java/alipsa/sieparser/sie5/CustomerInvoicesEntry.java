@@ -21,6 +21,9 @@ public class CustomerInvoicesEntry extends SubdividedAccountEntry {
     @XmlElement(name = "CustomerInvoice")
     private List<CustomerInvoiceEntry> customerInvoices = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public CustomerInvoicesEntry() {}
     /**
      * Returns the list of customer invoice entries in this container.
      * @return the list of customer invoice entries in this container

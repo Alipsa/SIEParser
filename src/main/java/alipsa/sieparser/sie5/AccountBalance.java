@@ -27,7 +27,10 @@ public final class AccountBalance {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "AccountOpeningBalance")
-    public static class Opening extends BaseBalance {}
+    public static class Opening extends BaseBalance {
+        /** Creates a new instance. */
+        public Opening() {}
+    }
 
     /**
      * Closing balance for an account.
@@ -35,5 +38,8 @@ public final class AccountBalance {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "AccountClosingBalance")
-    public static class Closing extends BaseBalance {}
+    public static class Closing extends BaseBalance {
+        /** Creates a new instance. */
+        public Closing() {}
+    }
 }

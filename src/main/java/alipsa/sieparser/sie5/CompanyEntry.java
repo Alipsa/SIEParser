@@ -28,6 +28,9 @@ public class CompanyEntry {
     @XmlAttribute(name = "multiple")
     private Integer multiple;
 
+
+    /** Creates a new instance. */
+    public CompanyEntry() {}
     /**
      * Returns the organization ID (Swedish: organisationsnummer).
      *

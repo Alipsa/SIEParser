@@ -57,6 +57,9 @@ public class LedgerEntry {
     @XmlElement(name = "LockingInfo")
     private LockingInfo lockingInfo;
 
+
+    /** Creates a new instance. */
+    public LedgerEntry() {}
     /**
      * Returns the account identifier (required).
      * @return the account identifier (required)

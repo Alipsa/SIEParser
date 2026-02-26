@@ -36,6 +36,9 @@ public class FileInfo {
     @XmlElement(name = "AccountingCurrency", required = true)
     private AccountingCurrency accountingCurrency;
 
+
+    /** Creates a new instance. */
+    public FileInfo() {}
     /**
      * Returns the software product that created this file.
      *

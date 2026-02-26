@@ -22,6 +22,9 @@ public class GeneralSubdividedAccount extends SubdividedAccount {
     @XmlElement(name = "GeneralObject")
     private List<GeneralObject> generalObjects = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public GeneralSubdividedAccount() {}
     /**
      * Returns the list of general objects in this container.
      * @return the list of general objects in this container

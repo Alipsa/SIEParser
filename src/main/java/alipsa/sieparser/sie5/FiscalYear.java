@@ -46,6 +46,9 @@ public class FiscalYear {
     @XmlSchemaType(name = "date")
     private LocalDate lastCoveredDate;
 
+
+    /** Creates a new instance. */
+    public FiscalYear() {}
     /**
      * Returns the start month of the fiscal year.
      *

@@ -30,6 +30,9 @@ public class AccountAggregation {
     @XmlElement(name = "Tag")
     private List<AccountAggregationTag> tags = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public AccountAggregation() {}
     /**
      * Returns the aggregation identifier.
      * @return the aggregation identifier

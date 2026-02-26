@@ -18,6 +18,9 @@ public class VoucherReference {
     @XmlAttribute(name = "documentId", required = true)
     private BigInteger documentId;
 
+
+    /** Creates a new instance. */
+    public VoucherReference() {}
     /**
      * Returns the document identifier (xsd:positiveInteger.
      * @return the document identifier (xsd:positiveInteger, required)

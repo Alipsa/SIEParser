@@ -35,6 +35,9 @@ public class AccountEntry {
     @XmlElement(name = "Budget")
     private List<BudgetEntry> budgets = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public AccountEntry() {}
     /**
      * Returns the account ID (account number).
      *

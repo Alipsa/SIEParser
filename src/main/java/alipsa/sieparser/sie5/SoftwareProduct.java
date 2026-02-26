@@ -19,6 +19,9 @@ public class SoftwareProduct {
     @XmlAttribute(name = "version", required = true)
     private String version;
 
+
+    /** Creates a new instance. */
+    public SoftwareProduct() {}
     /**
      * Returns the name of the software product.
      *

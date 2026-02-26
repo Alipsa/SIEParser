@@ -21,6 +21,9 @@ public class DimensionObject {
     @XmlAttribute(name = "name", required = true)
     private String name;
 
+
+    /** Creates a new instance. */
+    public DimensionObject() {}
     /**
      * Returns the object identifier.
      * @return the object identifier

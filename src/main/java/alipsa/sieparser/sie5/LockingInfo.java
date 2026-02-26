@@ -23,6 +23,9 @@ public class LockingInfo {
     @XmlAttribute(name = "by", required = true)
     private String by;
 
+
+    /** Creates a new instance. */
+    public LockingInfo() {}
     /**
      * Returns the date when the record was locked/entered (required).
      * @return the date when the record was locked/entered (required)

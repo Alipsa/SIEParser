@@ -43,6 +43,9 @@ public class JournalEntryEntry {
     @XmlElement(name = "VoucherReference")
     private List<VoucherReference> voucherReferences = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public JournalEntryEntry() {}
     /**
      * Returns the optional journal entry id (xsd:nonNegativeInteger).
      * @return the optional journal entry id (xsd:nonNegativeInteger)

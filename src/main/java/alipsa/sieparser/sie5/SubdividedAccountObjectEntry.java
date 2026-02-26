@@ -21,6 +21,9 @@ public class SubdividedAccountObjectEntry {
     @XmlAttribute(name = "name")
     private String name;
 
+
+    /** Creates a new instance. */
+    public SubdividedAccountObjectEntry() {}
     /**
      * Returns the unique object identifier (required).
      * @return the unique object identifier (required)

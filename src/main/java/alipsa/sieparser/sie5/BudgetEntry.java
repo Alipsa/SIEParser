@@ -34,6 +34,9 @@ public class BudgetEntry {
     @XmlElement(name = "ObjectReference")
     private List<ObjectReference> objectReferences = new ArrayList<>();
 
+
+    /** Creates a new instance. */
+    public BudgetEntry() {}
     /**
      * Returns the budget month.
      * @return the budget month, or {@code null} if the budget covers the full fiscal year

@@ -14,4 +14,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixedAsset extends SubdividedAccountObject {
+
+    /** Creates a new instance. */
+    public FixedAsset() {}
 }
