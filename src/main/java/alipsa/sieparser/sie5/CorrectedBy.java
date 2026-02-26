@@ -29,31 +29,37 @@ public class CorrectedBy {
     private BigInteger journalEntryId;
 
     /**
+     * Returns the optional fiscal year of the correcting entry (xsd:gYearMonth).
      * @return the optional fiscal year of the correcting entry (xsd:gYearMonth)
      */
     public YearMonth getFiscalYearId() { return fiscalYearId; }
 
     /**
+     * Sets the fiscal year of the correcting entry.
      * @param fiscalYearId the fiscal year of the correcting entry
      */
     public void setFiscalYearId(YearMonth fiscalYearId) { this.fiscalYearId = fiscalYearId; }
 
     /**
+     * Returns the journal id of the correcting entry (required).
      * @return the journal id of the correcting entry (required)
      */
     public String getJournalId() { return journalId; }
 
     /**
+     * Sets the journal id of the correcting entry.
      * @param journalId the journal id of the correcting entry
      */
     public void setJournalId(String journalId) { this.journalId = journalId; }
 
     /**
+     * Returns the journal entry id of the correcting entry (required).
      * @return the journal entry id of the correcting entry (required)
      */
     public BigInteger getJournalEntryId() { return journalEntryId; }
 
     /**
+     * Sets the journal entry id of the correcting entry.
      * @param journalEntryId the journal entry id of the correcting entry
      */
     public void setJournalEntryId(BigInteger journalEntryId) { this.journalEntryId = journalEntryId; }

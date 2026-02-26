@@ -22,21 +22,25 @@ public class DimensionObject {
     private String name;
 
     /**
+     * Returns the object identifier.
      * @return the object identifier
      */
     public String getId() { return id; }
 
     /**
+     * Sets the object identifier (required).
      * @param id the object identifier (required)
      */
     public void setId(String id) { this.id = id; }
 
     /**
+     * Returns the object name.
      * @return the object name
      */
     public String getName() { return name; }
 
     /**
+     * Sets the object name (required).
      * @param name the object name (required)
      */
     public void setName(String name) { this.name = name; }

@@ -24,21 +24,25 @@ public class LockingInfo {
     private String by;
 
     /**
+     * Returns the date when the record was locked/entered (required).
      * @return the date when the record was locked/entered (required)
      */
     public LocalDate getDate() { return date; }
 
     /**
+     * Sets the locking date.
      * @param date the locking date
      */
     public void setDate(LocalDate date) { this.date = date; }
 
     /**
+     * Returns the identifier of who locked/entered the record (required).
      * @return the identifier of who locked/entered the record (required)
      */
     public String getBy() { return by; }
 
     /**
+     * Sets the identifier of who locked/entered the record.
      * @param by the identifier of who locked/entered the record
      */
     public void setBy(String by) { this.by = by; }

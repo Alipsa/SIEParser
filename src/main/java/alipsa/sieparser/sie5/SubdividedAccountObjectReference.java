@@ -19,11 +19,13 @@ public class SubdividedAccountObjectReference {
     private String objectId;
 
     /**
+     * Returns the object identifier within the subdivided account.
      * @return the object identifier within the subdivided account
      */
     public String getObjectId() { return objectId; }
 
     /**
+     * Sets the object identifier (required).
      * @param objectId the object identifier (required)
      */
     public void setObjectId(String objectId) { this.objectId = objectId; }

@@ -30,21 +30,25 @@ public class Balances {
     private List<BaseBalance> balances = new ArrayList<>();
 
     /**
+     * Returns the optional account identifier.
      * @return the optional account identifier, or {@code null}
      */
     public String getAccountId() { return accountId; }
 
     /**
+     * Sets the account identifier to set.
      * @param accountId the account identifier to set, or {@code null} to omit
      */
     public void setAccountId(String accountId) { this.accountId = accountId; }
 
     /**
+     * Returns the list of all balance entries (both opening and closing).
      * @return the list of all balance entries (both opening and closing)
      */
     public List<BaseBalance> getBalances() { return balances; }
 
     /**
+     * Sets the list of balance entries to set.
      * @param balances the list of balance entries to set
      */
     public void setBalances(List<BaseBalance> balances) { this.balances = balances; }

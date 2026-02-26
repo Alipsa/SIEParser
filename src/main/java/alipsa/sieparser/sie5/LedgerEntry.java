@@ -58,111 +58,133 @@ public class LedgerEntry {
     private LockingInfo lockingInfo;
 
     /**
+     * Returns the account identifier (required).
      * @return the account identifier (required)
      */
     public String getAccountId() { return accountId; }
 
     /**
+     * Sets the account identifier.
      * @param accountId the account identifier
      */
     public void setAccountId(String accountId) { this.accountId = accountId; }
 
     /**
+     * Returns the monetary amount (required).
      * @return the monetary amount (required)
      */
     public BigDecimal getAmount() { return amount; }
 
     /**
+     * Sets the monetary amount.
      * @param amount the monetary amount
      */
     public void setAmount(BigDecimal amount) { this.amount = amount; }
 
     /**
+     * Returns the optional quantity.
      * @return the optional quantity
      */
     public BigDecimal getQuantity() { return quantity; }
 
     /**
+     * Sets the quantity.
      * @param quantity the quantity
      */
     public void setQuantity(BigDecimal quantity) { this.quantity = quantity; }
 
     /**
+     * Returns optional descriptive text for this ledger entry.
      * @return optional descriptive text for this ledger entry
      */
     public String getText() { return text; }
 
     /**
+     * Sets descriptive text for this ledger entry.
      * @param text descriptive text for this ledger entry
      */
     public void setText(String text) { this.text = text; }
 
     /**
+     * Returns the optional ledger date (may differ from the journal date).
      * @return the optional ledger date (may differ from the journal date)
      */
     public LocalDate getLedgerDate() { return ledgerDate; }
 
     /**
+     * Sets the ledger date.
      * @param ledgerDate the ledger date
      */
     public void setLedgerDate(LocalDate ledgerDate) { this.ledgerDate = ledgerDate; }
 
     /**
+     * Returns the optional foreign currency amount.
      * @return the optional foreign currency amount
      */
     public ForeignCurrencyAmount getForeignCurrencyAmount() { return foreignCurrencyAmount; }
 
     /**
+     * Sets the foreign currency amount.
      * @param foreignCurrencyAmount the foreign currency amount
      */
     public void setForeignCurrencyAmount(ForeignCurrencyAmount foreignCurrencyAmount) { this.foreignCurrencyAmount = foreignCurrencyAmount; }
 
     /**
+     * Returns the list of object (dimension value) references for this ledger entry.
      * @return the list of object (dimension value) references for this ledger entry
      */
     public List<ObjectReference> getObjectReferences() { return objectReferences; }
 
     /**
+     * Sets the list of object references to set.
      * @param objectReferences the list of object references to set
      */
     public void setObjectReferences(List<ObjectReference> objectReferences) { this.objectReferences = objectReferences; }
 
     /**
+     * Returns the optional subdivided account object reference.
      * @return the optional subdivided account object reference
      */
     public SubdividedAccountObjectReference getSubdividedAccountObjectReference() { return subdividedAccountObjectReference; }
 
     /**
+     * Sets the subdivided account object reference.
      * @param subdividedAccountObjectReference the subdivided account object reference
      */
     public void setSubdividedAccountObjectReference(SubdividedAccountObjectReference subdividedAccountObjectReference) { this.subdividedAccountObjectReference = subdividedAccountObjectReference; }
 
     /**
+     * Returns optional entry registration info for this ledger entry.
      * @return optional entry registration info for this ledger entry
      */
     public EntryInfo getEntryInfo() { return entryInfo; }
 
     /**
+     * Sets the entry registration info.
      * @param entryInfo the entry registration info
      */
     public void setEntryInfo(EntryInfo entryInfo) { this.entryInfo = entryInfo; }
 
     /**
+     * Returns optional overstrike info if this ledger entry has been struck through.
      * @return optional overstrike info if this ledger entry has been struck through
      */
     public Overstrike getOverstrike() { return overstrike; }
 
     /**
+     * Sets the overstrike info.
      * @param overstrike the overstrike info
      */
     public void setOverstrike(Overstrike overstrike) { this.overstrike = overstrike; }
 
     /**
+     * Returns optional locking info indicating when the ledger entry achieved "entered" status.
      * @return optional locking info indicating when the ledger entry achieved "entered" status
      */
     public LockingInfo getLockingInfo() { return lockingInfo; }
 
     /**
+     * Sets the locking info.
      * @param lockingInfo the locking info
      */
     public void setLockingInfo(LockingInfo lockingInfo) { this.lockingInfo = lockingInfo; }

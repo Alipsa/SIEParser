@@ -22,21 +22,25 @@ public class FileReference {
     private String uri;
 
     /**
+     * Returns the file reference identifier (xsd:positiveInteger.
      * @return the file reference identifier (xsd:positiveInteger, required)
      */
     public BigInteger getId() { return id; }
 
     /**
+     * Sets the file reference identifier (must be a positive integer).
      * @param id the file reference identifier (must be a positive integer)
      */
     public void setId(BigInteger id) { this.id = id; }
 
     /**
+     * Returns the URI pointing to the external file (required).
      * @return the URI pointing to the external file (required)
      */
     public String getUri() { return uri; }
 
     /**
+     * Sets the URI pointing to the external file.
      * @param uri the URI pointing to the external file
      */
     public void setUri(String uri) { this.uri = uri; }

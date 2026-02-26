@@ -28,31 +28,37 @@ public class DimensionEntry {
     private List<DimensionObject> objects = new ArrayList<>();
 
     /**
+     * Returns the dimension id as a string.
      * @return the dimension id as a string
      */
     public String getId() { return id; }
 
     /**
+     * Sets the dimension id (required).
      * @param id the dimension id (required)
      */
     public void setId(String id) { this.id = id; }
 
     /**
+     * Returns the optional dimension name.
      * @return the optional dimension name, or {@code null}
      */
     public String getName() { return name; }
 
     /**
+     * Sets the dimension name.
      * @param name the dimension name, or {@code null} to omit
      */
     public void setName(String name) { this.name = name; }
 
     /**
+     * Returns the list of objects belonging to this dimension.
      * @return the list of objects belonging to this dimension
      */
     public List<DimensionObject> getObjects() { return objects; }
 
     /**
+     * Sets the list of objects to set for this dimension.
      * @param objects the list of objects to set for this dimension
      */
     public void setObjects(List<DimensionObject> objects) { this.objects = objects; }

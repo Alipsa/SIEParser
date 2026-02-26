@@ -23,11 +23,13 @@ public class GeneralSubdividedAccount extends SubdividedAccount {
     private List<GeneralObject> generalObjects = new ArrayList<>();
 
     /**
+     * Returns the list of general objects in this container.
      * @return the list of general objects in this container
      */
     public List<GeneralObject> getGeneralObjects() { return generalObjects; }
 
     /**
+     * Sets the list of general objects to set.
      * @param generalObjects the list of general objects to set
      */
     public void setGeneralObjects(List<GeneralObject> generalObjects) { this.generalObjects = generalObjects; }

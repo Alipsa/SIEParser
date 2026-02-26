@@ -25,11 +25,13 @@ public class Documents {
     private List<Object> items = new ArrayList<>();
 
     /**
+     * Returns the raw list of document items ({@link EmbeddedFile} and/or {@link FileReference}).
      * @return the raw list of document items ({@link EmbeddedFile} and/or {@link FileReference})
      */
     public List<Object> getItems() { return items; }
 
     /**
+     * Sets the list of document items to set.
      * @param items the list of document items to set
      */
     public void setItems(List<Object> items) { this.items = items; }

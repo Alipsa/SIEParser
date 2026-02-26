@@ -21,11 +21,13 @@ public class FixedAssets extends SubdividedAccount {
     private List<FixedAsset> fixedAssets = new ArrayList<>();
 
     /**
+     * Returns the list of fixed assets in this container.
      * @return the list of fixed assets in this container
      */
     public List<FixedAsset> getFixedAssets() { return fixedAssets; }
 
     /**
+     * Sets the list of fixed assets to set.
      * @param fixedAssets the list of fixed assets to set
      */
     public void setFixedAssets(List<FixedAsset> fixedAssets) { this.fixedAssets = fixedAssets; }

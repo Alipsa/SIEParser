@@ -19,11 +19,13 @@ public class AccountRef {
     private String accountId;
 
     /**
+     * Returns the referenced account identifier.
      * @return the referenced account identifier
      */
     public String getAccountId() { return accountId; }
 
     /**
+     * Sets the account identifier to reference (required).
      * @param accountId the account identifier to reference (required)
      */
     public void setAccountId(String accountId) { this.accountId = accountId; }

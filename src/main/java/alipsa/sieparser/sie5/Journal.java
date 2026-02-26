@@ -27,31 +27,37 @@ public class Journal {
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
     /**
+     * Returns the journal identifier (required).
      * @return the journal identifier (required)
      */
     public String getId() { return id; }
 
     /**
+     * Sets the journal identifier.
      * @param id the journal identifier
      */
     public void setId(String id) { this.id = id; }
 
     /**
+     * Returns the journal name (required).
      * @return the journal name (required)
      */
     public String getName() { return name; }
 
     /**
+     * Sets the journal name.
      * @param name the journal name
      */
     public void setName(String name) { this.name = name; }
 
     /**
+     * Returns the list of journal entries in this journal.
      * @return the list of journal entries in this journal
      */
     public List<JournalEntry> getJournalEntries() { return journalEntries; }
 
     /**
+     * Sets the list of journal entries to set.
      * @param journalEntries the list of journal entries to set
      */
     public void setJournalEntries(List<JournalEntry> journalEntries) { this.journalEntries = journalEntries; }

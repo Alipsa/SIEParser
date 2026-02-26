@@ -24,21 +24,25 @@ public class Overstrike {
     private String by;
 
     /**
+     * Returns the date when the ledger entry was struck through (required).
      * @return the date when the ledger entry was struck through (required)
      */
     public LocalDate getDate() { return date; }
 
     /**
+     * Sets the overstrike date.
      * @param date the overstrike date
      */
     public void setDate(LocalDate date) { this.date = date; }
 
     /**
+     * Returns the identifier of who struck through the ledger entry (required).
      * @return the identifier of who struck through the ledger entry (required)
      */
     public String getBy() { return by; }
 
     /**
+     * Sets the identifier of who struck through the ledger entry.
      * @param by the identifier of who struck through the ledger entry
      */
     public void setBy(String by) { this.by = by; }

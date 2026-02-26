@@ -44,71 +44,85 @@ public class JournalEntryEntry {
     private List<VoucherReference> voucherReferences = new ArrayList<>();
 
     /**
+     * Returns the optional journal entry id (xsd:nonNegativeInteger).
      * @return the optional journal entry id (xsd:nonNegativeInteger)
      */
     public BigInteger getId() { return id; }
 
     /**
+     * Sets the journal entry id.
      * @param id the journal entry id
      */
     public void setId(BigInteger id) { this.id = id; }
 
     /**
+     * Returns the journal date (required).
      * @return the journal date (required)
      */
     public LocalDate getJournalDate() { return journalDate; }
 
     /**
+     * Sets the journal date.
      * @param journalDate the journal date
      */
     public void setJournalDate(LocalDate journalDate) { this.journalDate = journalDate; }
 
     /**
+     * Returns optional descriptive text for this entry.
      * @return optional descriptive text for this entry
      */
     public String getText() { return text; }
 
     /**
+     * Sets descriptive text for this entry.
      * @param text descriptive text for this entry
      */
     public void setText(String text) { this.text = text; }
 
     /**
+     * Returns optional external reference identifier.
      * @return optional external reference identifier
      */
     public String getReferenceId() { return referenceId; }
 
     /**
+     * Sets external reference identifier.
      * @param referenceId external reference identifier
      */
     public void setReferenceId(String referenceId) { this.referenceId = referenceId; }
 
     /**
+     * Returns the original entry registration info (required).
      * @return the original entry registration info (required)
      */
     public OriginalEntryInfo getOriginalEntryInfo() { return originalEntryInfo; }
 
     /**
+     * Sets original entry registration info.
      * @param originalEntryInfo original entry registration info
      */
     public void setOriginalEntryInfo(OriginalEntryInfo originalEntryInfo) { this.originalEntryInfo = originalEntryInfo; }
 
     /**
+     * Returns the list of ledger entry rows belonging to this journal entry.
      * @return the list of ledger entry rows belonging to this journal entry
      */
     public List<LedgerEntryEntry> getLedgerEntries() { return ledgerEntries; }
 
     /**
+     * Sets the list of ledger entry rows to set.
      * @param ledgerEntries the list of ledger entry rows to set
      */
     public void setLedgerEntries(List<LedgerEntryEntry> ledgerEntries) { this.ledgerEntries = ledgerEntries; }
 
     /**
+     * Returns the list of voucher references attached to this entry.
      * @return the list of voucher references attached to this entry
      */
     public List<VoucherReference> getVoucherReferences() { return voucherReferences; }
 
     /**
+     * Sets the list of voucher references to set.
      * @param voucherReferences the list of voucher references to set
      */
     public void setVoucherReferences(List<VoucherReference> voucherReferences) { this.voucherReferences = voucherReferences; }

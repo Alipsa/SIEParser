@@ -16,11 +16,13 @@ public class SecondaryAccountRef {
     private String accountId;
 
     /**
+     * Returns the account identifier of the secondary account.
      * @return the account identifier of the secondary account
      */
     public String getAccountId() { return accountId; }
 
     /**
+     * Sets the account identifier of the secondary account.
      * @param accountId the account identifier of the secondary account
      */
     public void setAccountId(String accountId) { this.accountId = accountId; }

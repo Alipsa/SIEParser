@@ -25,21 +25,25 @@ public class OriginalEntryInfo {
     private String by;
 
     /**
+     * Returns the date when the record was originally entered (required).
      * @return the date when the record was originally entered (required)
      */
     public LocalDate getDate() { return date; }
 
     /**
+     * Sets the original entry date.
      * @param date the original entry date
      */
     public void setDate(LocalDate date) { this.date = date; }
 
     /**
+     * Returns the identifier of who originally entered the record (required).
      * @return the identifier of who originally entered the record (required)
      */
     public String getBy() { return by; }
 
     /**
+     * Sets the identifier of who originally entered the record.
      * @param by the identifier of who originally entered the record
      */
     public void setBy(String by) { this.by = by; }

@@ -22,11 +22,13 @@ public class CustomerInvoicesEntry extends SubdividedAccountEntry {
     private List<CustomerInvoiceEntry> customerInvoices = new ArrayList<>();
 
     /**
+     * Returns the list of customer invoice entries in this container.
      * @return the list of customer invoice entries in this container
      */
     public List<CustomerInvoiceEntry> getCustomerInvoices() { return customerInvoices; }
 
     /**
+     * Sets the list of customer invoice entries to set.
      * @param customerInvoices the list of customer invoice entries to set
      */
     public void setCustomerInvoices(List<CustomerInvoiceEntry> customerInvoices) { this.customerInvoices = customerInvoices; }

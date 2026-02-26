@@ -35,41 +35,49 @@ public class BudgetEntry {
     private List<ObjectReference> objectReferences = new ArrayList<>();
 
     /**
+     * Returns the budget month.
      * @return the budget month, or {@code null} if the budget covers the full fiscal year
      */
     public YearMonth getMonth() { return month; }
 
     /**
+     * Sets the budget month.
      * @param month the budget month, or {@code null} for the full fiscal year
      */
     public void setMonth(YearMonth month) { this.month = month; }
 
     /**
+     * Returns the budget amount.
      * @return the budget amount
      */
     public BigDecimal getAmount() { return amount; }
 
     /**
+     * Sets the budget amount (required).
      * @param amount the budget amount (required)
      */
     public void setAmount(BigDecimal amount) { this.amount = amount; }
 
     /**
+     * Returns the optional quantity.
      * @return the optional quantity, or {@code null}
      */
     public BigDecimal getQuantity() { return quantity; }
 
     /**
+     * Sets the quantity to set.
      * @param quantity the quantity to set, or {@code null} to omit
      */
     public void setQuantity(BigDecimal quantity) { this.quantity = quantity; }
 
     /**
+     * Returns the list of object references with string-typed dimension ids.
      * @return the list of object references with string-typed dimension ids
      */
     public List<ObjectReference> getObjectReferences() { return objectReferences; }
 
     /**
+     * Sets the list of object references to set.
      * @param objectReferences the list of object references to set
      */
     public void setObjectReferences(List<ObjectReference> objectReferences) { this.objectReferences = objectReferences; }

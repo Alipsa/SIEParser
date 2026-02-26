@@ -19,11 +19,13 @@ public class VoucherReference {
     private BigInteger documentId;
 
     /**
+     * Returns the document identifier (xsd:positiveInteger.
      * @return the document identifier (xsd:positiveInteger, required)
      */
     public BigInteger getDocumentId() { return documentId; }
 
     /**
+     * Sets the document identifier (must be a positive integer).
      * @param documentId the document identifier (must be a positive integer)
      */
     public void setDocumentId(BigInteger documentId) { this.documentId = documentId; }

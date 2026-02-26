@@ -21,11 +21,13 @@ public class SupplierInvoices extends SubdividedAccount {
     private List<SupplierInvoice> supplierInvoices = new ArrayList<>();
 
     /**
+     * Returns the list of supplier invoices in this container.
      * @return the list of supplier invoices in this container
      */
     public List<SupplierInvoice> getSupplierInvoices() { return supplierInvoices; }
 
     /**
+     * Sets the list of supplier invoices to set.
      * @param supplierInvoices the list of supplier invoices to set
      */
     public void setSupplierInvoices(List<SupplierInvoice> supplierInvoices) { this.supplierInvoices = supplierInvoices; }

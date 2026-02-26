@@ -28,31 +28,37 @@ public class Dimension {
     private List<DimensionObject> objects = new ArrayList<>();
 
     /**
+     * Returns the dimension id (positive integer).
      * @return the dimension id (positive integer)
      */
     public int getId() { return id; }
 
     /**
+     * Sets the dimension id (positive integer.
      * @param id the dimension id (positive integer, required)
      */
     public void setId(int id) { this.id = id; }
 
     /**
+     * Returns the dimension name.
      * @return the dimension name
      */
     public String getName() { return name; }
 
     /**
+     * Sets the dimension name (required).
      * @param name the dimension name (required)
      */
     public void setName(String name) { this.name = name; }
 
     /**
+     * Returns the list of objects belonging to this dimension.
      * @return the list of objects belonging to this dimension
      */
     public List<DimensionObject> getObjects() { return objects; }
 
     /**
+     * Sets the list of objects to set for this dimension.
      * @param objects the list of objects to set for this dimension
      */
     public void setObjects(List<DimensionObject> objects) { this.objects = objects; }

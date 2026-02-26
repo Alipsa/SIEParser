@@ -20,21 +20,25 @@ public class ForeignCurrencyAmount {
     private String currency;
 
     /**
+     * Returns the amount in the foreign currency.
      * @return the amount in the foreign currency
      */
     public BigDecimal getAmount() { return amount; }
 
     /**
+     * Sets the amount in the foreign currency (required).
      * @param amount the amount in the foreign currency (required)
      */
     public void setAmount(BigDecimal amount) { this.amount = amount; }
 
     /**
+     * Returns the 3-letter ISO 4217 currency code.
      * @return the 3-letter ISO 4217 currency code
      */
     public String getCurrency() { return currency; }
 
     /**
+     * Sets the 3-letter ISO 4217 currency code (required).
      * @param currency the 3-letter ISO 4217 currency code (required)
      */
     public void setCurrency(String currency) { this.currency = currency; }

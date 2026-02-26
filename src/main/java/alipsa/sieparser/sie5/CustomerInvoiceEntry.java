@@ -32,41 +32,49 @@ public class CustomerInvoiceEntry extends SubdividedAccountObjectEntry {
     private LocalDate dueDate;
 
     /**
+     * Returns the customer identifier (required).
      * @return the customer identifier (required)
      */
     public String getCustomerId() { return customerId; }
 
     /**
+     * Sets the customer identifier.
      * @param customerId the customer identifier
      */
     public void setCustomerId(String customerId) { this.customerId = customerId; }
 
     /**
+     * Returns the invoice number (required).
      * @return the invoice number (required)
      */
     public String getInvoiceNumber() { return invoiceNumber; }
 
     /**
+     * Sets the invoice number.
      * @param invoiceNumber the invoice number
      */
     public void setInvoiceNumber(String invoiceNumber) { this.invoiceNumber = invoiceNumber; }
 
     /**
+     * Returns the OCR number (Swedish payment reference).
      * @return the OCR number (Swedish payment reference), or {@code null} if not set
      */
     public String getOcrNumber() { return ocrNumber; }
 
     /**
+     * Sets the OCR number.
      * @param ocrNumber the OCR number
      */
     public void setOcrNumber(String ocrNumber) { this.ocrNumber = ocrNumber; }
 
     /**
+     * Returns the invoice due date.
      * @return the invoice due date, or {@code null} if not set
      */
     public LocalDate getDueDate() { return dueDate; }
 
     /**
+     * Sets the invoice due date.
      * @param dueDate the invoice due date
      */
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }

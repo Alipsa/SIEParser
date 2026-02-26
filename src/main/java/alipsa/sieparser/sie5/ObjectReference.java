@@ -22,21 +22,25 @@ public class ObjectReference {
     private String objectId;
 
     /**
+     * Returns the dimension identifier.
      * @return the dimension identifier
      */
     public String getDimId() { return dimId; }
 
     /**
+     * Sets the dimension identifier (required).
      * @param dimId the dimension identifier (required)
      */
     public void setDimId(String dimId) { this.dimId = dimId; }
 
     /**
+     * Returns the object identifier within the dimension.
      * @return the object identifier within the dimension
      */
     public String getObjectId() { return objectId; }
 
     /**
+     * Sets the object identifier within the dimension (required).
      * @param objectId the object identifier within the dimension (required)
      */
     public void setObjectId(String objectId) { this.objectId = objectId; }

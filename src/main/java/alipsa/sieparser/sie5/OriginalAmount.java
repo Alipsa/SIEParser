@@ -30,31 +30,37 @@ public class OriginalAmount {
     private ForeignCurrencyAmount foreignCurrencyAmount;
 
     /**
+     * Returns the date of the original amount.
      * @return the date of the original amount
      */
     public LocalDate getDate() { return date; }
 
     /**
+     * Sets the date of the original amount (required).
      * @param date the date of the original amount (required)
      */
     public void setDate(LocalDate date) { this.date = date; }
 
     /**
+     * Returns the original amount.
      * @return the original amount
      */
     public BigDecimal getAmount() { return amount; }
 
     /**
+     * Sets the original amount (required).
      * @param amount the original amount (required)
      */
     public void setAmount(BigDecimal amount) { this.amount = amount; }
 
     /**
+     * Returns the optional foreign currency amount.
      * @return the optional foreign currency amount, or {@code null}
      */
     public ForeignCurrencyAmount getForeignCurrencyAmount() { return foreignCurrencyAmount; }
 
     /**
+     * Sets the foreign currency amount to set.
      * @param foreignCurrencyAmount the foreign currency amount to set, or {@code null} to omit
      */
     public void setForeignCurrencyAmount(ForeignCurrencyAmount foreignCurrencyAmount) { this.foreignCurrencyAmount = foreignCurrencyAmount; }

@@ -27,31 +27,37 @@ public class EmbeddedFile {
     private byte[] content;
 
     /**
+     * Returns the file identifier (xsd:positiveInteger.
      * @return the file identifier (xsd:positiveInteger, required)
      */
     public BigInteger getId() { return id; }
 
     /**
+     * Sets the file identifier (must be a positive integer).
      * @param id the file identifier (must be a positive integer)
      */
     public void setId(BigInteger id) { this.id = id; }
 
     /**
+     * Returns the file name (required).
      * @return the file name (required)
      */
     public String getFileName() { return fileName; }
 
     /**
+     * Sets the file name.
      * @param fileName the file name
      */
     public void setFileName(String fileName) { this.fileName = fileName; }
 
     /**
+     * Returns the base64-decoded file content as a byte array.
      * @return the base64-decoded file content as a byte array
      */
     public byte[] getContent() { return content; }
 
     /**
+     * Sets the file content as a byte array (will be base64-encoded in XML).
      * @param content the file content as a byte array (will be base64-encoded in XML)
      */
     public void setContent(byte[] content) { this.content = content; }

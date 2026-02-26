@@ -22,21 +22,25 @@ public abstract class SubdividedAccountEntry {
     private String name;
 
     /**
+     * Returns the primary account identifier (required).
      * @return the primary account identifier (required)
      */
     public String getPrimaryAccountId() { return primaryAccountId; }
 
     /**
+     * Sets the primary account identifier.
      * @param primaryAccountId the primary account identifier
      */
     public void setPrimaryAccountId(String primaryAccountId) { this.primaryAccountId = primaryAccountId; }
 
     /**
+     * Returns the optional descriptive name of this subdivided account.
      * @return the optional descriptive name of this subdivided account
      */
     public String getName() { return name; }
 
     /**
+     * Sets the descriptive name.
      * @param name the descriptive name
      */
     public void setName(String name) { this.name = name; }

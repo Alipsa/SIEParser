@@ -25,21 +25,25 @@ public class AccountAggregationTag {
     private List<AccountRef> accountRefs = new ArrayList<>();
 
     /**
+     * Returns the tag name.
      * @return the tag name
      */
     public String getName() { return name; }
 
     /**
+     * Sets the tag name (required).
      * @param name the tag name (required)
      */
     public void setName(String name) { this.name = name; }
 
     /**
+     * Returns the list of account references belonging to this tag.
      * @return the list of account references belonging to this tag
      */
     public List<AccountRef> getAccountRefs() { return accountRefs; }
 
     /**
+     * Sets the list of account references to set.
      * @param accountRefs the list of account references to set
      */
     public void setAccountRefs(List<AccountRef> accountRefs) { this.accountRefs = accountRefs; }

@@ -28,31 +28,37 @@ public abstract class SubdividedAccount {
     private List<SecondaryAccountRef> secondaryAccountRefs = new ArrayList<>();
 
     /**
+     * Returns the primary account identifier (required).
      * @return the primary account identifier (required)
      */
     public String getPrimaryAccountId() { return primaryAccountId; }
 
     /**
+     * Sets the primary account identifier.
      * @param primaryAccountId the primary account identifier
      */
     public void setPrimaryAccountId(String primaryAccountId) { this.primaryAccountId = primaryAccountId; }
 
     /**
+     * Returns the optional descriptive name of this subdivided account.
      * @return the optional descriptive name of this subdivided account
      */
     public String getName() { return name; }
 
     /**
+     * Sets the descriptive name.
      * @param name the descriptive name
      */
     public void setName(String name) { this.name = name; }
 
     /**
+     * Returns the list of secondary account references associated with this subdivided account.
      * @return the list of secondary account references associated with this subdivided account
      */
     public List<SecondaryAccountRef> getSecondaryAccountRefs() { return secondaryAccountRefs; }
 
     /**
+     * Sets the list of secondary account references to set.
      * @param secondaryAccountRefs the list of secondary account references to set
      */
     public void setSecondaryAccountRefs(List<SecondaryAccountRef> secondaryAccountRefs) { this.secondaryAccountRefs = secondaryAccountRefs; }

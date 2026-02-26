@@ -31,41 +31,49 @@ public class AccountAggregation {
     private List<AccountAggregationTag> tags = new ArrayList<>();
 
     /**
+     * Returns the aggregation identifier.
      * @return the aggregation identifier
      */
     public String getId() { return id; }
 
     /**
+     * Sets the aggregation identifier (required).
      * @param id the aggregation identifier (required)
      */
     public void setId(String id) { this.id = id; }
 
     /**
+     * Returns the aggregation name.
      * @return the aggregation name
      */
     public String getName() { return name; }
 
     /**
+     * Sets the aggregation name (required).
      * @param name the aggregation name (required)
      */
     public void setName(String name) { this.name = name; }
 
     /**
+     * Returns the optional taxonomy identifier.
      * @return the optional taxonomy identifier, or {@code null}
      */
     public String getTaxonomy() { return taxonomy; }
 
     /**
+     * Sets the taxonomy identifier.
      * @param taxonomy the taxonomy identifier, or {@code null} to omit
      */
     public void setTaxonomy(String taxonomy) { this.taxonomy = taxonomy; }
 
     /**
+     * Returns the list of tags grouping accounts within this aggregation.
      * @return the list of tags grouping accounts within this aggregation
      */
     public List<AccountAggregationTag> getTags() { return tags; }
 
     /**
+     * Sets the list of tags to set.
      * @param tags the list of tags to set
      */
     public void setTags(List<AccountAggregationTag> tags) { this.tags = tags; }

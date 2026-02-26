@@ -22,21 +22,25 @@ public class SubdividedAccountObjectEntry {
     private String name;
 
     /**
+     * Returns the unique object identifier (required).
      * @return the unique object identifier (required)
      */
     public String getId() { return id; }
 
     /**
+     * Sets the unique object identifier.
      * @param id the unique object identifier
      */
     public void setId(String id) { this.id = id; }
 
     /**
+     * Returns the optional descriptive name of this object.
      * @return the optional descriptive name of this object
      */
     public String getName() { return name; }
 
     /**
+     * Sets the descriptive name.
      * @param name the descriptive name
      */
     public void setName(String name) { this.name = name; }
