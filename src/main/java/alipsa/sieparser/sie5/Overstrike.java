@@ -6,6 +6,13 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import java.time.LocalDate;
 
+/**
+ * Overstrike information for a ledger entry.
+ * Corresponds to {@code OverstrikeType} in the SIE 5 XSD (namespace {@code http://www.sie.se/sie5}).
+ *
+ * <p>Records when and by whom a ledger entry was struck through (overstriken).
+ * Both {@code date} and {@code by} are required attributes.</p>
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Overstrike {
 
@@ -16,9 +23,23 @@ public class Overstrike {
     @XmlAttribute(name = "by", required = true)
     private String by;
 
+    /**
+     * @return the date when the ledger entry was struck through (required)
+     */
     public LocalDate getDate() { return date; }
+
+    /**
+     * @param date the overstrike date
+     */
     public void setDate(LocalDate date) { this.date = date; }
 
+    /**
+     * @return the identifier of who struck through the ledger entry (required)
+     */
     public String getBy() { return by; }
+
+    /**
+     * @param by the identifier of who struck through the ledger entry
+     */
     public void setBy(String by) { this.by = by; }
 }

@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for subdivided account containers.
- * Maps to BaseSubdividedAccountType in the XSD.
+ * Abstract base class for subdivided account containers in full SIE 5 documents.
+ * Corresponds to {@code BaseSubdividedAccountType} in the SIE 5 XSD
+ * (namespace {@code http://www.sie.se/sie5}).
+ *
+ * <p>A subdivided account groups objects (e.g. customer invoices, supplier invoices,
+ * fixed assets) under a primary account and optionally references secondary accounts.</p>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class SubdividedAccount {
@@ -23,12 +27,33 @@ public abstract class SubdividedAccount {
     @XmlElement(name = "SecondaryAccountRef")
     private List<SecondaryAccountRef> secondaryAccountRefs = new ArrayList<>();
 
+    /**
+     * @return the primary account identifier (required)
+     */
     public String getPrimaryAccountId() { return primaryAccountId; }
+
+    /**
+     * @param primaryAccountId the primary account identifier
+     */
     public void setPrimaryAccountId(String primaryAccountId) { this.primaryAccountId = primaryAccountId; }
 
+    /**
+     * @return the optional descriptive name of this subdivided account
+     */
     public String getName() { return name; }
+
+    /**
+     * @param name the descriptive name
+     */
     public void setName(String name) { this.name = name; }
 
+    /**
+     * @return the list of secondary account references associated with this subdivided account
+     */
     public List<SecondaryAccountRef> getSecondaryAccountRefs() { return secondaryAccountRefs; }
+
+    /**
+     * @param secondaryAccountRefs the list of secondary account references to set
+     */
     public void setSecondaryAccountRefs(List<SecondaryAccountRef> secondaryAccountRefs) { this.secondaryAccountRefs = secondaryAccountRefs; }
 }

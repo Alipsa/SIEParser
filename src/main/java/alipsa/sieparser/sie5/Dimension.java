@@ -7,6 +7,14 @@ import jakarta.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a dimension definition for full SIE 5 documents, corresponding to the
+ * XSD type {@code DimensionType}. A dimension has a required positive integer id, a
+ * required name, and contains zero or more {@link DimensionObject} children.
+ *
+ * @see DimensionObject
+ * @see DimensionEntry
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Dimension {
 
@@ -19,12 +27,33 @@ public class Dimension {
     @XmlElement(name = "Object")
     private List<DimensionObject> objects = new ArrayList<>();
 
+    /**
+     * @return the dimension id (positive integer)
+     */
     public int getId() { return id; }
+
+    /**
+     * @param id the dimension id (positive integer, required)
+     */
     public void setId(int id) { this.id = id; }
 
+    /**
+     * @return the dimension name
+     */
     public String getName() { return name; }
+
+    /**
+     * @param name the dimension name (required)
+     */
     public void setName(String name) { this.name = name; }
 
+    /**
+     * @return the list of objects belonging to this dimension
+     */
     public List<DimensionObject> getObjects() { return objects; }
+
+    /**
+     * @param objects the list of objects to set for this dimension
+     */
     public void setObjects(List<DimensionObject> objects) { this.objects = objects; }
 }

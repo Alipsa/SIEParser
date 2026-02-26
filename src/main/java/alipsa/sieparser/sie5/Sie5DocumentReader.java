@@ -8,8 +8,17 @@ import java.io.File;
 import java.io.InputStream;
 
 /**
- * Reader for SIE 5 XML documents.
- * Supports both full documents (Sie) and entry/import documents (SieEntry).
+ * JAXB-based reader for SIE 5 XML documents.
+ * Supports reading both full documents ({@code <Sie>}) and
+ * entry/import documents ({@code <SieEntry>}).
+ *
+ * <p>This reader uses a shared {@link JAXBContext} initialized once at class
+ * loading time for both {@link Sie5Document} and {@link Sie5Entry} root types.
+ * Each read operation creates a new {@link Unmarshaller} to ensure thread safety.</p>
+ *
+ * @see Sie5Document
+ * @see Sie5Entry
+ * @see Sie5DocumentWriter
  */
 public class Sie5DocumentReader {
 
@@ -24,7 +33,11 @@ public class Sie5DocumentReader {
     }
 
     /**
-     * Read a full SIE 5 document from a file path.
+     * Reads a full SIE 5 document from a file path.
+     *
+     * @param fileName the path to the SIE 5 XML file
+     * @return the parsed {@link Sie5Document}
+     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Document readDocument(String fileName) throws JAXBException {
         Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
@@ -32,7 +45,11 @@ public class Sie5DocumentReader {
     }
 
     /**
-     * Read a full SIE 5 document from an InputStream.
+     * Reads a full SIE 5 document from an {@link InputStream}.
+     *
+     * @param stream the input stream containing SIE 5 XML data
+     * @return the parsed {@link Sie5Document}
+     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Document readDocument(InputStream stream) throws JAXBException {
         Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
@@ -40,7 +57,11 @@ public class Sie5DocumentReader {
     }
 
     /**
-     * Read a SIE 5 entry (import) document from a file path.
+     * Reads a SIE 5 entry (import) document from a file path.
+     *
+     * @param fileName the path to the SIE 5 entry XML file
+     * @return the parsed {@link Sie5Entry}
+     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Entry readEntry(String fileName) throws JAXBException {
         Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
@@ -48,7 +69,14 @@ public class Sie5DocumentReader {
     }
 
     /**
-     * Read a SIE 5 entry (import) document from an InputStream.
+     * Reads a SIE 5 entry (import) document from an {@link InputStream}.
+     *
+     * <p>Uses {@link StreamSource} wrapping to ensure the unmarshaller binds
+     * to the correct {@link Sie5Entry} root type.</p>
+     *
+     * @param stream the input stream containing SIE 5 entry XML data
+     * @return the parsed {@link Sie5Entry}
+     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Entry readEntry(InputStream stream) throws JAXBException {
         Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();

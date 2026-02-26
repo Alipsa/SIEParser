@@ -5,6 +5,13 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import java.math.BigInteger;
 
+/**
+ * A reference to an external file.
+ * Corresponds to {@code FileReferenceType} in the SIE 5 XSD (namespace {@code http://www.sie.se/sie5}).
+ *
+ * <p>Points to an external document via a required {@code id} (xsd:positiveInteger)
+ * and a required URI string.</p>
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FileReference {
 
@@ -14,9 +21,23 @@ public class FileReference {
     @XmlAttribute(name = "URI", required = true)
     private String uri;
 
+    /**
+     * @return the file reference identifier (xsd:positiveInteger, required)
+     */
     public BigInteger getId() { return id; }
+
+    /**
+     * @param id the file reference identifier (must be a positive integer)
+     */
     public void setId(BigInteger id) { this.id = id; }
 
+    /**
+     * @return the URI pointing to the external file (required)
+     */
     public String getUri() { return uri; }
+
+    /**
+     * @param uri the URI pointing to the external file
+     */
     public void setUri(String uri) { this.uri = uri; }
 }

@@ -9,7 +9,10 @@ import java.util.List;
 
 /**
  * Entry-variant journal container (JournalTypeEntry in XSD).
- * In entry files, the journal id is optional and there is no name attribute.
+ * Corresponds to {@code JournalTypeEntry} in the SIE 5 XSD (namespace {@code http://www.sie.se/sie5}).
+ *
+ * <p>In entry files, the journal {@code id} is optional and there is no {@code name} attribute.
+ * Named {@code JournalEntry2} to avoid collision with {@link JournalEntry}.</p>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JournalEntry2 {
@@ -20,9 +23,23 @@ public class JournalEntry2 {
     @XmlElement(name = "JournalEntry")
     private List<JournalEntryEntry> journalEntries = new ArrayList<>();
 
+    /**
+     * @return the optional journal identifier
+     */
     public String getId() { return id; }
+
+    /**
+     * @param id the journal identifier
+     */
     public void setId(String id) { this.id = id; }
 
+    /**
+     * @return the list of journal entries (entry-document variant) in this journal
+     */
     public List<JournalEntryEntry> getJournalEntries() { return journalEntries; }
+
+    /**
+     * @param journalEntries the list of journal entries to set
+     */
     public void setJournalEntries(List<JournalEntryEntry> journalEntries) { this.journalEntries = journalEntries; }
 }
