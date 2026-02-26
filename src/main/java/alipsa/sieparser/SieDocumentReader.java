@@ -41,23 +41,40 @@ import java.util.function.Consumer;
  */
 public class SieDocumentReader {
 
+    /** Callbacks invoked during document reading for streaming processing. */
     public SieCallbacks callbacks = new SieCallbacks();
+    /** When {@code true}, #BTRANS rows are ignored during parsing. */
     public boolean ignoreBTRANS = false;
+    /** When {@code true}, a missing #OMFATTN is not treated as a validation error. */
     public boolean ignoreMissingOMFATTNING = false;
+    /** When {@code true}, #RTRANS rows are ignored during parsing. */
     public boolean ignoreRTRANS = false;
+    /** When {@code true}, vouchers whose rows do not sum to zero are accepted. */
     public boolean allowUnbalancedVoucher = false;
+    /** When {@code true}, the #KSUMMA checksum is not verified. */
     public boolean ignoreKSUMMA = false;
+    /** When {@code true}, #UNDERDIM definitions are allowed. */
     public boolean allowUnderDimensions = false;
+    /** When {@code true}, references to undefined dimensions are accepted. */
     public boolean ignoreMissingDIM = false;
     private EnumSet<SieType> acceptSIETypes = null;
     private SieDocument sieDocument;
     private List<Exception> validationExceptions;
+    /** When {@code true}, period values are only streamed via callbacks and not stored in the document. */
     public boolean streamValues = false;
+    /** The CRC32 calculator used for checksum verification. */
     public SieCRC32 CRC = new SieCRC32();
+    /** When {@code true}, parsing errors are thrown as exceptions instead of being silently collected. */
     public boolean throwErrors = true;
     private String fileName;
     private int parsingLineNumber = 0;
 
+    /**
+     * Returns the SIE type version from a file without fully parsing it.
+     * @param fileName the path to the SIE file
+     * @return the SIE type (1-4), or -1 if no #SIETYP was found
+     * @throws IOException if an I/O error occurs
+     */
     public static int getSieVersion(String fileName) throws IOException {
         int ret = -1;
         try (BufferedReader reader = IoUtil.getReader(fileName)) {
@@ -72,11 +89,19 @@ public class SieDocumentReader {
         return ret;
     }
 
+    /** Creates a new document reader with default settings. */
     public SieDocumentReader() {
         sieDocument = new SieDocument();
         setValidationExceptions(new ArrayList<>());
     }
 
+    /**
+     * Creates a new document reader with the specified settings.
+     * @param ignoreBTRANS whether to ignore #BTRANS rows
+     * @param ignoreMissingOMFATTNING whether to ignore missing #OMFATTN
+     * @param streamValues whether to stream values via callbacks only
+     * @param throwErrors whether to throw parsing errors as exceptions
+     */
     public SieDocumentReader(boolean ignoreBTRANS, boolean ignoreMissingOMFATTNING, boolean streamValues, boolean throwErrors) {
         this();
         this.ignoreBTRANS = ignoreBTRANS;
@@ -85,18 +110,36 @@ public class SieDocumentReader {
         this.throwErrors = throwErrors;
     }
 
+    /**
+     * Returns the current line number being parsed.
+     * @return the line number (1-based)
+     */
     public int getParsingLineNumber() {
         return parsingLineNumber;
     }
 
+    /**
+     * Returns the set of accepted SIE types, or {@code null} if all types are accepted.
+     * @return the accepted SIE types
+     */
     public EnumSet<SieType> getAcceptSIETypes() {
         return acceptSIETypes;
     }
 
+    /**
+     * Sets the accepted SIE types. Only files matching these types will be parsed.
+     * @param acceptSIETypes the accepted SIE types, or {@code null} to accept all
+     */
     public void setAcceptSIETypes(EnumSet<SieType> acceptSIETypes) {
         this.acceptSIETypes = acceptSIETypes;
     }
 
+    /**
+     * Reads and parses a SIE file into a {@link SieDocument}.
+     * @param fileName the path to the SIE file
+     * @return the parsed document, or {@code null} if the file is invalid
+     * @throws IOException if an I/O error occurs
+     */
     public SieDocument readDocument(String fileName) throws IOException {
         this.fileName = fileName;
         if (throwErrors) {
@@ -533,10 +576,18 @@ public class SieDocumentReader {
         }
     }
 
+    /**
+     * Returns the list of validation exceptions collected during reading.
+     * @return the validation exceptions
+     */
     public List<Exception> getValidationExceptions() {
         return validationExceptions;
     }
 
+    /**
+     * Sets the list of validation exceptions.
+     * @param value the validation exceptions list
+     */
     public void setValidationExceptions(List<Exception> value) {
         validationExceptions = value;
     }

@@ -43,16 +43,30 @@ public class SieDocumentWriter {
     private BufferedWriter writer;
     private WriteOptions options;
 
+    /**
+     * Creates a writer for the given SIE document with default options.
+     * @param sie the document to write
+     */
     public SieDocumentWriter(SieDocument sie) {
         sieDoc = sie;
         this.options = new WriteOptions();
     }
 
+    /**
+     * Creates a writer for the given SIE document with the specified options.
+     * @param sie the document to write
+     * @param options the write options, or {@code null} for defaults
+     */
     public SieDocumentWriter(SieDocument sie, WriteOptions options) {
         sieDoc = sie;
         this.options = options != null ? options : new WriteOptions();
     }
 
+    /**
+     * Writes the SIE document to a file.
+     * @param fileName the output file path
+     * @throws IOException if an I/O error occurs
+     */
     public void write(String fileName) throws IOException {
         File file = new File(fileName);
         if (file.exists()) file.delete();
@@ -63,6 +77,11 @@ public class SieDocumentWriter {
         }
     }
 
+    /**
+     * Writes the SIE document to an output stream.
+     * @param outputStream the output stream to write to
+     * @throws IOException if an I/O error occurs
+     */
     public void write(OutputStream outputStream) throws IOException {
         Charset charset = Encoding.getCharset();
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset))) {
@@ -71,6 +90,12 @@ public class SieDocumentWriter {
         }
     }
 
+    /**
+     * Writes only the given vouchers to an output stream, without any header or metadata.
+     * @param outputStream the output stream to write to
+     * @param vouchers the vouchers to write
+     * @throws IOException if an I/O error occurs
+     */
     public void addVouchers(OutputStream outputStream, List<SieVoucher> vouchers) throws IOException {
         Charset charset = Encoding.getCharset();
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset))) {

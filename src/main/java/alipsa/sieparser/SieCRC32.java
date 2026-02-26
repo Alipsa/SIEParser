@@ -38,10 +38,15 @@ public class SieCRC32 {
     private long[] CRCTable = new long[256];
     private long crc;
 
+    /** Creates a new CRC32 instance and initializes the CRC table. */
     public SieCRC32() {
         createCrcTable();
     }
 
+    /**
+     * Returns whether the CRC calculation has been started.
+     * @return {@code true} if {@link #start()} has been called
+     */
     public boolean isStarted() {
         return started;
     }
@@ -63,11 +68,16 @@ public class SieCRC32 {
         }
     }
 
+    /** Resets and starts the CRC calculation. */
     public void start() {
         crc = 0xFFFFFFFF;
         started = true;
     }
 
+    /**
+     * Adds the data from a SIE data item to the running CRC calculation.
+     * @param item the data item to include in the checksum
+     */
     public void addData(SieDataItem item) {
         List<Byte> buffer = new ArrayList<>();
         buffer.addAll(Encoding.getBytes(item.getItemType()));
@@ -78,6 +88,10 @@ public class SieCRC32 {
         cRC_accumulate(buffer);
     }
 
+    /**
+     * Returns the computed CRC32 checksum.
+     * @return the CRC32 checksum value
+     */
     public long checksum() {
         return (~crc);
     }

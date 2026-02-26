@@ -44,6 +44,12 @@ public class SieDocumentComparer {
         errors = new ArrayList<>();
     }
 
+    /**
+     * Compares two SIE documents and returns a list of differences.
+     * @param docA the first document
+     * @param docB the second document
+     * @return a list of difference descriptions, empty if the documents are equal
+     */
     public static List<String> compare(SieDocument docA, SieDocument docB) {
         SieDocumentComparer comp = new SieDocumentComparer(docA, docB);
         comp.doCompare();

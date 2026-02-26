@@ -1,3 +1,10 @@
+/**
+ * SIE 5 (XML-based) document model, reader, and writer.
+ *
+ * <p>This package provides JAXB-annotated model classes that map to the SIE 5 XSD schema
+ * ({@code http://www.sie.se/sie5}), along with {@link alipsa.sieparser.sie5.Sie5DocumentReader}
+ * and {@link alipsa.sieparser.sie5.Sie5DocumentWriter} for reading and writing SIE 5 XML files.</p>
+ */
 @XmlSchema(namespace = "http://www.sie.se/sie5", elementFormDefault = XmlNsForm.QUALIFIED)
 @XmlJavaTypeAdapters({
     @XmlJavaTypeAdapter(value = YearMonthAdapter.class, type = java.time.YearMonth.class),

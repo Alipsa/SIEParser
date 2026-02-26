@@ -42,6 +42,12 @@ public class SieDataItem {
     private List<String> data;
     private String rawData;
 
+    /**
+     * Creates a new data item by parsing the given line.
+     * @param line the raw SIE file line to parse
+     * @param documentReader the document reader context
+     * @param doc the document being populated
+     */
     public SieDataItem(String line, SieDocumentReader documentReader, SieDocument doc) {
         setRawData(line);
         setDocumentReader(documentReader);
@@ -57,34 +63,66 @@ public class SieDataItem {
         }
     }
 
+    /**
+     * Returns the document reader context.
+     * @return the document reader
+     */
     public SieDocumentReader getDocumentReader() {
         return documentReader;
     }
 
+    /**
+     * Sets the document reader context.
+     * @param value the document reader
+     */
     public void setDocumentReader(SieDocumentReader value) {
         documentReader = value;
     }
 
+    /**
+     * Returns the item type (e.g. "#KONTO", "#VER").
+     * @return the item type string
+     */
     public String getItemType() {
         return itemType;
     }
 
+    /**
+     * Sets the item type.
+     * @param value the item type string
+     */
     public void setItemType(String value) {
         itemType = value;
     }
 
+    /**
+     * Returns the parsed data fields from this line.
+     * @return the list of data field strings
+     */
     public List<String> getData() {
         return data;
     }
 
+    /**
+     * Sets the parsed data fields.
+     * @param value the list of data field strings
+     */
     public void setData(List<String> value) {
         data = value;
     }
 
+    /**
+     * Returns the raw, unparsed line text.
+     * @return the raw data string
+     */
     public String getRawData() {
         return rawData;
     }
 
+    /**
+     * Sets the raw, unparsed line text.
+     * @param value the raw data string
+     */
     public void setRawData(String value) {
         rawData = value;
     }
@@ -145,16 +183,31 @@ public class SieDataItem {
         return ret;
     }
 
+    /**
+     * Returns the field at the given index as a long, or 0 if the field does not exist.
+     * @param field the zero-based field index
+     * @return the long value
+     */
     public long getLong(int field) {
         if (getData().size() <= field) return 0;
         return Long.parseLong(getData().get(field));
     }
 
+    /**
+     * Returns the field at the given index as an int, or 0 if the field does not exist or is not a valid integer.
+     * @param field the zero-based field index
+     * @return the int value
+     */
     public int getInt(int field) {
         Integer foo = getIntNull(field);
         return foo != null ? foo : 0;
     }
 
+    /**
+     * Returns the field at the given index as an Integer, or {@code null} if the field does not exist or is not a valid integer.
+     * @param field the zero-based field index
+     * @return the Integer value, or {@code null}
+     */
     public Integer getIntNull(int field) {
         if (getData().size() <= field) return null;
         try {
@@ -164,11 +217,21 @@ public class SieDataItem {
         }
     }
 
+    /**
+     * Returns the field at the given index as a BigDecimal, or {@link BigDecimal#ZERO} if the field does not exist or is not a valid number.
+     * @param field the zero-based field index
+     * @return the BigDecimal value
+     */
     public BigDecimal getDecimal(int field) {
         BigDecimal foo = getDecimalNull(field);
         return foo != null ? foo : BigDecimal.ZERO;
     }
 
+    /**
+     * Returns the field at the given index as a BigDecimal, or {@code null} if the field does not exist or is not a valid number.
+     * @param field the zero-based field index
+     * @return the BigDecimal value, or {@code null}
+     */
     public BigDecimal getDecimalNull(int field) {
         if (getData().size() <= field) return null;
         try {
@@ -178,6 +241,11 @@ public class SieDataItem {
         }
     }
 
+    /**
+     * Returns the field at the given index as a trimmed string, or an empty string if the field does not exist.
+     * @param field the zero-based field index
+     * @return the string value
+     */
     public String getString(int field) {
         if (getData().size() <= field) return "";
         String s = getData().get(field).trim();
@@ -185,6 +253,11 @@ public class SieDataItem {
         return s;
     }
 
+    /**
+     * Returns the field at the given index as a LocalDate parsed from YYYYMMDD format, or {@code null} if the field does not exist or is empty.
+     * @param field the zero-based field index
+     * @return the LocalDate value, or {@code null}
+     */
     public LocalDate getDate(int field) {
         if (getData().size() <= field) return null;
 
@@ -201,6 +274,10 @@ public class SieDataItem {
         return LocalDate.of(y, m, d);
     }
 
+    /**
+     * Parses and returns the dimension objects from this data item's object field (e.g. "{1 10 6 3}").
+     * @return the list of SIE objects, or {@code null} if the object field is empty or missing
+     */
     public List<SieObject> getObjects() {
         String dimNumber;
         String objectNumber;

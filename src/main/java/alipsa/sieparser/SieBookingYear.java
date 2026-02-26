@@ -33,32 +33,57 @@ import java.time.LocalDate;
  */
 public class SieBookingYear {
 
+    /** Creates a new empty booking year. */
     public SieBookingYear() {}
 
     private int id;
     private LocalDate start;
     private LocalDate end;
 
+    /**
+     * Returns the year identifier.
+     * @return the year identifier (0 = current, -1 = previous, etc.)
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the year identifier.
+     * @param value the year identifier
+     */
     public void setId(int value) {
         id = value;
     }
 
+    /**
+     * Returns the start date of the financial year.
+     * @return the start date
+     */
     public LocalDate getStart() {
         return start;
     }
 
+    /**
+     * Sets the start date of the financial year.
+     * @param value the start date
+     */
     public void setStart(LocalDate value) {
         start = value;
     }
 
+    /**
+     * Returns the end date of the financial year.
+     * @return the end date
+     */
     public LocalDate getEnd() {
         return end;
     }
 
+    /**
+     * Sets the end date of the financial year.
+     * @param value the end date
+     */
     public void setEnd(LocalDate value) {
         end = value;
     }
