@@ -41,33 +41,148 @@ import java.util.function.Consumer;
  */
 public class SieDocumentReader {
 
-    /** Callbacks invoked during document reading for streaming processing. */
-    public SieCallbacks callbacks = new SieCallbacks();
-    /** When {@code true}, #BTRANS rows are ignored during parsing. */
-    public boolean ignoreBTRANS = false;
-    /** When {@code true}, a missing #OMFATTN is not treated as a validation error. */
-    public boolean ignoreMissingOMFATTNING = false;
-    /** When {@code true}, #RTRANS rows are ignored during parsing. */
-    public boolean ignoreRTRANS = false;
-    /** When {@code true}, vouchers whose rows do not sum to zero are accepted. */
-    public boolean allowUnbalancedVoucher = false;
-    /** When {@code true}, the #KSUMMA checksum is not verified. */
-    public boolean ignoreKSUMMA = false;
-    /** When {@code true}, #UNDERDIM definitions are allowed. */
-    public boolean allowUnderDimensions = false;
-    /** When {@code true}, references to undefined dimensions are accepted. */
-    public boolean ignoreMissingDIM = false;
+    private SieCallbacks callbacks = new SieCallbacks();
+    private boolean ignoreBTRANS = false;
+    private boolean ignoreMissingOMFATTNING = false;
+    private boolean ignoreRTRANS = false;
+    private boolean allowUnbalancedVoucher = false;
+    private boolean ignoreKSUMMA = false;
+    private boolean allowUnderDimensions = false;
+    private boolean ignoreMissingDIM = false;
     private EnumSet<SieType> acceptSIETypes = null;
     private SieDocument sieDocument;
     private List<Exception> validationExceptions;
-    /** When {@code true}, period values are only streamed via callbacks and not stored in the document. */
-    public boolean streamValues = false;
-    /** The CRC32 calculator used for checksum verification. */
-    public SieCRC32 CRC = new SieCRC32();
-    /** When {@code true}, parsing errors are thrown as exceptions instead of being silently collected. */
-    public boolean throwErrors = true;
+    private boolean streamValues = false;
+    private SieCRC32 CRC = new SieCRC32();
+    private boolean throwErrors = true;
     private String fileName;
     private int parsingLineNumber = 0;
+
+    /**
+     * Returns the callbacks invoked during document reading.
+     * @return the callbacks
+     */
+    public SieCallbacks getCallbacks() { return callbacks; }
+
+    /**
+     * Sets the callbacks invoked during document reading.
+     * @param callbacks the callbacks to use
+     */
+    public void setCallbacks(SieCallbacks callbacks) { this.callbacks = callbacks; }
+
+    /**
+     * Returns whether #BTRANS rows are ignored during parsing.
+     * @return true if #BTRANS rows are ignored
+     */
+    public boolean isIgnoreBTRANS() { return ignoreBTRANS; }
+
+    /**
+     * Sets whether #BTRANS rows are ignored during parsing.
+     * @param ignoreBTRANS true to ignore #BTRANS rows
+     */
+    public void setIgnoreBTRANS(boolean ignoreBTRANS) { this.ignoreBTRANS = ignoreBTRANS; }
+
+    /**
+     * Returns whether a missing #OMFATTN is accepted.
+     * @return true if a missing #OMFATTN is accepted
+     */
+    public boolean isIgnoreMissingOMFATTNING() { return ignoreMissingOMFATTNING; }
+
+    /**
+     * Sets whether a missing #OMFATTN is accepted.
+     * @param ignoreMissingOMFATTNING true to accept a missing #OMFATTN
+     */
+    public void setIgnoreMissingOMFATTNING(boolean ignoreMissingOMFATTNING) { this.ignoreMissingOMFATTNING = ignoreMissingOMFATTNING; }
+
+    /**
+     * Returns whether #RTRANS rows are ignored during parsing.
+     * @return true if #RTRANS rows are ignored
+     */
+    public boolean isIgnoreRTRANS() { return ignoreRTRANS; }
+
+    /**
+     * Sets whether #RTRANS rows are ignored during parsing.
+     * @param ignoreRTRANS true to ignore #RTRANS rows
+     */
+    public void setIgnoreRTRANS(boolean ignoreRTRANS) { this.ignoreRTRANS = ignoreRTRANS; }
+
+    /**
+     * Returns whether unbalanced vouchers are accepted.
+     * @return true if unbalanced vouchers are accepted
+     */
+    public boolean isAllowUnbalancedVoucher() { return allowUnbalancedVoucher; }
+
+    /**
+     * Sets whether unbalanced vouchers are accepted.
+     * @param allowUnbalancedVoucher true to accept unbalanced vouchers
+     */
+    public void setAllowUnbalancedVoucher(boolean allowUnbalancedVoucher) { this.allowUnbalancedVoucher = allowUnbalancedVoucher; }
+
+    /**
+     * Returns whether the #KSUMMA checksum is ignored.
+     * @return true if the checksum is ignored
+     */
+    public boolean isIgnoreKSUMMA() { return ignoreKSUMMA; }
+
+    /**
+     * Sets whether the #KSUMMA checksum is ignored.
+     * @param ignoreKSUMMA true to ignore the checksum
+     */
+    public void setIgnoreKSUMMA(boolean ignoreKSUMMA) { this.ignoreKSUMMA = ignoreKSUMMA; }
+
+    /**
+     * Returns whether #UNDERDIM definitions are allowed.
+     * @return true if #UNDERDIM is allowed
+     */
+    public boolean isAllowUnderDimensions() { return allowUnderDimensions; }
+
+    /**
+     * Sets whether #UNDERDIM definitions are allowed.
+     * @param allowUnderDimensions true to allow #UNDERDIM
+     */
+    public void setAllowUnderDimensions(boolean allowUnderDimensions) { this.allowUnderDimensions = allowUnderDimensions; }
+
+    /**
+     * Returns whether references to undefined dimensions are accepted.
+     * @return true if undefined dimension references are accepted
+     */
+    public boolean isIgnoreMissingDIM() { return ignoreMissingDIM; }
+
+    /**
+     * Sets whether references to undefined dimensions are accepted.
+     * @param ignoreMissingDIM true to accept undefined dimension references
+     */
+    public void setIgnoreMissingDIM(boolean ignoreMissingDIM) { this.ignoreMissingDIM = ignoreMissingDIM; }
+
+    /**
+     * Returns whether period values are only streamed via callbacks and not stored in the document.
+     * @return true if values are streamed only
+     */
+    public boolean isStreamValues() { return streamValues; }
+
+    /**
+     * Sets whether period values are only streamed via callbacks and not stored in the document.
+     * @param streamValues true to stream values only
+     */
+    public void setStreamValues(boolean streamValues) { this.streamValues = streamValues; }
+
+    /**
+     * Returns the CRC32 calculator used for checksum verification.
+     * @return the CRC32 calculator
+     */
+    public SieCRC32 getCRC() { return CRC; }
+
+    /**
+     * Returns whether parsing errors are thrown as exceptions instead of being silently collected.
+     * @return true if errors are thrown
+     */
+    public boolean isThrowErrors() { return throwErrors; }
+
+    /**
+     * Sets whether parsing errors are thrown as exceptions instead of being silently collected.
+     * @param throwErrors true to throw errors as exceptions
+     */
+    public void setThrowErrors(boolean throwErrors) { this.throwErrors = throwErrors; }
 
     /**
      * Returns the SIE type version from a file without fully parsing it.
@@ -602,7 +717,7 @@ public class SieDocumentReader {
                 check = check.add(r.getAmount());
             }
             if (check.compareTo(BigDecimal.ZERO) != 0)
-                callbacks.callbackException(new SieVoucherMissmatchException(
+                callbacks.callbackException(new SieVoucherMismatchException(
                     v.getSeries() + "." + v.getNumber() + " Sum is not zero."));
         }
 

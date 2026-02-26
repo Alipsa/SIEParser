@@ -170,17 +170,4 @@ public class SiePeriodValue {
     public void setToken(String token) {
         this.token = token;
     }
-
-    /*
-    public SieVoucherRow toVoucherRow() throws Exception {
-        SieVoucherRow vr = new SieVoucherRow();
-        return vr;
-    }
-
-    public SieVoucherRow toInvertedVoucherRow() throws Exception {
-        SieVoucherRow vr = toVoucherRow();
-        vr.setAmount(vr.getAmount() * -1);
-        return vr;
-    }
-    */
 }

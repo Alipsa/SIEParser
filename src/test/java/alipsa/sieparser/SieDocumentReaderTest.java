@@ -27,7 +27,7 @@ public class SieDocumentReaderTest {
         URL url = Thread.currentThread().getContextClassLoader().getResource("samples/1_BL0001_typ2.SE");
         assertNotNull(url);
         SieDocumentReader reader = new SieDocumentReader();
-        reader.ignoreMissingOMFATTNING = true;
+        reader.setIgnoreMissingOMFATTNING(true);
         SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
         assertEquals(2, doc.getSIETYP());
     }
@@ -45,7 +45,7 @@ public class SieDocumentReaderTest {
     @Test
     public void allowUnbalancedVoucher() throws IOException {
         SieDocumentReader reader = new SieDocumentReader();
-        reader.allowUnbalancedVoucher = true;
+        reader.setAllowUnbalancedVoucher(true);
         assertDoesNotThrow(() -> {
             // Should not throw even if vouchers are unbalanced
             // (the flag prevents the balance check)
@@ -60,7 +60,7 @@ public class SieDocumentReaderTest {
         // Only accept type 2 - should reject type 4 file
         SieDocumentReader reader = new SieDocumentReader();
         reader.setAcceptSIETypes(EnumSet.of(SieType.TYPE_2));
-        reader.throwErrors = true;
+        reader.setThrowErrors(true);
 
         assertThrows(RuntimeException.class, () -> {
             reader.readDocument(new File(url.getFile()).getAbsolutePath());
@@ -85,7 +85,7 @@ public class SieDocumentReaderTest {
         assertNotNull(url);
 
         SieDocumentReader reader = new SieDocumentReader();
-        reader.ignoreKSUMMA = true;
+        reader.setIgnoreKSUMMA(true);
         SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
         assertNotNull(doc);
     }
@@ -106,7 +106,7 @@ public class SieDocumentReaderTest {
         assertNotNull(url);
 
         SieDocumentReader reader = new SieDocumentReader();
-        reader.ignoreBTRANS = true;
+        reader.setIgnoreBTRANS(true);
         SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
         assertNotNull(doc);
 

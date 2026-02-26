@@ -68,10 +68,4 @@ public class Encoding {
         }
         return byteList;
     }
-
-    /*
-    public byte[] getByteArray(String value) {
-        return value.getBytes(getCharset());
-    }
-    */
 }

@@ -79,11 +79,11 @@ For large files, use callbacks to process records without storing them all in me
 
 ```java
 SieDocumentReader reader = new SieDocumentReader();
-reader.streamValues = true;
-reader.callbacks.setVER(voucher -> {
+reader.setStreamValues(true);
+reader.getCallbacks().setVER(voucher -> {
     // Process each voucher as it is parsed
 });
-reader.callbacks.setIB(periodValue -> {
+reader.getCallbacks().setIB(periodValue -> {
     // Process each opening balance entry
 });
 reader.readDocument("large-file.SE");

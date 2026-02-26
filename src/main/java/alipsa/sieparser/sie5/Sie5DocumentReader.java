@@ -1,5 +1,6 @@
 package alipsa.sieparser.sie5;
 
+import alipsa.sieparser.SieException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -40,11 +41,15 @@ public class Sie5DocumentReader {
      *
      * @param fileName the path to the SIE 5 XML file
      * @return the parsed {@link Sie5Document}
-     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
+     * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
-    public Sie5Document readDocument(String fileName) throws JAXBException {
-        Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-        return (Sie5Document) unmarshaller.unmarshal(new File(fileName));
+    public Sie5Document readDocument(String fileName) {
+        try {
+            Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
+            return (Sie5Document) unmarshaller.unmarshal(new File(fileName));
+        } catch (JAXBException e) {
+            throw new SieException("Failed to read SIE 5 document: " + fileName, e);
+        }
     }
 
     /**
@@ -52,11 +57,15 @@ public class Sie5DocumentReader {
      *
      * @param stream the input stream containing SIE 5 XML data
      * @return the parsed {@link Sie5Document}
-     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
+     * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
-    public Sie5Document readDocument(InputStream stream) throws JAXBException {
-        Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-        return (Sie5Document) unmarshaller.unmarshal(stream);
+    public Sie5Document readDocument(InputStream stream) {
+        try {
+            Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
+            return (Sie5Document) unmarshaller.unmarshal(stream);
+        } catch (JAXBException e) {
+            throw new SieException("Failed to read SIE 5 document from stream", e);
+        }
     }
 
     /**
@@ -64,11 +73,15 @@ public class Sie5DocumentReader {
      *
      * @param fileName the path to the SIE 5 entry XML file
      * @return the parsed {@link Sie5Entry}
-     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
+     * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
-    public Sie5Entry readEntry(String fileName) throws JAXBException {
-        Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-        return (Sie5Entry) unmarshaller.unmarshal(new File(fileName));
+    public Sie5Entry readEntry(String fileName) {
+        try {
+            Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
+            return (Sie5Entry) unmarshaller.unmarshal(new File(fileName));
+        } catch (JAXBException e) {
+            throw new SieException("Failed to read SIE 5 entry: " + fileName, e);
+        }
     }
 
     /**
@@ -79,10 +92,14 @@ public class Sie5DocumentReader {
      *
      * @param stream the input stream containing SIE 5 entry XML data
      * @return the parsed {@link Sie5Entry}
-     * @throws JAXBException if the XML cannot be parsed or does not conform to the expected structure
+     * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
-    public Sie5Entry readEntry(InputStream stream) throws JAXBException {
-        Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-        return unmarshaller.unmarshal(new StreamSource(stream), Sie5Entry.class).getValue();
+    public Sie5Entry readEntry(InputStream stream) {
+        try {
+            Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
+            return unmarshaller.unmarshal(new StreamSource(stream), Sie5Entry.class).getValue();
+        } catch (JAXBException e) {
+            throw new SieException("Failed to read SIE 5 entry from stream", e);
+        }
     }
 }

@@ -265,7 +265,7 @@ public class SieDataItem {
         if (foo.isEmpty()) return null;
 
         if (foo.length() != 8) {
-            getDocumentReader().callbacks.callbackException(new SieDateException(foo + " is not a valid date"));
+            getDocumentReader().getCallbacks().callbackException(new SieDateException(foo + " is not a valid date"));
             return null;
         }
         int y = Integer.parseInt(foo.substring(0, 4));
@@ -292,7 +292,7 @@ public class SieDataItem {
             }
         }
         if (data == null) {
-            getDocumentReader().callbacks.callbackException(new SieMissingObjectException(getRawData()));
+            getDocumentReader().getCallbacks().callbackException(new SieMissingObjectException(getRawData()));
             return null;
         }
 
