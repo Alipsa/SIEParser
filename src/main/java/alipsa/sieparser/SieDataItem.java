@@ -268,10 +268,15 @@ public class SieDataItem {
             getDocumentReader().getCallbacks().callbackException(new SieDateException(foo + " is not a valid date"));
             return null;
         }
-        int y = Integer.parseInt(foo.substring(0, 4));
-        int m = Integer.parseInt(foo.substring(4, 6));
-        int d = Integer.parseInt(foo.substring(6, 8));
-        return LocalDate.of(y, m, d);
+        try {
+            int y = Integer.parseInt(foo.substring(0, 4));
+            int m = Integer.parseInt(foo.substring(4, 6));
+            int d = Integer.parseInt(foo.substring(6, 8));
+            return LocalDate.of(y, m, d);
+        } catch (NumberFormatException | java.time.DateTimeException e) {
+            getDocumentReader().getCallbacks().callbackException(new SieDateException(foo + " is not a valid date"));
+            return null;
+        }
     }
 
     /**

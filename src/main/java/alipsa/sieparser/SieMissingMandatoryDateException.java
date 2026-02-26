@@ -39,4 +39,13 @@ public class SieMissingMandatoryDateException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieMissingMandatoryDateException with the given description and cause.
+     *
+     * @param description a message describing which date is missing
+     * @param cause the underlying cause
+     */
+    public SieMissingMandatoryDateException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

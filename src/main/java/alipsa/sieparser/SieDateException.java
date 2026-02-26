@@ -40,4 +40,13 @@ public class SieDateException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieDateException with the given description and cause.
+     *
+     * @param description a message describing the invalid date
+     * @param cause the underlying cause
+     */
+    public SieDateException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

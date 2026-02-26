@@ -1,11 +1,17 @@
 package alipsa.sieparser;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -147,5 +153,106 @@ public class SieDocumentReaderTest {
         SieDocumentReader reader = new SieDocumentReader();
         SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
         assertFalse(doc.getRars().isEmpty(), "Booking years should be parsed");
+    }
+
+    @Test
+    public void ignoreRTRANS() throws IOException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("samples/3_BL0001_typ4.SE");
+        assertNotNull(url);
+
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.setIgnoreRTRANS(true);
+        SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
+        assertNotNull(doc);
+
+        for (SieVoucher v : doc.getVER()) {
+            for (SieVoucherRow r : v.getRows()) {
+                assertNotEquals("#RTRANS", r.getToken());
+            }
+        }
+    }
+
+    @Test
+    public void streamValuesDoesNotStoreInDocument() throws IOException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("samples/1_BL0001_typ2.SE");
+        assertNotNull(url);
+
+        AtomicInteger ibCount = new AtomicInteger(0);
+        AtomicInteger ubCount = new AtomicInteger(0);
+
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.setStreamValues(true);
+        reader.setIgnoreMissingOMFATTNING(true);
+        reader.getCallbacks().setIB(pv -> ibCount.incrementAndGet());
+        reader.getCallbacks().setUB(pv -> ubCount.incrementAndGet());
+        SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
+
+        assertTrue(doc.getIB().isEmpty(), "IB should not be stored when streaming");
+        assertTrue(doc.getUB().isEmpty(), "UB should not be stored when streaming");
+        assertTrue(ibCount.get() > 0, "IB callback should have been called");
+        assertTrue(ubCount.get() > 0, "UB callback should have been called");
+    }
+
+    @Test
+    public void constructorWithParameters() throws IOException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("samples/1_BL0001_typ2.SE");
+        assertNotNull(url);
+
+        SieDocumentReader reader = new SieDocumentReader(false, true, false, true);
+        assertTrue(reader.isIgnoreMissingOMFATTNING());
+        assertTrue(reader.isThrowErrors());
+        assertFalse(reader.isIgnoreBTRANS());
+        assertFalse(reader.isStreamValues());
+
+        SieDocument doc = reader.readDocument(new File(url.getFile()).getAbsolutePath());
+        assertNotNull(doc);
+    }
+
+    @Test
+    public void invalidFileThrowsException(@TempDir Path tempDir) throws IOException {
+        Path badFile = tempDir.resolve("bad.SE");
+        Files.writeString(badFile, "This is not a SIE file\n");
+
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.setThrowErrors(true);
+        assertThrows(SieInvalidFileException.class, () -> {
+            reader.readDocument(badFile.toString());
+        });
+    }
+
+    @Test
+    public void throwErrorsFalseCollectsExceptions(@TempDir Path tempDir) throws IOException {
+        Path badFile = tempDir.resolve("bad.SE");
+        Files.writeString(badFile, "This is not a SIE file\n");
+
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.setThrowErrors(false);
+        List<Exception> collected = new ArrayList<>();
+        reader.getCallbacks().setSieException(collected::add);
+        SieDocument doc = reader.readDocument(badFile.toString());
+
+        assertNull(doc, "Should return null for invalid file");
+        assertFalse(collected.isEmpty(), "Exceptions should be collected");
+        assertInstanceOf(SieInvalidFileException.class, collected.get(0));
+    }
+
+    @Test
+    public void invalidDateHandledGracefully(@TempDir Path tempDir) throws IOException {
+        // Create a minimal SIE file with an invalid date (Feb 30)
+        String content = "#FLAGGA 0\n#SIETYP 4\n#PROGRAM \"Test\" 1.0\n#FORMAT PC8\n"
+                + "#GEN 20220230\n#FNAMN \"Test\"\n#KONTO 1000 \"Kassa\"\n#RAR 0 20220101 20221231\n";
+        Path sieFile = tempDir.resolve("invalid_date.SE");
+        Files.writeString(sieFile, content, Encoding.getCharset());
+
+        List<Exception> collected = new ArrayList<>();
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.setThrowErrors(false);
+        reader.getCallbacks().setSieException(collected::add);
+        SieDocument doc = reader.readDocument(sieFile.toString());
+
+        // GEN date should be null due to invalid date
+        assertNull(doc.getGEN_DATE(), "Invalid date should result in null");
+        assertTrue(collected.stream().anyMatch(e -> e instanceof SieDateException),
+                "Should report a SieDateException for invalid date");
     }
 }

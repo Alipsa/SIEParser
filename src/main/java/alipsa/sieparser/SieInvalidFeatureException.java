@@ -40,4 +40,13 @@ public class SieInvalidFeatureException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieInvalidFeatureException with the given description and cause.
+     *
+     * @param description a message describing the invalid feature usage
+     * @param cause the underlying cause
+     */
+    public SieInvalidFeatureException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

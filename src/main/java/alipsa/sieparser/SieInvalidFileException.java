@@ -40,4 +40,13 @@ public class SieInvalidFileException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieInvalidFileException with the given description and cause.
+     *
+     * @param description a message identifying the invalid file
+     * @param cause the underlying cause
+     */
+    public SieInvalidFileException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

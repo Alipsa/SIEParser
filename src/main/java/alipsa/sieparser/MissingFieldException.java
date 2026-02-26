@@ -38,4 +38,14 @@ public class MissingFieldException extends SieException {
     public MissingFieldException(String s) {
         super(s);
     }
+
+    /**
+     * Creates a new MissingFieldException with the given message and cause.
+     *
+     * @param s the detail message describing which field is missing
+     * @param cause the underlying cause
+     */
+    public MissingFieldException(String s, Throwable cause) {
+        super(s, cause);
+    }
 }

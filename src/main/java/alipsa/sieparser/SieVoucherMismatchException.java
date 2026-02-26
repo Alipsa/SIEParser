@@ -39,4 +39,13 @@ public class SieVoucherMismatchException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieVoucherMismatchException with the given description and cause.
+     *
+     * @param description a message identifying the mismatched voucher
+     * @param cause the underlying cause
+     */
+    public SieVoucherMismatchException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }
