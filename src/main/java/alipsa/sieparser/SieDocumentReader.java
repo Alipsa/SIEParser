@@ -31,7 +31,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -57,6 +59,9 @@ public class SieDocumentReader {
     private boolean throwErrors = true;
     private String fileName;
     private int parsingLineNumber = 0;
+    private SieVoucher curVoucher;
+    private boolean abortParsing;
+    private final Map<String, Consumer<SieDataItem>> handlers = new LinkedHashMap<>();
 
     /**
      * Returns the callbacks invoked during document reading.
@@ -208,6 +213,7 @@ public class SieDocumentReader {
     public SieDocumentReader() {
         sieDocument = new SieDocument();
         setValidationExceptions(new ArrayList<>());
+        initHandlers();
     }
 
     /**
@@ -257,6 +263,9 @@ public class SieDocumentReader {
      */
     public SieDocument readDocument(String fileName) throws IOException {
         this.fileName = fileName;
+        curVoucher = null;
+        abortParsing = false;
+
         if (throwErrors) {
             Consumer<Exception> existing = callbacks.getSieException();
             callbacks.setSieException(ex -> {
@@ -266,7 +275,6 @@ public class SieDocumentReader {
             });
         }
 
-        SieVoucher curVoucher = null;
         boolean firstLine = true;
         parsingLineNumber = 0;
 
@@ -286,141 +294,20 @@ public class SieDocumentReader {
                 if (!ignoreKSUMMA && CRC.isStarted() && !SIE.KSUMMA.equals(di.getItemType()))
                     CRC.addData(di);
 
-                SiePeriodValue pv;
                 String itemType = di.getItemType();
-                if (SIE.ADRESS.equals(itemType)) {
-                    sieDocument.getFNAMN().setContact(di.getString(0));
-                    sieDocument.getFNAMN().setStreet(di.getString(1));
-                    sieDocument.getFNAMN().setZipCity(di.getString(2));
-                    sieDocument.getFNAMN().setPhone(di.getString(3));
-                } else if (SIE.BKOD.equals(itemType)) {
-                    sieDocument.getFNAMN().setSni(di.getInt(0));
-                } else if (SIE.BTRANS.equals(itemType)) {
-                    if (!ignoreBTRANS) {
-                        if (curVoucher == null) {
-                            callbacks.callbackException(new SieParseException(
-                                "#BTRANS outside #VER block at line " + parsingLineNumber));
-                        } else {
-                            parseTRANS(di, curVoucher);
-                        }
-                    }
-                } else if (SIE.DIM.equals(itemType)) {
-                    parseDimension(di);
-                } else if (SIE.ENHET.equals(itemType)) {
-                    parseENHET(di);
-                } else if (SIE.FLAGGA.equals(itemType)) {
-                    sieDocument.setFLAGGA(di.getInt(0));
-                } else if (SIE.FNAMN.equals(itemType)) {
-                    sieDocument.getFNAMN().setName(di.getString(0));
-                } else if (SIE.FNR.equals(itemType)) {
-                    sieDocument.getFNAMN().setCode(di.getString(0));
-                } else if (SIE.FORMAT.equals(itemType)) {
-                    sieDocument.setFORMAT(di.getString(0));
-                } else if (SIE.FTYP.equals(itemType)) {
-                    sieDocument.getFNAMN().setOrgType(di.getString(0));
-                } else if (SIE.GEN.equals(itemType)) {
-                    sieDocument.setGEN_DATE(di.getDate(0));
-                    sieDocument.setGEN_NAMN(di.getString(1));
-                } else if (SIE.IB.equals(itemType)) {
-                    parseIB(di);
-                } else if (SIE.KONTO.equals(itemType)) {
-                    parseKONTO(di);
-                } else if (SIE.KSUMMA.equals(itemType)) {
-                    if (!ignoreKSUMMA) {
-                        if (CRC.isStarted()) {
-                            parseKSUMMA(di);
-                        } else {
-                            CRC.start();
-                        }
-                    }
-                } else if (SIE.KTYP.equals(itemType)) {
-                    parseKTYP(di);
-                } else if (SIE.KPTYP.equals(itemType)) {
-                    sieDocument.setKPTYP(di.getString(0));
-                } else if (SIE.OBJEKT.equals(itemType)) {
-                    parseOBJEKT(di);
-                } else if (SIE.OIB.equals(itemType)) {
-                    pv = parseOIB_OUB(di);
-                    callbacks.callbackOIB(pv);
-                    if (!streamValues) sieDocument.getOIB().add(pv);
-                } else if (SIE.OUB.equals(itemType)) {
-                    pv = parseOIB_OUB(di);
-                    callbacks.callbackOUB(pv);
-                    if (!streamValues) sieDocument.getOUB().add(pv);
-                } else if (SIE.ORGNR.equals(itemType)) {
-                    sieDocument.getFNAMN().setOrgIdentifier(di.getString(0));
-                } else if (SIE.OMFATTN.equals(itemType)) {
-                    sieDocument.setOMFATTN(di.getDate(0));
-                } else if (SIE.PBUDGET.equals(itemType)) {
-                    pv = parsePBUDGET_PSALDO(di);
-                    if (pv != null) {
-                        callbacks.callbackPBUDGET(pv);
-                        if (!streamValues) sieDocument.getPBUDGET().add(pv);
-                    }
-                } else if (SIE.PROGRAM.equals(itemType)) {
-                    sieDocument.setPROGRAM(di.getData());
-                } else if (SIE.PROSA.equals(itemType)) {
-                    sieDocument.setPROSA(di.getString(0));
-                } else if (SIE.PSALDO.equals(itemType)) {
-                    pv = parsePBUDGET_PSALDO(di);
-                    if (pv != null) {
-                        callbacks.callbackPSALDO(pv);
-                        if (!streamValues) sieDocument.getPSALDO().add(pv);
-                    }
-                } else if (SIE.RAR.equals(itemType)) {
-                    parseRAR(di);
-                } else if (SIE.RTRANS.equals(itemType)) {
-                    if (!ignoreRTRANS) {
-                        if (curVoucher == null) {
-                            callbacks.callbackException(new SieParseException(
-                                "#RTRANS outside #VER block at line " + parsingLineNumber));
-                        } else {
-                            parseTRANS(di, curVoucher);
-                        }
-                    }
-                } else if (SIE.SIETYP.equals(itemType)) {
-                    sieDocument.setSIETYP(di.getInt(0));
-                    if (acceptSIETypes != null) {
-                        try {
-                            SieType parsed = SieType.fromValue(di.getInt(0));
-                            if (!acceptSIETypes.contains(parsed)) {
-                                callbacks.callbackException(new SieInvalidFeatureException(
-                                    "SIE type " + di.getInt(0) + " is not accepted"));
-                                return null;
-                            }
-                        } catch (IllegalArgumentException e) {
-                            callbacks.callbackException(new SieInvalidFeatureException(
-                                "Unknown SIE type: " + di.getInt(0)));
-                        }
-                    }
-                } else if (SIE.SRU.equals(itemType)) {
-                    parseSRU(di);
-                } else if (SIE.TAXAR.equals(itemType)) {
-                    sieDocument.setTAXAR(di.getInt(0));
-                } else if (SIE.UB.equals(itemType)) {
-                    parseUB(di);
-                } else if (SIE.TRANS.equals(itemType)) {
-                    if (curVoucher == null) {
-                        callbacks.callbackException(new SieParseException(
-                            "#TRANS outside #VER block at line " + parsingLineNumber));
-                    } else {
-                        parseTRANS(di, curVoucher);
-                    }
-                } else if (SIE.RES.equals(itemType)) {
-                    parseRES(di);
-                } else if (SIE.UNDERDIM.equals(itemType)) {
-                    parseUnderDimension(di);
-                } else if (SIE.VALUTA.equals(itemType)) {
-                    sieDocument.setVALUTA(di.getString(0));
-                } else if (SIE.VER.equals(itemType)) {
-                    curVoucher = parseVER(di);
-                } else if ("".equals(itemType)) {
-                } else if ("{".equals(itemType)) {
+                if ("".equals(itemType) || "{".equals(itemType)) {
+                    // blank lines and opening braces are ignored
                 } else if ("}".equals(itemType)) {
                     if (curVoucher != null) closeVoucher(curVoucher);
                     curVoucher = null;
                 } else {
-                    callbacks.callbackException(new UnsupportedOperationException(di.getItemType()));
+                    Consumer<SieDataItem> handler = handlers.get(itemType);
+                    if (handler != null) {
+                        handler.accept(di);
+                        if (abortParsing) return null;
+                    } else {
+                        callbacks.callbackException(new UnsupportedOperationException(di.getItemType()));
+                    }
                 }
             }
         }
@@ -432,6 +319,143 @@ public class SieDocumentReader {
 
         validateDocument();
         return sieDocument;
+    }
+
+    private void initHandlers() {
+        handlers.put(SIE.ADRESS, this::handleADRESS);
+        handlers.put(SIE.BKOD, di -> sieDocument.getFNAMN().setSni(di.getInt(0)));
+        handlers.put(SIE.BTRANS, this::handleBTRANS);
+        handlers.put(SIE.DIM, this::parseDimension);
+        handlers.put(SIE.ENHET, this::parseENHET);
+        handlers.put(SIE.FLAGGA, di -> sieDocument.setFLAGGA(di.getInt(0)));
+        handlers.put(SIE.FNAMN, di -> sieDocument.getFNAMN().setName(di.getString(0)));
+        handlers.put(SIE.FNR, di -> sieDocument.getFNAMN().setCode(di.getString(0)));
+        handlers.put(SIE.FORMAT, di -> sieDocument.setFORMAT(di.getString(0)));
+        handlers.put(SIE.FTYP, di -> sieDocument.getFNAMN().setOrgType(di.getString(0)));
+        handlers.put(SIE.GEN, this::handleGEN);
+        handlers.put(SIE.IB, this::parseIB);
+        handlers.put(SIE.KONTO, this::parseKONTO);
+        handlers.put(SIE.KSUMMA, this::handleKSUMMA);
+        handlers.put(SIE.KTYP, this::parseKTYP);
+        handlers.put(SIE.KPTYP, di -> sieDocument.setKPTYP(di.getString(0)));
+        handlers.put(SIE.OBJEKT, this::parseOBJEKT);
+        handlers.put(SIE.OIB, this::handleOIB);
+        handlers.put(SIE.OUB, this::handleOUB);
+        handlers.put(SIE.ORGNR, di -> sieDocument.getFNAMN().setOrgIdentifier(di.getString(0)));
+        handlers.put(SIE.OMFATTN, di -> sieDocument.setOMFATTN(di.getDate(0)));
+        handlers.put(SIE.PBUDGET, this::handlePBUDGET);
+        handlers.put(SIE.PROGRAM, di -> sieDocument.setPROGRAM(di.getData()));
+        handlers.put(SIE.PROSA, di -> sieDocument.setPROSA(di.getString(0)));
+        handlers.put(SIE.PSALDO, this::handlePSALDO);
+        handlers.put(SIE.RAR, this::parseRAR);
+        handlers.put(SIE.RTRANS, this::handleRTRANS);
+        handlers.put(SIE.SIETYP, this::handleSIETYP);
+        handlers.put(SIE.SRU, this::parseSRU);
+        handlers.put(SIE.TAXAR, di -> sieDocument.setTAXAR(di.getInt(0)));
+        handlers.put(SIE.UB, this::parseUB);
+        handlers.put(SIE.TRANS, this::handleTRANS);
+        handlers.put(SIE.RES, this::parseRES);
+        handlers.put(SIE.UNDERDIM, this::parseUnderDimension);
+        handlers.put(SIE.VALUTA, di -> sieDocument.setVALUTA(di.getString(0)));
+        handlers.put(SIE.VER, di -> curVoucher = parseVER(di));
+    }
+
+    private void handleADRESS(SieDataItem di) {
+        sieDocument.getFNAMN().setContact(di.getString(0));
+        sieDocument.getFNAMN().setStreet(di.getString(1));
+        sieDocument.getFNAMN().setZipCity(di.getString(2));
+        sieDocument.getFNAMN().setPhone(di.getString(3));
+    }
+
+    private void handleGEN(SieDataItem di) {
+        sieDocument.setGEN_DATE(di.getDate(0));
+        sieDocument.setGEN_NAMN(di.getString(1));
+    }
+
+    private void handleBTRANS(SieDataItem di) {
+        if (!ignoreBTRANS) {
+            if (curVoucher == null) {
+                callbacks.callbackException(new SieParseException(
+                    "#BTRANS outside #VER block at line " + parsingLineNumber));
+            } else {
+                parseTRANS(di, curVoucher);
+            }
+        }
+    }
+
+    private void handleRTRANS(SieDataItem di) {
+        if (!ignoreRTRANS) {
+            if (curVoucher == null) {
+                callbacks.callbackException(new SieParseException(
+                    "#RTRANS outside #VER block at line " + parsingLineNumber));
+            } else {
+                parseTRANS(di, curVoucher);
+            }
+        }
+    }
+
+    private void handleTRANS(SieDataItem di) {
+        if (curVoucher == null) {
+            callbacks.callbackException(new SieParseException(
+                "#TRANS outside #VER block at line " + parsingLineNumber));
+        } else {
+            parseTRANS(di, curVoucher);
+        }
+    }
+
+    private void handleKSUMMA(SieDataItem di) {
+        if (!ignoreKSUMMA) {
+            if (CRC.isStarted()) {
+                parseKSUMMA(di);
+            } else {
+                CRC.start();
+            }
+        }
+    }
+
+    private void handleSIETYP(SieDataItem di) {
+        sieDocument.setSIETYP(di.getInt(0));
+        if (acceptSIETypes != null) {
+            try {
+                SieType parsed = SieType.fromValue(di.getInt(0));
+                if (!acceptSIETypes.contains(parsed)) {
+                    callbacks.callbackException(new SieInvalidFeatureException(
+                        "SIE type " + di.getInt(0) + " is not accepted"));
+                    abortParsing = true;
+                }
+            } catch (IllegalArgumentException e) {
+                callbacks.callbackException(new SieInvalidFeatureException(
+                    "Unknown SIE type: " + di.getInt(0)));
+            }
+        }
+    }
+
+    private void handleOIB(SieDataItem di) {
+        SiePeriodValue pv = parseOIB_OUB(di);
+        callbacks.callbackOIB(pv);
+        if (!streamValues) sieDocument.getOIB().add(pv);
+    }
+
+    private void handleOUB(SieDataItem di) {
+        SiePeriodValue pv = parseOIB_OUB(di);
+        callbacks.callbackOUB(pv);
+        if (!streamValues) sieDocument.getOUB().add(pv);
+    }
+
+    private void handlePBUDGET(SieDataItem di) {
+        SiePeriodValue pv = parsePBUDGET_PSALDO(di);
+        if (pv != null) {
+            callbacks.callbackPBUDGET(pv);
+            if (!streamValues) sieDocument.getPBUDGET().add(pv);
+        }
+    }
+
+    private void handlePSALDO(SieDataItem di) {
+        SiePeriodValue pv = parsePBUDGET_PSALDO(di);
+        if (pv != null) {
+            callbacks.callbackPSALDO(pv);
+            if (!streamValues) sieDocument.getPSALDO().add(pv);
+        }
     }
 
     private void parseRAR(SieDataItem di) {
