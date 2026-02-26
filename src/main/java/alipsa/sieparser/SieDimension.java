@@ -27,11 +27,18 @@ package alipsa.sieparser;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+/**
+ * Represents a SIE dimension (#DIM).
+ * Dimensions are used for multi-dimensional accounting (e.g. cost centers, projects).
+ * Standard dimensions 1-19 are predefined; custom dimensions can also be added.
+ */
 public class SieDimension {
-    public boolean isDefault;
-    public HashSet<SieDimension> subDim = new HashSet<SieDimension>();
-    public HashMap<String, SieObject> objects = new HashMap<String, SieObject>();
+    private boolean isDefault;
+    private Set<SieDimension> subDim = new HashSet<>();
+    private Map<String, SieObject> objects = new HashMap<>();
     private String number;
     private String name;
     private SieDimension parent = null;
@@ -52,6 +59,22 @@ public class SieDimension {
         this(number, "");
     }
 
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean value) {
+        isDefault = value;
+    }
+
+    public Set<SieDimension> getSubDim() {
+        return subDim;
+    }
+
+    public Map<String, SieObject> getObjects() {
+        return objects;
+    }
+
     public String getNumber() {
         return number;
     }
@@ -68,14 +91,12 @@ public class SieDimension {
         name = value;
     }
 
-    public SieDimension getSuperDim() throws Exception {
+    public SieDimension getSuperDim() {
         return parent;
     }
 
-    public void setSuperDim(SieDimension value) throws Exception {
+    public void setSuperDim(SieDimension value) {
         parent = value;
         parent.subDim.add(this);
     }
 }
-
-

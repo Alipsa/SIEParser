@@ -33,10 +33,19 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 /**
- * Centralized place for creating Readers and writers.
+ * Centralized place for creating Readers and Writers using the SIE charset (IBM437).
  */
 public class IoUtil {
 
+    private IoUtil() {}
+
+    /**
+     * Creates a {@link BufferedReader} for reading a SIE file using the IBM437 charset.
+     *
+     * @param fileName the path to the file to read
+     * @return a buffered reader for the file
+     * @throws IOException if the file cannot be opened
+     */
     public static BufferedReader getReader(String fileName) throws IOException {
         /*
         CharsetDecoder decoder = Encoding.getCharset().newDecoder();
@@ -48,6 +57,14 @@ public class IoUtil {
 
     }
 
+    /**
+     * Creates a {@link BufferedWriter} for writing a SIE file using the IBM437 charset.
+     * If the file already exists it will be overwritten; otherwise a new file is created.
+     *
+     * @param fileName the path to the file to write
+     * @return a buffered writer for the file
+     * @throws IOException if the file cannot be opened or created
+     */
     public static BufferedWriter getWriter(String fileName) throws IOException {
         /*
         CharsetEncoder encoder = Encoding.getCharset().newEncoder();

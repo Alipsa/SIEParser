@@ -25,22 +25,27 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a SIE voucher (#VER).
+ * A voucher contains a series, number, date, descriptive text,
+ * and a list of transaction rows that must sum to zero.
+ */
 public class SieVoucher {
     private String series;
     private String number;
-    private Date voucherDate;
+    private LocalDate voucherDate;
     private String text;
-    private int createdDate;
+    private LocalDate createdDate;
     private String createdBy;
     private String token;
     private List<SieVoucherRow> rows;
 
-    public SieVoucher() throws Exception {
-        setRows(new ArrayList<SieVoucherRow>());
+    public SieVoucher() {
+        setRows(new ArrayList<>());
     }
 
     public String getSeries() {
@@ -59,11 +64,11 @@ public class SieVoucher {
         number = value;
     }
 
-    public Date getVoucherDate() {
+    public LocalDate getVoucherDate() {
         return voucherDate;
     }
 
-    public void setVoucherDate(Date value) {
+    public void setVoucherDate(LocalDate value) {
         voucherDate = value;
     }
 
@@ -75,11 +80,11 @@ public class SieVoucher {
         text = value;
     }
 
-    public int getCreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(int value) {
+    public void setCreatedDate(LocalDate value) {
         createdDate = value;
     }
 
@@ -106,7 +111,4 @@ public class SieVoucher {
     public void setRows(List<SieVoucherRow> value) {
         rows = value;
     }
-
 }
-
-

@@ -25,7 +25,13 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
+/**
+ * Constants for all SIE item type identifiers (field tags).
+ * Each constant corresponds to a record type defined in the SIE file format specification.
+ */
 public class SIE {
+
+    private SIE() {}
 
     /** Address for the company */
     public static final String ADRESS = "#ADRESS";

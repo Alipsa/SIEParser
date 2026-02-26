@@ -26,11 +26,18 @@ SOFTWARE.
 package alipsa.sieparser;
 
 
-public class SieDateException extends Exception {
-    public SieDateException(String description) throws Exception {
+/**
+ * Thrown when a date field in a SIE file has an invalid format.
+ * SIE dates must be in YYYYMMDD format.
+ */
+public class SieDateException extends SieException {
+    /**
+     * Creates a new SieDateException with the given description.
+     *
+     * @param description a message describing the invalid date
+     */
+    public SieDateException(String description) {
         super(description);
     }
 
 }
-
-

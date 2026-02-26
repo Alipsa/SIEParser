@@ -26,15 +26,22 @@ SOFTWARE.
 package alipsa.sieparser;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Represents a single transaction row (#TRANS, #BTRANS, #RTRANS) within a voucher.
+ * Each row records a debit or credit to a specific account.
+ */
 public class SieVoucherRow {
-    public Integer quantity;
+
+    public SieVoucherRow() {}
+
+    private BigDecimal quantity;
     private SieAccount account;
     private List<SieObject> objects;
     private BigDecimal amount;
-    private Date rowDate;
+    private LocalDate rowDate;
     private String text;
     private String createdBy;
     private String token;
@@ -63,11 +70,11 @@ public class SieVoucherRow {
         amount = value;
     }
 
-    public Date getRowDate() {
+    public LocalDate getRowDate() {
         return rowDate;
     }
 
-    public void setRowDate(Date value) {
+    public void setRowDate(LocalDate value) {
         rowDate = value;
     }
 
@@ -95,8 +102,11 @@ public class SieVoucherRow {
         token = value;
     }
 
-    public void setQuantity(Integer q) {quantity = q; }
+    public BigDecimal getQuantity() {
+        return quantity;
+    }
 
+    public void setQuantity(BigDecimal q) {
+        quantity = q;
+    }
 }
-
-

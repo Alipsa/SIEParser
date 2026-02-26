@@ -1,131 +1,106 @@
 /*
- * Gradle 3.2.1 build script
+ * Gradle 9.3 build script
  *
  */
-
-//def releaseVersion = '1.0'
-def releaseVersion = '1.1-SNAPSHOT'
-
-// Apply the java plugin to add support for Java
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
-
-group = 'com.github.pernyfelt.sieparser'
-archivesBaseName = "sieparser"
-version = releaseVersion
-
-def defaultEncoding = 'UTF-8'
-
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-    options.deprecation = true
-    options.compilerArgs << "-Xlint:unchecked"
-    //options.encoding = defaultEncoding
+plugins {
+    id 'java-library'
+    id 'signing'
+    id 'maven-publish'
+    id("se.alipsa.nexus-release-plugin") version '2.0.1'
 }
 
-[compileJava, compileTestJava]*.options*.encoding = defaultEncoding
+group = 'com.github.pernyfelt.sieparser'
+version = '2.0-SNAPSHOT'
 
-ext {
-    pomFile = file("${project.buildDir}/generated-pom.xml")
+base {
+    archivesName = 'sieparser'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withJavadocJar()
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.deprecation = true
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
 repositories {
-    // Use 'jcenter' for resolving dependencies.
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
     // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+    api 'org.slf4j:slf4j-api:2.0.16'
 
-    testCompile 'junit:junit:4.12'
+    // JAXB for SIE 5 XML support
+    api 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.16'
 }
 
-task myJavadocs(type: Javadoc) {
-    classpath = configurations.compile
-    source = sourceSets.main.allJava
-    exclude '**/org/slf4j/**'
+test {
+    useJUnitPlatform()
 }
 
-task javadocJar(type: Jar, dependsOn: 'myJavadocs') {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourceJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourceJar, javadocJar
-}
-
-signing {
-    sign configurations.archives
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-            /*
-            repository(url: "file://$buildDir/repo") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "file://$buildDir/repo") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-            */
-            pom.project {
-                name 'SIEParser'
-                description 'A Java parser for SIE files that can read files of version 1 to 4 (including 4i)'
-                artifactId 'SieParser'
-                url 'http://github.com/perNyfelt/SIEParser'
-                packaging 'jar'
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            pom {
+                name = 'SIEParser'
+                description = 'A Java parser for SIE files that can read files of version 1 to 4 (including 4i)'
+                artifactId = 'SieParser'
+                url = 'http://github.com/perNyfelt/SIEParser'
+                packaging = 'jar'
                 licenses {
                     license {
-                        name 'MIT License'
-                        url 'http://opensource.org/licenses/MIT'
+                        name = 'MIT License'
+                        url = 'http://opensource.org/licenses/MIT'
                     }
                 }
-                inceptionYear 2016
+                inceptionYear = '2016'
                 organization {
-                    name 'Alipsa HB'
-                    url 'http://www.alipsa.se'
+                    name = 'Alipsa HB'
+                    url = 'http://www.alipsa.se'
                 }
                 developers {
                     developer {
-                        id 'perNyfelt'
-                        name 'Per Nyfelt'
-                        // organization 'Alipsa HB'
-                        organizationUrl 'http://www.alipsa.se'
+                        id = 'perNyfelt'
+                        name = 'Per Nyfelt'
+                        organizationUrl = 'http://www.alipsa.se'
                     }
                 }
                 issueManagement {
-                    system 'github'
-                    url 'http://github.com/perNyfelt/SIEParser/issues'
+                    system = 'github'
+                    url = 'http://github.com/perNyfelt/SIEParser/issues'
                 }
-
                 scm {
-                    url 'http://github.com/perNyfelt/SIEParser'
-                    connection '"scm:git:http://github.com/perNyfelt/SIEParser.git'
-                    developerConnection 'scm:git:git@github.com:perNyfelt/SIEParser.git'
+                    url = 'http://github.com/perNyfelt/SIEParser'
+                    connection = 'scm:git:http://github.com/perNyfelt/SIEParser.git'
+                    developerConnection = 'scm:git:git@github.com:perNyfelt/SIEParser.git'
                 }
             }
         }
     }
+}
+
+signing {
+    if (project.properties['signing.keyId'] != null) {
+        sign publishing.publications.maven
+    } else {
+        project.logger.debug("signing.keyId is not defined, skipping signing of artifacts...")
+    }
+}
+
+nexusReleasePlugin {
+    userName = project.ext.properties.sonatypeUsername
+    password = project.ext.properties.sonatypePassword
+    mavenPublication = publishing.publications.maven
 }

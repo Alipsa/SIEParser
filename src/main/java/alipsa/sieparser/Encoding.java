@@ -33,16 +33,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Handles character encoding for SIE files.
+ * SIE files use the IBM437 (PC8) code page by default.
+ */
 public class Encoding {
+
+    private Encoding() {}
 
     Logger logger = LoggerFactory.getLogger(Encoding.class);
 
     private static Charset defaultCharset=Charset.forName("IBM437");
 
+    /**
+     * Returns the charset used for SIE file encoding (IBM437).
+     *
+     * @return the SIE charset
+     */
     public static Charset getCharset() {
         return defaultCharset;
     }
 
+    /**
+     * Converts a string to a collection of bytes using the SIE charset.
+     *
+     * @param value the string to convert
+     * @return a collection of bytes representing the string in IBM437 encoding
+     */
     public static Collection<Byte> getBytes(String value) {
         byte[] byteArray =  value.getBytes(getCharset());
         List<Byte> byteList = new ArrayList<>();

@@ -25,8 +25,16 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
-public class MissingFieldException extends Exception {
+/**
+ * Thrown when a required field is missing from a SIE data item.
+ */
+public class MissingFieldException extends SieException {
 
+    /**
+     * Creates a new MissingFieldException with the given message.
+     *
+     * @param s the detail message describing which field is missing
+     */
     public MissingFieldException(String s) {
         super(s);
     }

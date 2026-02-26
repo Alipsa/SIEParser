@@ -27,26 +27,32 @@ package alipsa.sieparser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Compares two {@link SieDocument} instances and reports all differences.
+ * Useful for verifying that a read-write round-trip preserves all data.
+ */
 public class SieDocumentComparer {
     private SieDocument docA;
     private SieDocument docB;
     private List<String> errors;
 
-    private SieDocumentComparer(SieDocument docA, SieDocument docB) throws Exception {
+    private SieDocumentComparer(SieDocument docA, SieDocument docB) {
         this.docA = docA;
         this.docB = docB;
         errors = new ArrayList<>();
     }
 
-    public static List<String> compare(SieDocument docA, SieDocument docB) throws Exception {
+    public static List<String> compare(SieDocument docA, SieDocument docB) {
         SieDocumentComparer comp = new SieDocumentComparer(docA, docB);
         comp.doCompare();
         return comp.errors;
     }
 
-    private void doCompare() throws Exception {
+    private void doCompare() {
         compareNonListItems();
+        compareProgram();
         compareDIM(docA, docB, "First", "Second");
         compareDIM(docB, docA, "Second", "First");
         comparePeriodValueList(docA.getIB(), docB.getIB(), "IB", "First", "Second");
@@ -71,50 +77,62 @@ public class SieDocumentComparer {
         compareVER(docB, docA, "Second", "First");
     }
 
-    private void compareNonListItems() throws Exception {
+    private void compareNonListItems() {
         if (docA.getFLAGGA() != docB.getFLAGGA())
-            errors.add("FLAGGA differs First, Second: '" + docA.getFLAGGA() + "' , '" + docB.getFLAGGA()+"'");
+            errors.add("FLAGGA differs First, Second: '" + docA.getFLAGGA() + "' , '" + docB.getFLAGGA() + "'");
 
         if (!docA.getFORMAT().equals(docB.getFORMAT()))
-            errors.add("FORMAT differs First, Second: '" + docA.getFORMAT() + "' , '" + docB.getFORMAT()+"'");
+            errors.add("FORMAT differs First, Second: '" + docA.getFORMAT() + "' , '" + docB.getFORMAT() + "'");
 
         compareFNAMN();
-        if (!docA.getFORMAT().equals(docB.getFORMAT()))
-            errors.add("FORMAT differs First, Second: '" + docA.getFORMAT() + "' , '" + docB.getFORMAT()+"'");
 
-        if (docA.getGEN_DATE() == null && docB.getGEN_DATE() != null && docA.getGEN_DATE().equals(docB.getGEN_DATE())) {
+        // Fix: use Objects.equals for null-safe comparison
+        if (!Objects.equals(docA.getGEN_DATE(), docB.getGEN_DATE())) {
             errors.add("GEN_DATE differs");
         }
 
-        if (docA.getOMFATTN() == null && docB.getOMFATTN() != null && docA.getOMFATTN().equals(docB.getOMFATTN())) {
+        if (!Objects.equals(docA.getOMFATTN(), docB.getOMFATTN())) {
             errors.add("OMFATTN differs");
         }
 
-        if (!docA.getGEN_NAMN().equals(docB.getGEN_NAMN()))
+        if (!StringUtil.equals(docA.getGEN_NAMN(), docB.getGEN_NAMN()))
             errors.add("GEN_NAMN differs First, Second: '" + docA.getGEN_NAMN() + "' , '" + docB.getGEN_NAMN() + "'");
 
         if (docA.getKPTYP() != null && !docA.getKPTYP().equals(docB.getKPTYP()))
             errors.add("KPTYP differs First, Second: '" + docA.getKPTYP() + "' , '" + docB.getKPTYP() + "'");
 
-        if (docA.getKSUMMA() != docB.getKSUMMA()) errors.add("KSUMMA differs First, Second: '" + docA.getKSUMMA() + "', '" + docB.getKSUMMA());
+        if (docA.getKSUMMA() != docB.getKSUMMA()) errors.add("KSUMMA differs First, Second: '" + docA.getKSUMMA() + "', '" + docB.getKSUMMA() + "'");
 
         String a = docA.getPROSA() != null ? docA.getPROSA() : "";
         String b = docB.getPROSA() != null ? docB.getPROSA() : "";
         if (!a.equals(b))
-            errors.add("PROSA differs First, Second: '" + a + "' , '" + b+"'");
+            errors.add("PROSA differs First, Second: '" + a + "' , '" + b + "'");
 
         if (docA.getSIETYP() != docB.getSIETYP())
-            errors.add("SIETYP differs First, Second: '" + docA.getSIETYP() + "' , '" + docB.getSIETYP()+"'");
+            errors.add("SIETYP differs First, Second: '" + docA.getSIETYP() + "' , '" + docB.getSIETYP() + "'");
 
         if (docA.getTAXAR() != docB.getTAXAR())
-            errors.add("TAXAR differs First, Second: '" + docA.getTAXAR() + "' , '" + docB.getTAXAR()+"'");
+            errors.add("TAXAR differs First, Second: '" + docA.getTAXAR() + "' , '" + docB.getTAXAR() + "'");
 
         if (!docA.getVALUTA().equals(docB.getVALUTA()))
             errors.add("VALUTA differs First, Second: '" + docA.getVALUTA() + "' , '" + docB.getVALUTA() + "'");
-
     }
 
-    private void comparePeriodValueList(List<SiePeriodValue> listA, List<SiePeriodValue> listB, String listName, String nameA, String nameB) throws Exception {
+    private void compareProgram() {
+        List<String> progA = docA.getPROGRAM();
+        List<String> progB = docB.getPROGRAM();
+        if (progA.size() != progB.size()) {
+            errors.add("PROGRAM differs First has " + progA.size() + " entries, Second has " + progB.size());
+            return;
+        }
+        for (int i = 0; i < progA.size(); i++) {
+            if (!StringUtil.equals(progA.get(i), progB.get(i))) {
+                errors.add("PROGRAM[" + i + "] differs First, Second: '" + progA.get(i) + "' , '" + progB.get(i) + "'");
+            }
+        }
+    }
+
+    private void comparePeriodValueList(List<SiePeriodValue> listA, List<SiePeriodValue> listB, String listName, String nameA, String nameB) {
         for (SiePeriodValue pA : listA) {
             boolean foundIt = false;
             for (SiePeriodValue pB : listB) {
@@ -122,18 +140,16 @@ public class SieDocumentComparer {
                     foundIt = true;
                     break;
                 }
-
             }
             if (!foundIt) {
                 errors.add(listName + " differs account, YearNo, period not found or different in " + nameB + ": " +
                         "Account=" + pA.getAccount().getNumber() + ", Year=" + pA.getYearNr() + ", Period=" +
                         pA.getPeriod());
             }
-
         }
     }
 
-    private boolean periodValueComparer(SiePeriodValue a, SiePeriodValue b) throws Exception {
+    private boolean periodValueComparer(SiePeriodValue a, SiePeriodValue b) {
         if (!a.getAccount().getNumber().equals(b.getAccount().getNumber()))
             return false;
 
@@ -158,7 +174,7 @@ public class SieDocumentComparer {
         return true;
     }
 
-    private boolean compareObjects(List<SieObject> a, List<SieObject> b) throws Exception {
+    private boolean compareObjects(List<SieObject> a, List<SieObject> b) {
         if (a != null && b == null)
             return false;
 
@@ -178,58 +194,48 @@ public class SieDocumentComparer {
 
                 if (!a.get(i).getNumber().equals(b.get(i).getNumber()))
                     return false;
-
             }
         }
 
         return true;
     }
 
-    private void compareFNAMN() throws Exception {
-
+    private void compareFNAMN() {
         if (docA.getFNAMN() != null && docB.getFNAMN() != null) {
-            if (!StringUtil.equals(docA.getFNAMN().getCode(),docB.getFNAMN().getCode()))
-                errors.add("FNAMN.Code differs First, Second: '" + docA.getFNAMN().getCode() + "' , '" + docB.getFNAMN()
-                        .getCode() + "'");
+            if (!StringUtil.equals(docA.getFNAMN().getCode(), docB.getFNAMN().getCode()))
+                errors.add("FNAMN.Code differs First, Second: '" + docA.getFNAMN().getCode() + "' , '" + docB.getFNAMN().getCode() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getContact(),docB.getFNAMN().getContact()))
-                errors.add("ADRESS.Contact differs First, Second: '" + docA.getFNAMN().getContact() + "' , '" + docB
-                        .getFNAMN().getContact()+"'");
+            if (!StringUtil.equals(docA.getFNAMN().getContact(), docB.getFNAMN().getContact()))
+                errors.add("ADRESS.Contact differs First, Second: '" + docA.getFNAMN().getContact() + "' , '" + docB.getFNAMN().getContact() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getName(),docB.getFNAMN().getName()))
-                errors.add("FNAMN.Name differs First, Second: '" + docA.getFNAMN().getName() + "' , '" + docB.getFNAMN()
-                        .getName()+"'");
+            if (!StringUtil.equals(docA.getFNAMN().getName(), docB.getFNAMN().getName()))
+                errors.add("FNAMN.Name differs First, Second: '" + docA.getFNAMN().getName() + "' , '" + docB.getFNAMN().getName() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getOrgIdentifier(),docB.getFNAMN().getOrgIdentifier()))
+            if (!StringUtil.equals(docA.getFNAMN().getOrgIdentifier(), docB.getFNAMN().getOrgIdentifier()))
                 errors.add("ORGNR.OrgIdentifier (#FNAMN) differs First, Second: '" + docA.getFNAMN().getOrgIdentifier()
-                        + "', '" + docB.getFNAMN().getOrgIdentifier()+"'");
+                        + "', '" + docB.getFNAMN().getOrgIdentifier() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getOrgType(),docB.getFNAMN().getOrgType()))
-                errors.add("FTYP differs First, Second: '" + docA.getFNAMN().getOrgType() + "' , '" + docB.getFNAMN()
-                        .getOrgType()+"'");
+            if (!StringUtil.equals(docA.getFNAMN().getOrgType(), docB.getFNAMN().getOrgType()))
+                errors.add("FTYP differs First, Second: '" + docA.getFNAMN().getOrgType() + "' , '" + docB.getFNAMN().getOrgType() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getPhone(),docB.getFNAMN().getPhone()))
-                errors.add("ADRESS.Phone differs First, Second: '" + docA.getFNAMN().getPhone() + "' , '" + docB
-                        .getFNAMN().getPhone()+"'");
+            if (!StringUtil.equals(docA.getFNAMN().getPhone(), docB.getFNAMN().getPhone()))
+                errors.add("ADRESS.Phone differs First, Second: '" + docA.getFNAMN().getPhone() + "' , '" + docB.getFNAMN().getPhone() + "'");
 
             if (docA.getFNAMN().getSni() != docB.getFNAMN().getSni())
-                errors.add("FNAMN.SNI differs First, Second: '" + docA.getFNAMN().getSni() + "' , '" + docB.getFNAMN()
-                        .getSni()+"'");
+                errors.add("FNAMN.SNI differs First, Second: '" + docA.getFNAMN().getSni() + "' , '" + docB.getFNAMN().getSni() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getStreet(),docB.getFNAMN().getStreet()))
-                errors.add("ADRESS.Street differs First, Second: '" + docA.getFNAMN().getStreet() + "' , '" + docB
-                        .getFNAMN().getStreet()+"'");
+            if (!StringUtil.equals(docA.getFNAMN().getStreet(), docB.getFNAMN().getStreet()))
+                errors.add("ADRESS.Street differs First, Second: '" + docA.getFNAMN().getStreet() + "' , '" + docB.getFNAMN().getStreet() + "'");
 
-            if (!StringUtil.equals(docA.getFNAMN().getZipCity(),docB.getFNAMN().getZipCity()))
-                errors.add("ADRESS.ZipCity differs First, Second: '" + docA.getFNAMN().getZipCity() + "' , '" + docB
-                        .getFNAMN().getZipCity()+"'");
+            if (!StringUtil.equals(docA.getFNAMN().getZipCity(), docB.getFNAMN().getZipCity()))
+                errors.add("ADRESS.ZipCity differs First, Second: '" + docA.getFNAMN().getZipCity() + "' , '" + docB.getFNAMN().getZipCity() + "'");
 
         } else {
             errors.add("FNAMN differs.");
         }
     }
 
-    private void compareKONTO(SieDocument docA, SieDocument docB, String nameA, String nameB) throws Exception {
+    private void compareKONTO(SieDocument docA, SieDocument docB, String nameA, String nameB) {
         for (SieAccount kA : docA.getKONTO().values()) {
             if (docB.getKONTO().containsKey(kA.getNumber())) {
                 SieAccount kB = docB.getKONTO().get(kA.getNumber());
@@ -248,7 +254,6 @@ public class SieDocumentComparer {
                             errors.add("KONTO.SRU differ " + kA.getNumber());
                             break;
                         }
-
                     }
                 } else {
                     errors.add("KONTO.SRU differ " + kA.getNumber());
@@ -259,7 +264,7 @@ public class SieDocumentComparer {
         }
     }
 
-    private void compareDIM(SieDocument docA, SieDocument docB, String nameA, String nameB) throws Exception {
+    private void compareDIM(SieDocument docA, SieDocument docB, String nameA, String nameB) {
         for (String dimKey : docA.getDIM().keySet()) {
             if (docB.getDIM().containsKey(dimKey)) {
                 if (!docA.getDIM().get(dimKey).getName().equals(docB.getDIM().get(dimKey).getName()))
@@ -277,7 +282,6 @@ public class SieDocumentComparer {
 
                     if (!docA.getDIM().get(dimKey).getSuperDim().getNumber().equals(docB.getDIM().get(dimKey).getSuperDim().getNumber()))
                         errors.add("DIM " + dimKey + " SuperDim.Number differ " + nameA + "," + nameB + ":" + docA.getDIM().get(dimKey).getSuperDim().getNumber() + " , " + docB.getDIM().get(dimKey).getSuperDim().getNumber());
-
                 }
 
             } else {
@@ -286,17 +290,17 @@ public class SieDocumentComparer {
         }
     }
 
-    private void compareRAR(SieDocument docA, SieDocument docB, String nameA, String nameB) throws Exception {
+    private void compareRAR(SieDocument docA, SieDocument docB, String nameA, String nameB) {
         for (SieBookingYear rarA : docA.getRars().values()) {
             if (docB.getRars().containsKey(rarA.getId())) {
                 SieBookingYear rarB = docB.getRars().get(rarA.getId());
                 if (rarA.getStart() != null && !rarA.getStart().equals(rarB.getStart()))
-                    errors.add(nameB + " RAR differs: id=" + rarA.getId() + " " + nameA + ".start='"+rarA.getStart() +
-                            "' " + nameB + ".start='"+rarB.getStart()+"'");
+                    errors.add(nameB + " RAR differs: id=" + rarA.getId() + " " + nameA + ".start='" + rarA.getStart() +
+                            "' " + nameB + ".start='" + rarB.getStart() + "'");
 
                 if (rarA.getEnd() != null && !rarA.getEnd().equals(rarB.getEnd()))
-                    errors.add(nameB + " RAR differs " + rarA.getId() + " " + nameA + ".end='"+rarA.getEnd() +
-                            "' " + nameB + ".end='"+rarB.getEnd()+"'");
+                    errors.add(nameB + " RAR differs " + rarA.getId() + " " + nameA + ".end='" + rarA.getEnd() +
+                            "' " + nameB + ".end='" + rarB.getEnd() + "'");
 
             } else {
                 errors.add(nameB + " RAR is missing " + rarA.getId());
@@ -304,7 +308,7 @@ public class SieDocumentComparer {
         }
     }
 
-    private void compareVER(SieDocument docA, SieDocument docB, String nameA, String nameB) throws Exception {
+    private void compareVER(SieDocument docA, SieDocument docB, String nameA, String nameB) {
         for (SieVoucher vA : docA.getVER()) {
             boolean foundIt = false;
             for (SieVoucher vB : docB.getVER()) {
@@ -312,16 +316,14 @@ public class SieDocumentComparer {
                     foundIt = true;
                     break;
                 }
-
             }
             if (!foundIt) {
                 errors.add("Vouchers differs Series, Number not found or different in " + nameB + ": " + vA.getSeries() + ", " + vA.getNumber());
             }
-
         }
     }
 
-    private boolean voucherComparer(SieVoucher vA, SieVoucher vB) throws Exception {
+    private boolean voucherComparer(SieVoucher vA, SieVoucher vB) {
         if (!vA.getNumber().equals(vB.getNumber()))
             return false;
 
@@ -339,41 +341,43 @@ public class SieDocumentComparer {
 
         if (vA.getRows().size() != vB.getRows().size()) {
             return false;
-        } else {
-            for (SieVoucherRow rA : vA.getRows()) {
-                boolean foundIt = true;
-                for (SieVoucherRow rB : vB.getRows()) {
-                    if (!rA.getAccount().getNumber().equals(rB.getAccount().getNumber()))
-                        foundIt = false;
+        }
 
-                    if (rA.getAmount() != rB.getAmount())
-                        foundIt = false;
-
-                    if (!rA.getCreatedBy().equals(rB.getCreatedBy()))
-                        foundIt = false;
-
-                    if (!rA.getRowDate().equals(rB.getRowDate()))
-                        foundIt = false;
-
-                    if (!(rA.quantity == null || rA.quantity.equals(rB.quantity)))
-                        foundIt = false;
-
-                    if (!compareObjects(rA.getObjects(), rB.getObjects()))
-                        foundIt = false;
-
-                    if (foundIt)
-                        break;
-
+        // Fix: properly track match state
+        for (SieVoucherRow rA : vA.getRows()) {
+            boolean foundRow = false;
+            for (SieVoucherRow rB : vB.getRows()) {
+                if (rowMatches(rA, rB)) {
+                    foundRow = true;
+                    break;
                 }
-                if (foundIt) {
-                    return true;
-                }
-
+            }
+            if (!foundRow) {
+                return false;
             }
         }
         return true;
     }
 
+    private boolean rowMatches(SieVoucherRow rA, SieVoucherRow rB) {
+        if (!rA.getAccount().getNumber().equals(rB.getAccount().getNumber()))
+            return false;
+
+        if (rA.getAmount().compareTo(rB.getAmount()) != 0)
+            return false;
+
+        if (!StringUtil.equals(rA.getCreatedBy(), rB.getCreatedBy()))
+            return false;
+
+        if (!Objects.equals(rA.getRowDate(), rB.getRowDate()))
+            return false;
+
+        if (!Objects.equals(rA.getQuantity(), rB.getQuantity()))
+            return false;
+
+        if (!compareObjects(rA.getObjects(), rB.getObjects()))
+            return false;
+
+        return true;
+    }
 }
-
-

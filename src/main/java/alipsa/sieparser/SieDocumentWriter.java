@@ -27,31 +27,75 @@ package alipsa.sieparser;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.charset.Charset;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Writes a {@link SieDocument} to a SIE file.
+ * Produces output conforming to the SIE file format specification using IBM437 encoding.
+ */
 public class SieDocumentWriter {
+    private static final DateTimeFormatter SIE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     private SieDocument sieDoc;
     private BufferedWriter writer;
+    private WriteOptions options;
 
-    public SieDocumentWriter(SieDocument sie) throws Exception {
+    public SieDocumentWriter(SieDocument sie) {
         sieDoc = sie;
+        this.options = new WriteOptions();
     }
 
-    public void write(String fileName) throws Exception {
+    public SieDocumentWriter(SieDocument sie, WriteOptions options) {
+        sieDoc = sie;
+        this.options = options != null ? options : new WriteOptions();
+    }
+
+    public void write(String fileName) throws IOException {
         File file = new File(fileName);
         if (file.exists()) file.delete();
 
-        writer = IoUtil.getWriter(fileName);
+        try (BufferedWriter bw = IoUtil.getWriter(fileName)) {
+            writer = bw;
+            writeContent();
+        }
+    }
+
+    public void write(OutputStream outputStream) throws IOException {
+        Charset charset = Encoding.getCharset();
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset))) {
+            writer = bw;
+            writeContent();
+        }
+    }
+
+    public void addVouchers(OutputStream outputStream, List<SieVoucher> vouchers) throws IOException {
+        Charset charset = Encoding.getCharset();
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset))) {
+            writer = bw;
+            for (SieVoucher v : vouchers) {
+                writeVoucherEntry(v);
+            }
+        }
+    }
+
+    private void writeContent() throws IOException {
+        SieCRC32 crc = null;
+        if (options.isWriteKSUMMA()) {
+            crc = new SieCRC32();
+            crc.start();
+            writeLine(SIE.KSUMMA);
+        }
+
         writeLine(getFLAGGA());
         writeLine(getPROGRAM());
         writeLine(getFORMAT());
         writeLine(getGEN());
         writeLine(getSIETYP());
         if (!StringUtil.isNullOrEmpty(sieDoc.getPROSA())) {
-            writeLine(SIE.PROSA + " \"" + sieDoc.getPROSA() + "\"");
+            writeLine(SIE.PROSA + " \"" + sieText(sieDoc.getPROSA()) + "\"");
         }
         writeFNR();
         writeLine(getORGNR());
@@ -64,6 +108,7 @@ public class SieDocumentWriter {
         writeOMFATTN();
         writeRAR();
         writeDIM();
+        writeUNDERDIM();
         writeKONTO();
         writePeriodValue(SIE.IB, sieDoc.getIB());
         writePeriodValue(SIE.UB, sieDoc.getUB());
@@ -79,83 +124,97 @@ public class SieDocumentWriter {
 
         writePeriodValue(SIE.RES, sieDoc.getRES());
         writeVER();
-        writer.close();
+
+        if (options.isWriteKSUMMA() && crc != null) {
+            writeLine(SIE.KSUMMA + " " + crc.checksum());
+        }
     }
 
-    private void writeVALUTA() throws Exception {
+    private void writeVALUTA() throws IOException {
         if (!StringUtil.isNullOrEmpty(sieDoc.getVALUTA())) {
             writeLine(SIE.VALUTA + " " + sieDoc.getVALUTA());
         }
-
     }
 
-    private void writeVER() throws Exception {
+    private void writeVER() throws IOException {
         for (SieVoucher v : sieDoc.getVER()) {
-            String createdBy = StringUtil.equals(v.getCreatedBy(), "") ? "" : " \"" + v.getCreatedBy() + "\"";
-            String createdDate = v.getCreatedDate() == 0 ? "" : String.valueOf(v.getCreatedDate());
-            writeLine(SIE.VER + " \"" + v.getSeries() + "\" \"" + v.getNumber() + "\" " + makeSieDate(v.getVoucherDate())
-                    + " \"" + v.getText() + "\" " + createdDate + createdBy);
-            writeLine("{");
-            for (SieVoucherRow r : v.getRows()) {
-                String obj = getObjeklista(r.getObjects());
-                String quantity;
-                if (r.quantity != null) {
-                    quantity = sieAmount(r.quantity);
-                } else {
-                    quantity = "";
-                }
-                createdBy = StringUtil.equals(v.getCreatedBy(), "") ? "" : "\"" + v.getCreatedBy() + "\"";
-                // TODO: improve null checking
-                if (r.getAccount() != null) {
-                    writeLine(SIE.TRANS + " " +
-                            r.getAccount().getNumber() + " " +
-                            obj + " " +
-                            sieAmount(r.getAmount()) + " " +
-                            makeSieDate(r.getRowDate()) + " \"" +
-                            r.getText() + "\" " +
-                            quantity + " " +
-                            createdBy);
-                }
-            }
-            writeLine("}");
+            writeVoucherEntry(v);
         }
     }
 
-    private String getObjeklista(List<SieObject> objects) throws Exception {
-        if (sieDoc.getSIETYP() < 3)
-            return "";
+    private void writeVoucherEntry(SieVoucher v) throws IOException {
+        String createdBy = StringUtil.equals(v.getCreatedBy(), "") ? "" : " \"" + v.getCreatedBy() + "\"";
+        String createdDate = v.getCreatedDate() == null ? "" : makeSieDate(v.getCreatedDate());
+        writeLine(SIE.VER + " \"" + v.getSeries() + "\" \"" + v.getNumber() + "\" " + makeSieDate(v.getVoucherDate())
+                + " \"" + sieText(v.getText()) + "\" " + createdDate + createdBy);
+        writeLine("{");
+        for (SieVoucherRow r : v.getRows()) {
+            String obj = getObjeklista(r.getObjects());
+            String quantity;
+            if (r.getQuantity() != null) {
+                quantity = sieAmount(r.getQuantity());
+            } else if (!StringUtil.isNullOrEmpty(r.getCreatedBy())) {
+                // Write quoted empty string placeholder when createdBy follows
+                quantity = "\"\"";
+            } else {
+                quantity = "";
+            }
+            String rowCreatedBy = StringUtil.equals(r.getCreatedBy(), "") ? "" : "\"" + r.getCreatedBy() + "\"";
+            if (r.getAccount() != null) {
+                // Fix: use r.getToken() instead of hardcoding SIE.TRANS
+                writeLine(r.getToken() + " " +
+                        r.getAccount().getNumber() + " " +
+                        obj + " " +
+                        sieAmount(r.getAmount()) + " " +
+                        makeSieDate(r.getRowDate()) + " \"" +
+                        sieText(r.getText()) + "\" " +
+                        quantity + " " +
+                        rowCreatedBy);
+            }
+        }
+        writeLine("}");
+    }
 
-        String ret = "{";
+    private String getObjeklista(List<SieObject> objects) {
+        if (sieDoc.getSIETYP() < 3) return "";
+
+        StringBuilder ret = new StringBuilder("{");
         if (objects != null) {
             for (SieObject o : objects) {
-                ret += o.getDimension().getNumber();
-                ret += " \"" + o.getNumber() + "\" ";
+                ret.append(o.getDimension().getNumber());
+                ret.append(" \"").append(o.getNumber()).append("\" ");
             }
         }
-
-        ret += "}";
-        return ret;
+        ret.append("}");
+        return ret.toString();
     }
 
-    private void writeDIM() throws Exception {
+    private void writeDIM() throws IOException {
         for (SieDimension d : sieDoc.getDIM().values()) {
-            writeLine(SIE.DIM + " " + d.getNumber() + " \"" + d.getName() + "\"");
-            for (SieObject o : d.objects.values()) {
-                writeLine(SIE.OBJEKT+" " + d.getNumber() + " " + o.getNumber() + " \"" + o.getName() + "\"");
+            writeLine(SIE.DIM + " " + d.getNumber() + " \"" + sieText(d.getName()) + "\"");
+            for (SieObject o : d.getObjects().values()) {
+                // Fix: quote object number
+                writeLine(SIE.OBJEKT + " " + d.getNumber() + " \"" + o.getNumber() + "\" \"" + sieText(o.getName()) + "\"");
             }
         }
     }
 
-    private void writePeriodValue(String name, List<SiePeriodValue> list) throws Exception {
+    private void writeUNDERDIM() throws IOException {
+        for (SieDimension d : sieDoc.getUNDERDIM().values()) {
+            String superDim = d.getSuperDim() != null ? d.getSuperDim().getNumber() : "";
+            writeLine(SIE.UNDERDIM + " " + d.getNumber() + " \"" + sieText(d.getName()) + "\" " + superDim);
+        }
+    }
+
+    private void writePeriodValue(String name, List<SiePeriodValue> list) throws IOException {
         for (SiePeriodValue v : list) {
             String objekt = getObjeklista(v.getObjects());
-            if ((SIE.IB+SIE.UB+SIE.RES).contains(name)) {
+            if ((SIE.IB + SIE.UB + SIE.RES).contains(name)) {
                 objekt = "";
             }
-            // TODO: improve null checking
             if (v.getAccount() != null) {
                 writeLine(name + " " +
-                        String.valueOf(v.getYearNr()) + " " +
+                        v.getYearNr() + " " +
                         v.getAccount().getNumber() + " " +
                         objekt + " " +
                         sieAmount(v.getAmount()));
@@ -163,150 +222,146 @@ public class SieDocumentWriter {
         }
     }
 
-    private void writePeriodSaldo(String name, List<SiePeriodValue> list) throws Exception {
+    private void writePeriodSaldo(String name, List<SiePeriodValue> list) throws IOException {
         for (SiePeriodValue v : list) {
             String objekt = getObjeklista(v.getObjects());
-            // TODO: improve null checking
             if (v.getAccount() != null) {
-                writeLine(name + " " +
-                        String.valueOf(v.getYearNr()) + " " +
-                        String.valueOf(v.getPeriod()) + " " +
-                        v.getAccount().getNumber() + " " +
-                        objekt + " " +
-                        sieAmount(v.getAmount()));
+                StringBuilder sb = new StringBuilder();
+                sb.append(name).append(" ")
+                  .append(v.getYearNr()).append(" ")
+                  .append(v.getPeriod()).append(" ")
+                  .append(v.getAccount().getNumber()).append(" ")
+                  .append(objekt).append(" ")
+                  .append(sieAmount(v.getAmount()));
+                // Write quantity when present
+                if (v.getQuantity() != null && v.getQuantity().compareTo(BigDecimal.ZERO) != 0) {
+                    sb.append(" ").append(sieAmount(v.getQuantity()));
+                }
+                writeLine(sb.toString());
             }
         }
     }
 
-    private void writeRAR() throws Exception {
+    private void writeRAR() throws IOException {
         for (SieBookingYear r : sieDoc.getRars().values()) {
-            writeLine(SIE.RAR+" " + String.valueOf(r.getId()) + " " + sieDate(r.getStart()) + " " + sieDate(r.getEnd()));
+            writeLine(SIE.RAR + " " + r.getId() + " " + sieDate(r.getStart()) + " " + sieDate(r.getEnd()));
         }
     }
 
-    private String sieDate(Date date) throws Exception {
+    private String sieDate(LocalDate date) {
         if (date != null) {
-            SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd");
-            return f.format(date);
+            return date.format(SIE_DATE_FORMAT);
         } else {
             return "";
         }
     }
 
-    private String sieAmount(BigDecimal amount) throws Exception {
+    private String sieAmount(BigDecimal amount) {
         return amount.toPlainString();
-        //return String.valueOf(amount).replace(',', '.');
     }
 
-    private String sieAmount(Integer amount) throws Exception {
-        return String.valueOf(amount).replace(',', '.');
-    }
-
-    private void writeKONTO() throws Exception {
+    private void writeKONTO() throws IOException {
         for (SieAccount k : sieDoc.getKONTO().values()) {
-            writeLine(SIE.KONTO+" " + k.getNumber() + " \"" + k.getName() + "\"");
+            writeLine(SIE.KONTO + " " + k.getNumber() + " \"" + sieText(k.getName()) + "\"");
             if ((k.getUnit() != null) && !k.getUnit().trim().isEmpty()) {
-                writeLine(SIE.ENHET+" " + k.getNumber() + " \"" + k.getUnit() + "\"");
+                writeLine(SIE.ENHET + " " + k.getNumber() + " \"" + k.getUnit() + "\"");
             }
-
             if (k.getType() != null && !k.getType().trim().isEmpty()) {
-                writeLine(SIE.KTYP+" " + k.getNumber() + " " + k.getType());
+                writeLine(SIE.KTYP + " " + k.getNumber() + " " + k.getType());
             }
-
         }
         for (SieAccount k : sieDoc.getKONTO().values()) {
             for (String s : k.getSRU()) {
-                writeLine(SIE.SRU+" " + k.getNumber() + " " + s);
+                writeLine(SIE.SRU + " " + k.getNumber() + " " + s);
             }
         }
     }
 
-    private void writeOMFATTN() throws Exception {
+    private void writeOMFATTN() throws IOException {
         if (sieDoc.getOMFATTN() != null) {
-            writeLine(SIE.OMFATTN+" " + sieDate(sieDoc.getOMFATTN()));
+            writeLine(SIE.OMFATTN + " " + sieDate(sieDoc.getOMFATTN()));
         }
-
     }
 
-    private void writeTAXAR() throws Exception {
+    private void writeTAXAR() throws IOException {
         if (sieDoc.getTAXAR() > 0) {
-            writeLine(SIE.TAXAR+" " + String.valueOf(sieDoc.getTAXAR()));
+            writeLine(SIE.TAXAR + " " + sieDoc.getTAXAR());
         }
-
     }
 
-    private void writeFTYP() throws Exception {
+    private void writeFTYP() throws IOException {
         String orgType = sieDoc.getFNAMN().getOrgType();
         if (orgType != null && !orgType.trim().isEmpty()) {
-            writeLine(SIE.FTYP+" " + orgType);
+            writeLine(SIE.FTYP + " " + orgType);
         }
-
     }
 
-    private void writeKPTYP() throws Exception {
+    private void writeKPTYP() throws IOException {
         String kpTyp = sieDoc.getKPTYP();
         if (kpTyp != null && !kpTyp.trim().isEmpty()) {
-            writeLine(SIE.KPTYP+" " + sieDoc.getKPTYP());
+            writeLine(SIE.KPTYP + " " + sieDoc.getKPTYP());
         }
-
     }
 
-    private void writeADRESS() throws Exception {
+    private void writeADRESS() throws IOException {
         if (!(sieDoc.getFNAMN().getContact() == null && sieDoc.getFNAMN().getStreet() == null && sieDoc.getFNAMN().getZipCity() == null && sieDoc.getFNAMN().getPhone() == null)) {
-            writeLine(SIE.ADRESS+" \"" + sieDoc.getFNAMN().getContact() + "\" \"" + sieDoc.getFNAMN().getStreet() +
+            writeLine(SIE.ADRESS + " \"" + sieDoc.getFNAMN().getContact() + "\" \"" + sieDoc.getFNAMN().getStreet() +
                     "\" \"" + sieDoc.getFNAMN().getZipCity() + "\" \"" + sieDoc.getFNAMN().getPhone() + "\"");
         }
-
     }
 
-    private String getFNAMN() throws Exception {
-        return SIE.FNAMN+" \"" + sieDoc.getFNAMN().getName() + "\"";
+    private String getFNAMN() {
+        return SIE.FNAMN + " \"" + sieDoc.getFNAMN().getName() + "\"";
     }
 
-    private String getORGNR() throws Exception {
-        return SIE.ORGNR+" " + sieDoc.getFNAMN().getOrgIdentifier();
+    private String getORGNR() {
+        return SIE.ORGNR + " " + sieDoc.getFNAMN().getOrgIdentifier();
     }
 
-    private void writeFNR() throws Exception {
+    private void writeFNR() throws IOException {
         String code = sieDoc.getFNAMN().getCode();
         if (code != null && !code.trim().isEmpty())
-            writeLine(SIE.FNR+" \"" + sieDoc.getFNAMN().getCode() + "\"");
-
+            writeLine(SIE.FNR + " \"" + sieDoc.getFNAMN().getCode() + "\"");
     }
 
-    private String getSIETYP() throws Exception {
-        return SIE.SIETYP+" " + String.valueOf(sieDoc.getSIETYP());
+    private String getSIETYP() {
+        return SIE.SIETYP + " " + sieDoc.getSIETYP();
     }
 
-    private String getGEN() throws Exception {
-        String ret = SIE.GEN+" ";
-        ret += makeSieDate(sieDoc.getGEN_DATE()) + " ";
-        ret += makeField(sieDoc.getGEN_NAMN());
-        return ret;
+    private String getGEN() {
+        StringBuilder ret = new StringBuilder(SIE.GEN + " ");
+        ret.append(makeSieDate(sieDoc.getGEN_DATE())).append(" ");
+        ret.append(makeField(sieDoc.getGEN_NAMN()));
+        return ret.toString();
     }
 
-    private String getFORMAT() throws Exception {
-        return SIE.FORMAT+" PC8";
+    private String getFORMAT() {
+        return SIE.FORMAT + " PC8";
     }
 
-    private String getPROGRAM() throws Exception {
-        String program = SIE.PROGRAM+" ";
-        for (String s : sieDoc.getPROGRAM()) {
-            program += "\"SIEParser\" " + makeField(s) + " ";
+    private String getPROGRAM() {
+        StringBuilder program = new StringBuilder(SIE.PROGRAM + " ");
+        if (sieDoc.getPROGRAM().isEmpty()) {
+            program.append("\"SIEParser\" \"\"");
+        } else {
+            for (String s : sieDoc.getPROGRAM()) {
+                program.append(makeField(s)).append(" ");
+            }
         }
-        return program;
+        return program.toString().trim();
     }
 
-    private String getFLAGGA() throws Exception {
-        return SIE.FLAGGA+" " + String.valueOf(sieDoc.getFLAGGA());
+    private String getFLAGGA() {
+        return SIE.FLAGGA + " " + sieDoc.getFLAGGA();
     }
 
-    private void writeLine(String line) throws Exception {
+    private void writeLine(String line) throws IOException {
         writer.write(line);
         writer.newLine();
     }
 
-    private String makeField(String data) throws Exception {
+    private String makeField(String data) {
+        if (data == null) return "\"\"";
         try {
             Integer.parseInt(data);
             return data;
@@ -315,15 +370,19 @@ public class SieDocumentWriter {
         }
     }
 
-    private String makeSieDate(Date date) throws Exception {
+    private String makeSieDate(LocalDate date) {
         if (date != null) {
-            DateFormat df = new SimpleDateFormat("yyyyMMdd");
-            return df.format(date);
+            return date.format(SIE_DATE_FORMAT);
         } else {
             return "00000000";
         }
     }
 
+    /**
+     * Escapes quotation marks in text fields for SIE output.
+     */
+    private String sieText(String text) {
+        if (text == null) return "";
+        return text.replace("\"", "\\\"");
+    }
 }
-
-

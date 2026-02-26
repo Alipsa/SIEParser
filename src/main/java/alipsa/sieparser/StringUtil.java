@@ -25,7 +25,12 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
+/**
+ * String utility methods for null-safe comparisons and trimming with custom characters.
+ */
 public class StringUtil {
+
+    private StringUtil() {}
 
     private static boolean isIn(char c, char[] cs) {
         for (char f : cs)
@@ -35,6 +40,15 @@ public class StringUtil {
         return false;
     }
 
+    /**
+     * Trims the specified characters from the start and/or end of a string.
+     *
+     * @param in the input string (may be null)
+     * @param filters the characters to trim
+     * @param trimStart whether to trim from the start
+     * @param trimEnd whether to trim from the end
+     * @return the trimmed string, or null if the input was null
+     */
     public static String trim(String in, char[] filters, boolean trimStart, boolean trimEnd) {
         if (in == null) {
             return null;
@@ -64,10 +78,24 @@ public class StringUtil {
         return in.substring(firstIdx, lastIdx);
     }
 
+    /**
+     * Trims the specified characters from both the start and end of a string.
+     *
+     * @param in the input string (may be null)
+     * @param filters the characters to trim
+     * @return the trimmed string, or null if the input was null
+     */
     public static String trim(String in, char[] filters) {
         return trim(in, filters, true, true);
     }
 
+    /**
+     * Null-safe string equality check.
+     *
+     * @param s1 the first string (may be null)
+     * @param s2 the second string (may be null)
+     * @return true if both are null, or both are non-null and equal
+     */
     public static boolean equals(String s1, String s2) {
         if (s1 == null)
             return s2 == null;
@@ -75,6 +103,12 @@ public class StringUtil {
             return s1.equals(s2);
     }
 
+    /**
+     * Checks whether a string is null or empty.
+     *
+     * @param str the string to check (may be null)
+     * @return true if the string is null or empty
+     */
     public static boolean isNullOrEmpty(String str) {
         return (str == null || "".equals(str));
     }

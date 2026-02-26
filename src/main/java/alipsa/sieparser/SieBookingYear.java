@@ -25,15 +25,19 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
- * #RAR
+ * Represents a SIE booking year (#RAR).
+ * Contains the year identifier, start date, and end date of the financial year.
  */
 public class SieBookingYear {
+
+    public SieBookingYear() {}
+
     private int id;
-    private Date start;
-    private Date end;
+    private LocalDate start;
+    private LocalDate end;
 
     public int getId() {
         return id;
@@ -43,23 +47,19 @@ public class SieBookingYear {
         id = value;
     }
 
-
-    public Date getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(Date value) {
+    public void setStart(LocalDate value) {
         start = value;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date value) {
+    public void setEnd(LocalDate value) {
         end = value;
     }
-
 }
-
-
