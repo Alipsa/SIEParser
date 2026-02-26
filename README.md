@@ -212,6 +212,11 @@ MIT License. See [LICENSE](LICENSE) or the file headers for details.
 - Exception hierarchy (`SieException` base class), proper field encapsulation
 - 112 tests across 8 test classes for SIE 1-4
 - SIE 5 (XML) read/write support via JAXB (`alipsa.sieparser.sie5` package)
+- New dependencies
+  - jakarta.xml.bind:jakarta.xml.bind-api [4.0.5]
+  - org.glassfish.jaxb:jaxb-runtime [4.0.6]
+- Upgraded dependencies
+  - org.slf4j:slf4j-api [2.0.16 -> 2.0.17]
 
 **Version 1.0**:
 - Initial working port of the jsisie parser to Java

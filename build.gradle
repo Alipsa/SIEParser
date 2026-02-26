@@ -7,6 +7,7 @@ plugins {
     id 'signing'
     id 'maven-publish'
     id("se.alipsa.nexus-release-plugin") version '2.0.1'
+    id "com.github.ben-manes.versions" version "0.53.0"
 }
 
 group = 'se.alipsa'
@@ -34,15 +35,15 @@ repositories {
 
 dependencies {
     // The production code uses the SLF4J logging API at compile time
-    api 'org.slf4j:slf4j-api:2.0.16'
+    api 'org.slf4j:slf4j-api:2.0.17'
 
     // JAXB for SIE 5 XML support
-    api 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
-    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+    api 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
+    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.0.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.16'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.17'
 }
 
 test {
@@ -88,6 +89,19 @@ publishing {
                 }
             }
         }
+    }
+}
+
+def isNonStable = { String v ->
+    def stableKeyword = ['RELEASE','FINAL','GA'].any { v?.toUpperCase()?.contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+    !stableKeyword && !(v ==~ regex)
+}
+
+tasks.named("dependencyUpdates").configure {
+    gradleReleaseChannel = 'current'
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
     }
 }
 

@@ -9,11 +9,12 @@
  * in the user guide at https://docs.gradle.org/3.1/userguide/multi_project_builds.html
  */
 
-/*
-// To declare projects as part of a multi-project build use the 'include' method
-include 'shared'
-include 'api'
-include 'services:webservice'
-*/
+pluginManagement {
+  repositories {
+    mavenLocal() // For local development, use mavenLocal to resolve SNAPSHOT dependencies
+    //mavenCentral()
+    gradlePluginPortal()
+  }
+}
 
 rootProject.name = 'SIEParser'
