@@ -39,4 +39,13 @@ public class SieMissingObjectException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieMissingObjectException with the given description and cause.
+     *
+     * @param description a message describing the missing object
+     * @param cause the underlying cause
+     */
+    public SieMissingObjectException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

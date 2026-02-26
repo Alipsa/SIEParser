@@ -162,7 +162,7 @@ public class TestSieDocument {
             assertTrue(file.exists(), "SIE file not found at " + file.getAbsolutePath());
             SieDocumentReader reader = new SieDocumentReader();
             if (ignoreOMFATTN) {
-                reader.ignoreMissingOMFATTNING = true;
+                reader.setIgnoreMissingOMFATTNING(true);
             }
             doc = reader.readDocument(file.getAbsolutePath());
             if (reader.getValidationExceptions().size() > 0) {

@@ -39,4 +39,13 @@ public class SieInvalidChecksumException extends SieException {
         super(description);
     }
 
+    /**
+     * Creates a new SieInvalidChecksumException with the given description and cause.
+     *
+     * @param description a message describing the checksum mismatch
+     * @param cause the underlying cause
+     */
+    public SieInvalidChecksumException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

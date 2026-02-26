@@ -29,14 +29,23 @@ package alipsa.sieparser;
 /**
  * Thrown when the transaction rows of a voucher do not sum to zero.
  */
-public class SieVoucherMissmatchException extends SieException {
+public class SieVoucherMismatchException extends SieException {
     /**
-     * Creates a new SieVoucherMissmatchException with the given description.
+     * Creates a new SieVoucherMismatchException with the given description.
      *
      * @param description a message identifying the mismatched voucher
      */
-    public SieVoucherMissmatchException(String description) {
+    public SieVoucherMismatchException(String description) {
         super(description);
     }
 
+    /**
+     * Creates a new SieVoucherMismatchException with the given description and cause.
+     *
+     * @param description a message identifying the mismatched voucher
+     * @param cause the underlying cause
+     */
+    public SieVoucherMismatchException(String description, Throwable cause) {
+        super(description, cause);
+    }
 }

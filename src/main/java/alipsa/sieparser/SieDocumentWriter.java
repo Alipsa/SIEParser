@@ -68,9 +68,6 @@ public class SieDocumentWriter {
      * @throws IOException if an I/O error occurs
      */
     public void write(String fileName) throws IOException {
-        File file = new File(fileName);
-        if (file.exists()) file.delete();
-
         try (BufferedWriter bw = IoUtil.getWriter(fileName)) {
             writer = bw;
             writeContent();
@@ -329,10 +326,15 @@ public class SieDocumentWriter {
     }
 
     private void writeADRESS() throws IOException {
-        if (!(sieDoc.getFNAMN().getContact() == null && sieDoc.getFNAMN().getStreet() == null && sieDoc.getFNAMN().getZipCity() == null && sieDoc.getFNAMN().getPhone() == null)) {
-            writeLine(SIE.ADRESS + " \"" + sieDoc.getFNAMN().getContact() + "\" \"" + sieDoc.getFNAMN().getStreet() +
-                    "\" \"" + sieDoc.getFNAMN().getZipCity() + "\" \"" + sieDoc.getFNAMN().getPhone() + "\"");
+        SieCompany fnamn = sieDoc.getFNAMN();
+        if (!(fnamn.getContact() == null && fnamn.getStreet() == null && fnamn.getZipCity() == null && fnamn.getPhone() == null)) {
+            writeLine(SIE.ADRESS + " \"" + nullToEmpty(fnamn.getContact()) + "\" \"" + nullToEmpty(fnamn.getStreet()) +
+                    "\" \"" + nullToEmpty(fnamn.getZipCity()) + "\" \"" + nullToEmpty(fnamn.getPhone()) + "\"");
         }
+    }
+
+    private static String nullToEmpty(String s) {
+        return s == null ? "" : s;
     }
 
     private String getFNAMN() {

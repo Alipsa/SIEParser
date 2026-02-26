@@ -168,7 +168,7 @@ RuntimeException
         ├── SieDateException
         ├── SieMissingMandatoryDateException
         ├── SieMissingObjectException
-        ├── SieVoucherMissmatchException
+        ├── SieVoucherMismatchException
         └── MissingFieldException
 ```
 

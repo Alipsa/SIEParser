@@ -25,9 +25,6 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Implementation of the CRC32 checksum algorithm as specified in the SIE file format (#KSUMMA).
  * Used to verify the integrity of SIE file data.
@@ -79,13 +76,11 @@ public class SieCRC32 {
      * @param item the data item to include in the checksum
      */
     public void addData(SieDataItem item) {
-        List<Byte> buffer = new ArrayList<>();
-        buffer.addAll(Encoding.getBytes(item.getItemType()));
+        crcAccumulate(Encoding.getBytes(item.getItemType()));
         for (String d : item.getData()) {
             String foo = d.replace("{", "").replace("}", "");
-            buffer.addAll(Encoding.getBytes(foo));
+            crcAccumulate(Encoding.getBytes(foo));
         }
-        cRC_accumulate(buffer);
     }
 
     /**
@@ -96,12 +91,12 @@ public class SieCRC32 {
         return (~crc);
     }
 
-    private void cRC_accumulate(List<Byte> buffer) {
+    private void crcAccumulate(byte[] buffer) {
         long temp1;
         long temp2;
-        for (Byte p : buffer) {
+        for (byte p : buffer) {
             temp1 = (crc >> 8) & 0x00FFFFFF;
-            temp2 = CRCTable[((int) crc ^ p.byteValue()) & 0xff];
+            temp2 = CRCTable[((int) crc ^ p) & 0xff];
             crc = temp1 ^ temp2;
         }
     }

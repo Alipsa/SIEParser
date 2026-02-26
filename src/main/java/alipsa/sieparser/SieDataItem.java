@@ -265,13 +265,18 @@ public class SieDataItem {
         if (foo.isEmpty()) return null;
 
         if (foo.length() != 8) {
-            getDocumentReader().callbacks.callbackException(new SieDateException(foo + " is not a valid date"));
+            getDocumentReader().getCallbacks().callbackException(new SieDateException(foo + " is not a valid date"));
             return null;
         }
-        int y = Integer.parseInt(foo.substring(0, 4));
-        int m = Integer.parseInt(foo.substring(4, 6));
-        int d = Integer.parseInt(foo.substring(6, 8));
-        return LocalDate.of(y, m, d);
+        try {
+            int y = Integer.parseInt(foo.substring(0, 4));
+            int m = Integer.parseInt(foo.substring(4, 6));
+            int d = Integer.parseInt(foo.substring(6, 8));
+            return LocalDate.of(y, m, d);
+        } catch (NumberFormatException | java.time.DateTimeException e) {
+            getDocumentReader().getCallbacks().callbackException(new SieDateException(foo + " is not a valid date"));
+            return null;
+        }
     }
 
     /**
@@ -292,7 +297,7 @@ public class SieDataItem {
             }
         }
         if (data == null) {
-            getDocumentReader().callbacks.callbackException(new SieMissingObjectException(getRawData()));
+            getDocumentReader().getCallbacks().callbackException(new SieMissingObjectException(getRawData()));
             return null;
         }
 

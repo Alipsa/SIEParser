@@ -25,13 +25,7 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Handles character encoding for SIE files.
@@ -41,9 +35,7 @@ public class Encoding {
 
     private Encoding() {}
 
-    Logger logger = LoggerFactory.getLogger(Encoding.class);
-
-    private static Charset defaultCharset=Charset.forName("IBM437");
+    private static final Charset defaultCharset = Charset.forName("IBM437");
 
     /**
      * Returns the charset used for SIE file encoding (IBM437).
@@ -55,23 +47,12 @@ public class Encoding {
     }
 
     /**
-     * Converts a string to a collection of bytes using the SIE charset.
+     * Converts a string to a byte array using the SIE charset.
      *
      * @param value the string to convert
-     * @return a collection of bytes representing the string in IBM437 encoding
+     * @return a byte array representing the string in IBM437 encoding
      */
-    public static Collection<Byte> getBytes(String value) {
-        byte[] byteArray =  value.getBytes(getCharset());
-        List<Byte> byteList = new ArrayList<>();
-        for (byte b : byteArray) {
-            byteList.add(Byte.valueOf(b));
-        }
-        return byteList;
-    }
-
-    /*
-    public byte[] getByteArray(String value) {
+    public static byte[] getBytes(String value) {
         return value.getBytes(getCharset());
     }
-    */
 }

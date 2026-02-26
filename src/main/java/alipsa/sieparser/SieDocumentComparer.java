@@ -120,7 +120,7 @@ public class SieDocumentComparer {
         if (docA.getTAXAR() != docB.getTAXAR())
             errors.add("TAXAR differs First, Second: '" + docA.getTAXAR() + "' , '" + docB.getTAXAR() + "'");
 
-        if (!docA.getVALUTA().equals(docB.getVALUTA()))
+        if (!StringUtil.equals(docA.getVALUTA(), docB.getVALUTA()))
             errors.add("VALUTA differs First, Second: '" + docA.getVALUTA() + "' , '" + docB.getVALUTA() + "'");
     }
 

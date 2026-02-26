@@ -1,5 +1,6 @@
 package alipsa.sieparser.sie5;
 
+import alipsa.sieparser.SieException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -38,11 +39,15 @@ public class Sie5DocumentWriter {
      *
      * @param doc      the document to write
      * @param fileName the path of the output file
-     * @throws JAXBException if the document cannot be marshalled
+     * @throws SieException if the document cannot be marshalled
      */
-    public void write(Sie5Document doc, String fileName) throws JAXBException {
-        Marshaller marshaller = createMarshaller();
-        marshaller.marshal(doc, new File(fileName));
+    public void write(Sie5Document doc, String fileName) {
+        try {
+            Marshaller marshaller = createMarshaller();
+            marshaller.marshal(doc, new File(fileName));
+        } catch (JAXBException e) {
+            throw new SieException("Failed to write SIE 5 document: " + fileName, e);
+        }
     }
 
     /**
@@ -50,11 +55,15 @@ public class Sie5DocumentWriter {
      *
      * @param doc    the document to write
      * @param stream the output stream to write to
-     * @throws JAXBException if the document cannot be marshalled
+     * @throws SieException if the document cannot be marshalled
      */
-    public void write(Sie5Document doc, OutputStream stream) throws JAXBException {
-        Marshaller marshaller = createMarshaller();
-        marshaller.marshal(doc, stream);
+    public void write(Sie5Document doc, OutputStream stream) {
+        try {
+            Marshaller marshaller = createMarshaller();
+            marshaller.marshal(doc, stream);
+        } catch (JAXBException e) {
+            throw new SieException("Failed to write SIE 5 document to stream", e);
+        }
     }
 
     /**
@@ -62,11 +71,15 @@ public class Sie5DocumentWriter {
      *
      * @param entry    the entry document to write
      * @param fileName the path of the output file
-     * @throws JAXBException if the document cannot be marshalled
+     * @throws SieException if the document cannot be marshalled
      */
-    public void writeEntry(Sie5Entry entry, String fileName) throws JAXBException {
-        Marshaller marshaller = createMarshaller();
-        marshaller.marshal(entry, new File(fileName));
+    public void writeEntry(Sie5Entry entry, String fileName) {
+        try {
+            Marshaller marshaller = createMarshaller();
+            marshaller.marshal(entry, new File(fileName));
+        } catch (JAXBException e) {
+            throw new SieException("Failed to write SIE 5 entry: " + fileName, e);
+        }
     }
 
     /**
@@ -74,11 +87,15 @@ public class Sie5DocumentWriter {
      *
      * @param entry  the entry document to write
      * @param stream the output stream to write to
-     * @throws JAXBException if the document cannot be marshalled
+     * @throws SieException if the document cannot be marshalled
      */
-    public void writeEntry(Sie5Entry entry, OutputStream stream) throws JAXBException {
-        Marshaller marshaller = createMarshaller();
-        marshaller.marshal(entry, stream);
+    public void writeEntry(Sie5Entry entry, OutputStream stream) {
+        try {
+            Marshaller marshaller = createMarshaller();
+            marshaller.marshal(entry, stream);
+        } catch (JAXBException e) {
+            throw new SieException("Failed to write SIE 5 entry to stream", e);
+        }
     }
 
     private Marshaller createMarshaller() throws JAXBException {

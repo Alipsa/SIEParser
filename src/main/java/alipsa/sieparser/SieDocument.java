@@ -471,13 +471,11 @@ public class SieDocument {
     }
 
     /**
-     * Returns the currency code (#VALUTA), or an empty string if not set.
-     * @return the currency code
+     * Returns the currency code (#VALUTA), or {@code null} if not set.
+     * Per the SIE specification, if this post is absent the reader should assume SEK.
+     * @return the currency code, or {@code null} if not set
      */
     public String getVALUTA() {
-        if (valuta == null) {
-            return "";
-        }
         return valuta;
     }
 

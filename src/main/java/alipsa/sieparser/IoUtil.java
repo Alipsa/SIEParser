@@ -24,11 +24,7 @@ SOFTWARE.
 package alipsa.sieparser;
 
 import java.io.*;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CodingErrorAction;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
@@ -47,14 +43,7 @@ public class IoUtil {
      * @throws IOException if the file cannot be opened
      */
     public static BufferedReader getReader(String fileName) throws IOException {
-        /*
-        CharsetDecoder decoder = Encoding.getCharset().newDecoder();
-        decoder.onMalformedInput(CodingErrorAction.REPORT);
-        InputStreamReader isReader = new InputStreamReader(new FileInputStream(fileName), decoder);
-        return new BufferedReader( isReader );
-        */
         return Files.newBufferedReader(Paths.get(fileName), Encoding.getCharset());
-
     }
 
     /**
@@ -66,19 +55,7 @@ public class IoUtil {
      * @throws IOException if the file cannot be opened or created
      */
     public static BufferedWriter getWriter(String fileName) throws IOException {
-        /*
-        CharsetEncoder encoder = Encoding.getCharset().newEncoder();
-        encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
-        OutputStreamWriter osWriter = new OutputStreamWriter(new FileOutputStream(fileName), encoder);
-        return new BufferedWriter( osWriter );
-        */
-        Path filePath = Paths.get(fileName);
-        StandardOpenOption option;
-        if (Files.exists(filePath)) {
-            option = StandardOpenOption.WRITE;
-        } else {
-            option = StandardOpenOption.CREATE_NEW;
-        }
-        return Files.newBufferedWriter(Paths.get(fileName),Encoding.getCharset(), option);
+        return Files.newBufferedWriter(Paths.get(fileName), Encoding.getCharset(),
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 }
