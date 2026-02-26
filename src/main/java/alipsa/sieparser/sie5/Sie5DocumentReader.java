@@ -174,7 +174,7 @@ public class Sie5DocumentReader {
     /**
      * Reads a SIE 5 entry (import) document from an {@link InputStream}.
      *
-     * <p>Uses {@link StreamSource} wrapping to ensure the unmarshaller binds
+     * <p>Uses DOM parsing to ensure the unmarshaller binds
      * to the correct {@link Sie5Entry} root type.</p>
      *
      * @param stream the input stream containing SIE 5 entry XML data
