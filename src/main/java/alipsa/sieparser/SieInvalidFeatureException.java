@@ -26,11 +26,18 @@ SOFTWARE.
 package alipsa.sieparser;
 
 
-public class SieInvalidFeatureException extends Exception {
-    public SieInvalidFeatureException(String description) throws Exception {
+/**
+ * Thrown when a SIE feature is encountered that is not valid for the current SIE type version.
+ * For example, #OIB and #OUB are not valid in SIE types below 3.
+ */
+public class SieInvalidFeatureException extends SieException {
+    /**
+     * Creates a new SieInvalidFeatureException with the given description.
+     *
+     * @param description a message describing the invalid feature usage
+     */
+    public SieInvalidFeatureException(String description) {
         super(description);
     }
 
 }
-
-

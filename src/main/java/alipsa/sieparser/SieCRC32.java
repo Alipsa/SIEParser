@@ -29,16 +29,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is an implementation of the CRC algorithm published in the Sie specification
+ * Implementation of the CRC32 checksum algorithm as specified in the SIE file format (#KSUMMA).
+ * Used to verify the integrity of SIE file data.
  */
 public class SieCRC32 {
-    public boolean Started = false;
+    private boolean started = false;
     private static long CRC32_POLYNOMIAL = 0xEDB88320;
     private long[] CRCTable = new long[256];
     private long crc;
 
-    public SieCRC32()  {
+    public SieCRC32() {
         createCrcTable();
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 
     private void createCrcTable() {
@@ -58,13 +63,12 @@ public class SieCRC32 {
         }
     }
 
-    // start CRC-calculation
-    public void start() throws Exception {
+    public void start() {
         crc = 0xFFFFFFFF;
-        Started = true;
+        started = true;
     }
 
-    public void addData(SieDataItem item) throws Exception {
+    public void addData(SieDataItem item) {
         List<Byte> buffer = new ArrayList<>();
         buffer.addAll(Encoding.getBytes(item.getItemType()));
         for (String d : item.getData()) {
@@ -74,11 +78,11 @@ public class SieCRC32 {
         cRC_accumulate(buffer);
     }
 
-    public long checksum() throws Exception {
+    public long checksum() {
         return (~crc);
     }
 
-    private void cRC_accumulate(List<Byte> buffer) throws Exception {
+    private void cRC_accumulate(List<Byte> buffer) {
         long temp1;
         long temp2;
         for (Byte p : buffer) {
@@ -87,7 +91,4 @@ public class SieCRC32 {
             crc = temp1 ^ temp2;
         }
     }
-
 }
-
-

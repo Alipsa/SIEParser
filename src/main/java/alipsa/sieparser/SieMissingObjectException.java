@@ -26,11 +26,17 @@ SOFTWARE.
 package alipsa.sieparser;
 
 
-public class SieMissingObjectException extends Exception {
-    public SieMissingObjectException(String description) throws Exception {
+/**
+ * Thrown when an expected object reference is missing from a SIE data item.
+ */
+public class SieMissingObjectException extends SieException {
+    /**
+     * Creates a new SieMissingObjectException with the given description.
+     *
+     * @param description a message describing the missing object
+     */
+    public SieMissingObjectException(String description) {
         super(description);
     }
 
 }
-
-

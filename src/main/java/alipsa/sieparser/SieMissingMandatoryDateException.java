@@ -26,11 +26,17 @@ SOFTWARE.
 package alipsa.sieparser;
 
 
-public class SieMissingMandatoryDateException extends Exception {
-    public SieMissingMandatoryDateException(String description) throws Exception {
+/**
+ * Thrown when a mandatory date field (#GEN or #OMFATTN) is missing from a SIE file.
+ */
+public class SieMissingMandatoryDateException extends SieException {
+    /**
+     * Creates a new SieMissingMandatoryDateException with the given description.
+     *
+     * @param description a message describing which date is missing
+     */
+    public SieMissingMandatoryDateException(String description) {
         super(description);
     }
 
 }
-
-

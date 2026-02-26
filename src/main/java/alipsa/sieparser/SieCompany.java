@@ -27,6 +27,10 @@ package alipsa.sieparser;
 
 import java.util.HashMap;
 
+/**
+ * Represents company information in a SIE document.
+ * Aggregates data from multiple SIE fields: #FNAMN, #FNR, #ORGNR, #FTYP, #BKOD, and #ADRESS.
+ */
 public class SieCompany {
     /**
      * The organisation type names as set by Bolagsverket
@@ -43,103 +47,172 @@ public class SieCompany {
     private String zipCity;
     private String phone;
 
+    /**
+     * Creates a new SieCompany and initializes the organisation type name lookup.
+     */
     public SieCompany() {
         organisationTypeNames = new HashMap<>();
         loadOrgTypeNames();
     }
 
     /**
-     * #BKOD
-     * @return the Sni code (#BKOD)
+     * Returns the SNI code (#BKOD) indicating the company's branch affiliation.
+     *
+     * @return the SNI code
      */
     public int getSni() {
         return sni;
     }
 
+    /**
+     * Sets the SNI code (#BKOD).
+     *
+     * @param value the SNI code
+     */
     public void setSni(int value) {
         sni = value;
     }
 
     /**
-     * #FNAMN
-     * @return the company name (#FNAMN)
+     * Returns the company name (#FNAMN).
+     *
+     * @return the company name
      */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the company name (#FNAMN).
+     *
+     * @param value the company name
+     */
     public void setName(String value) {
         name = value;
     }
 
     /**
-     * #FNR
-     * @return the code (#FNR)
+     * Returns the accounting system's internal code for the company (#FNR).
+     *
+     * @return the company code
      */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Sets the accounting system's internal code for the company (#FNR).
+     *
+     * @param value the company code
+     */
     public void setCode(String value) {
         code = value;
     }
 
     /**
-     * #FTYP
-     * @return the organization type (#FTYP)
+     * Returns the organisation type (#FTYP), e.g. "AB", "HB", "EK".
+     *
+     * @return the organisation type code
      */
     public String getOrgType() {
         return orgType;
     }
 
+    /**
+     * Sets the organisation type (#FTYP).
+     *
+     * @param value the organisation type code
+     */
     public void setOrgType(String value) {
         orgType = value;
     }
 
     /**
-     * #ORGNR
-     * @return the organization id (#ORGNR)
+     * Returns the organisation number (#ORGNR).
+     *
+     * @return the organisation number
      */
     public String getOrgIdentifier() {
         return orgIdentifier;
     }
 
+    /**
+     * Sets the organisation number (#ORGNR).
+     *
+     * @param value the organisation number
+     */
     public void setOrgIdentifier(String value) {
         orgIdentifier = value;
     }
 
     /**
-     * #ADRESS
-     * @return the contact address (#ADRESS)
+     * Returns the contact person from the address record (#ADRESS).
+     *
+     * @return the contact person
      */
     public String getContact() {
         return contact;
     }
 
+    /**
+     * Sets the contact person from the address record (#ADRESS).
+     *
+     * @param value the contact person
+     */
     public void setContact(String value) {
         contact = value;
     }
 
+    /**
+     * Returns the street address from the address record (#ADRESS).
+     *
+     * @return the street address
+     */
     public String getStreet() {
         return street;
     }
 
+    /**
+     * Sets the street address from the address record (#ADRESS).
+     *
+     * @param value the street address
+     */
     public void setStreet(String value) {
         street = value;
     }
 
+    /**
+     * Returns the zip code and city from the address record (#ADRESS).
+     *
+     * @return the zip code and city
+     */
     public String getZipCity() {
         return zipCity;
     }
 
+    /**
+     * Sets the zip code and city from the address record (#ADRESS).
+     *
+     * @param value the zip code and city
+     */
     public void setZipCity(String value) {
         zipCity = value;
     }
 
+    /**
+     * Returns the phone number from the address record (#ADRESS).
+     *
+     * @return the phone number
+     */
     public String getPhone() {
         return phone;
     }
 
+    /**
+     * Sets the phone number from the address record (#ADRESS).
+     *
+     * @param value the phone number
+     */
     public void setPhone(String value) {
         phone = value;
     }
@@ -170,5 +243,3 @@ public class SieCompany {
     }
 
 }
-
-

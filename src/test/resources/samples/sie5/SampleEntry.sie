@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SieEntry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.sie.se/sie5 http://www.sie.se/sie5.xsd" xmlns="http://www.sie.se/sie5">
+  <FileInfo>
+    <SoftwareProduct name="Anonymous software Ltd" version="0.0.007B" />
+    <FileCreation time="2016-11-02T15:27:27.376893+01:00" by="LH" />
+    <Company organizationId="56334-3689" name="Universal Exports AB" />
+  </FileInfo>
+  <Accounts>
+    <Account id="1910" name="Kassa" type="asset" />
+    <Account id="1930" name="Bank" type="asset" />
+  </Accounts>
+</SieEntry>

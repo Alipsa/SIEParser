@@ -25,78 +25,93 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
+import java.util.function.Consumer;
+
+/**
+ * Container for callback consumers that are invoked during SIE document reading.
+ */
 public class SieCallbacks {
-    public Action<String> Line;
-    public Action<Exception> SieException;
-    public Action<SiePeriodValue> IB;
-    public Action<SiePeriodValue> UB;
-    public Action<SiePeriodValue> OIB;
-    public Action<SiePeriodValue> OUB;
-    public Action<SiePeriodValue> PSALDO;
-    public Action<SiePeriodValue> PBUDGET;
-    public Action<SiePeriodValue> RES;
-    public Action<SieVoucher> VER;
 
-    public void callbackLine(String message) throws Exception {
-        if (Line != null)
-            Line.Invoke(message);
+    public SieCallbacks() {}
 
+    private Consumer<String> line;
+    private Consumer<Exception> sieException;
+    private Consumer<SiePeriodValue> ib;
+    private Consumer<SiePeriodValue> ub;
+    private Consumer<SiePeriodValue> oib;
+    private Consumer<SiePeriodValue> oub;
+    private Consumer<SiePeriodValue> psaldo;
+    private Consumer<SiePeriodValue> pbudget;
+    private Consumer<SiePeriodValue> res;
+    private Consumer<SieVoucher> ver;
+
+    public Consumer<String> getLine() { return line; }
+    public void setLine(Consumer<String> value) { line = value; }
+
+    public Consumer<Exception> getSieException() { return sieException; }
+    public void setSieException(Consumer<Exception> value) { sieException = value; }
+
+    public Consumer<SiePeriodValue> getIB() { return ib; }
+    public void setIB(Consumer<SiePeriodValue> value) { ib = value; }
+
+    public Consumer<SiePeriodValue> getUB() { return ub; }
+    public void setUB(Consumer<SiePeriodValue> value) { ub = value; }
+
+    public Consumer<SiePeriodValue> getOIB() { return oib; }
+    public void setOIB(Consumer<SiePeriodValue> value) { oib = value; }
+
+    public Consumer<SiePeriodValue> getOUB() { return oub; }
+    public void setOUB(Consumer<SiePeriodValue> value) { oub = value; }
+
+    public Consumer<SiePeriodValue> getPSALDO() { return psaldo; }
+    public void setPSALDO(Consumer<SiePeriodValue> value) { psaldo = value; }
+
+    public Consumer<SiePeriodValue> getPBUDGET() { return pbudget; }
+    public void setPBUDGET(Consumer<SiePeriodValue> value) { pbudget = value; }
+
+    public Consumer<SiePeriodValue> getRES() { return res; }
+    public void setRES(Consumer<SiePeriodValue> value) { res = value; }
+
+    public Consumer<SieVoucher> getVER() { return ver; }
+    public void setVER(Consumer<SieVoucher> value) { ver = value; }
+
+    public void callbackLine(String message) {
+        if (line != null) line.accept(message);
     }
 
-    public void callbackException(Exception ex) throws Exception {
-        if (SieException != null)
-            SieException.Invoke(ex);
-
+    public void callbackException(Exception ex) {
+        if (sieException != null) sieException.accept(ex);
     }
 
-    public void callbackIB(SiePeriodValue pv) throws Exception {
-        if (IB != null)
-            IB.Invoke(pv);
-
+    public void callbackIB(SiePeriodValue pv) {
+        if (ib != null) ib.accept(pv);
     }
 
-    public void callbackUB(SiePeriodValue pv) throws Exception {
-        if (UB != null)
-            UB.Invoke(pv);
-
+    public void callbackUB(SiePeriodValue pv) {
+        if (ub != null) ub.accept(pv);
     }
 
-    public void callbackOIB(SiePeriodValue pv) throws Exception {
-        if (OIB != null)
-            OIB.Invoke(pv);
-
+    public void callbackOIB(SiePeriodValue pv) {
+        if (oib != null) oib.accept(pv);
     }
 
-    public void callbackOUB(SiePeriodValue pv) throws Exception {
-        if (OUB != null)
-            OUB.Invoke(pv);
-
+    public void callbackOUB(SiePeriodValue pv) {
+        if (oub != null) oub.accept(pv);
     }
 
-    public void callbackPSALDO(SiePeriodValue pv) throws Exception {
-        if (PSALDO != null)
-            PSALDO.Invoke(pv);
-
+    public void callbackPSALDO(SiePeriodValue pv) {
+        if (psaldo != null) psaldo.accept(pv);
     }
 
-    public void callbackPBUDGET(SiePeriodValue pv) throws Exception {
-        if (PBUDGET != null)
-            PBUDGET.Invoke(pv);
-
+    public void callbackPBUDGET(SiePeriodValue pv) {
+        if (pbudget != null) pbudget.accept(pv);
     }
 
-    public void callbackRES(SiePeriodValue pv) throws Exception {
-        if (RES != null)
-            RES.Invoke(pv);
-
+    public void callbackRES(SiePeriodValue pv) {
+        if (res != null) res.accept(pv);
     }
 
-    public void callbackVER(SieVoucher v) throws Exception {
-        if (VER != null)
-            VER.Invoke(v);
-
+    public void callbackVER(SieVoucher v) {
+        if (ver != null) ver.accept(v);
     }
-
 }
-
-

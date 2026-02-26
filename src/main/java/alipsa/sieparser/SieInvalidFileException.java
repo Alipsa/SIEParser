@@ -26,11 +26,18 @@ SOFTWARE.
 package alipsa.sieparser;
 
 
-public class SieInvalidFileException extends Exception {
-    public SieInvalidFileException(String description) throws Exception {
+/**
+ * Thrown when a file does not appear to be a valid SIE file.
+ * A valid SIE file must start with #FLAGGA as its first record.
+ */
+public class SieInvalidFileException extends SieException {
+    /**
+     * Creates a new SieInvalidFileException with the given description.
+     *
+     * @param description a message identifying the invalid file
+     */
+    public SieInvalidFileException(String description) {
         super(description);
     }
 
 }
-
-

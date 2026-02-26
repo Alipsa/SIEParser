@@ -25,106 +25,52 @@ SOFTWARE.
 
 package alipsa.sieparser;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Represents a complete parsed SIE document.
+ * Contains all data from a SIE file including company info, accounts, dimensions,
+ * balances, period values, vouchers, and metadata.
+ */
 public class SieDocument {
 
-    /**
-     * #DIM
-     */
-    private HashMap<String, SieDimension> dim;
-    /**
-     * #FLAGGA
-     */
+    private Map<String, SieDimension> dim;
+    private Map<String, SieDimension> underDim;
+    private Map<String, SieDimension> tempDim;
     private int flagga;
     private SieCompany fnamn;
-    /**
-     * #FORMAT
-     */
     private String format;
-    /**
-     * #GEN
-     */
-    private Date genDate;
+    private LocalDate genDate;
     private String genNamn;
-    /**
-     * #IB
-     */
     private List<SiePeriodValue> ib;
-    /**
-     * #KONTO
-     */
-    private HashMap<String, SieAccount> konto;
-    /**
-     * #KPTYP
-     */
+    private Map<String, SieAccount> konto;
     private String kptyp;
     private long ksumma;
-    /**
-     * #OIB
-     */
     private List<SiePeriodValue> oib;
-    /**
-     * #OMFATTN Obligatory when exporting period values
-     */
-    private Date omfattn;
-    /**
-     * #OUB
-     */
+    private LocalDate omfattn;
     private List<SiePeriodValue> oub;
-    /**
-     * #PBUDGET
-     */
     private List<SiePeriodValue> pbudget;
-    /**
-     * #PROGRAM
-     */
     private List<String> program;
-    /**
-     * #PROSA
-     */
     private String prosa;
-    /**
-     * #PSALDO
-     */
     private List<SiePeriodValue> psaldo;
-    /**
-     * #RAR
-     */
-    private HashMap<Integer, SieBookingYear> rars;
-    /**
-     * #RES
-     */
+    private Map<Integer, SieBookingYear> rars;
     private List<SiePeriodValue> res;
-    /**
-     * #SIETYP
-     */
     private int sieTyp;
-    /**
-     * #TAXAR
-     */
     private int taxar;
-    /**
-     * #UB
-     */
     private List<SiePeriodValue> ub;
-
-    /**
-     * #VALUTA
-     */
     private String valuta;
-    /**
-     * #VER
-     */
     private List<SieVoucher> ver;
 
     public SieDocument() {
         setFNAMN(new SieCompany());
         setKONTO(new HashMap<>());
         setDIM(new HashMap<>());
+        setUNDERDIM(new HashMap<>());
+        setTEMPDIM(new HashMap<>());
         setOIB(new ArrayList<>());
         setOUB(new ArrayList<>());
         setPSALDO(new ArrayList<>());
@@ -139,12 +85,28 @@ public class SieDocument {
         initializeDimensions();
     }
 
-    public HashMap<String, SieDimension> getDIM() {
+    public Map<String, SieDimension> getDIM() {
         return dim;
     }
 
-    public void setDIM(HashMap<String, SieDimension> value) {
+    public void setDIM(Map<String, SieDimension> value) {
         dim = value;
+    }
+
+    public Map<String, SieDimension> getUNDERDIM() {
+        return underDim;
+    }
+
+    public void setUNDERDIM(Map<String, SieDimension> value) {
+        underDim = value;
+    }
+
+    public Map<String, SieDimension> getTEMPDIM() {
+        return tempDim;
+    }
+
+    public void setTEMPDIM(Map<String, SieDimension> value) {
+        tempDim = value;
     }
 
     public int getFLAGGA() {
@@ -171,11 +133,11 @@ public class SieDocument {
         format = value;
     }
 
-    public Date getGEN_DATE() {
+    public LocalDate getGEN_DATE() {
         return genDate;
     }
 
-    public void setGEN_DATE(Date value) {
+    public void setGEN_DATE(LocalDate value) {
         genDate = value;
     }
 
@@ -195,11 +157,11 @@ public class SieDocument {
         ib = value;
     }
 
-    public HashMap<String, SieAccount> getKONTO() {
+    public Map<String, SieAccount> getKONTO() {
         return konto;
     }
 
-    public void setKONTO(HashMap<String, SieAccount> value) {
+    public void setKONTO(Map<String, SieAccount> value) {
         konto = value;
     }
 
@@ -227,11 +189,11 @@ public class SieDocument {
         oib = value;
     }
 
-    public Date getOMFATTN() {
+    public LocalDate getOMFATTN() {
         return omfattn;
     }
 
-    public void setOMFATTN(Date value) {
+    public void setOMFATTN(LocalDate value) {
         omfattn = value;
     }
 
@@ -275,11 +237,11 @@ public class SieDocument {
         psaldo = value;
     }
 
-    public HashMap<Integer, SieBookingYear> getRars() {
+    public Map<Integer, SieBookingYear> getRars() {
         return rars;
     }
 
-    public void setRars(HashMap<Integer, SieBookingYear> value) {
+    public void setRars(Map<Integer, SieBookingYear> value) {
         rars = value;
     }
 
@@ -315,7 +277,6 @@ public class SieDocument {
         ub = value;
     }
 
-
     public String getVALUTA() {
         if (valuta == null) {
             return "";
@@ -335,13 +296,12 @@ public class SieDocument {
         ver = value;
     }
 
-
     private void initializeDimensions() {
         getDIM().put("1", new SieDimension("1", "Resultatenhet", true));
         getDIM().put("2", new SieDimension("2", "Kostnadsbärare", true));
         getDIM().put("3", new SieDimension("3", "Reserverat", true));
-        getDIM().put("4", new SieDimension("4","Reserverat", true));
-        getDIM().put("5", new SieDimension("5","Reserverat", true));
+        getDIM().put("4", new SieDimension("4", "Reserverat", true));
+        getDIM().put("5", new SieDimension("5", "Reserverat", true));
         getDIM().put("6", new SieDimension("6", "Projekt", true));
         getDIM().put("7", new SieDimension("7", "Anställd", true));
         getDIM().put("8", new SieDimension("8", "Kund", true));
@@ -357,7 +317,4 @@ public class SieDocument {
         getDIM().put("18", new SieDimension("18", "Reserverat", true));
         getDIM().put("19", new SieDimension("19", "Reserverat", true));
     }
-
 }
-
-

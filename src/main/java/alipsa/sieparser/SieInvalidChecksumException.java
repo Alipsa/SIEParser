@@ -26,11 +26,17 @@ SOFTWARE.
 package alipsa.sieparser;
 
 
-public class SieInvalidChecksumException extends Exception {
-    public SieInvalidChecksumException(String description) throws Exception {
+/**
+ * Thrown when the #KSUMMA checksum in a SIE file does not match the computed checksum.
+ */
+public class SieInvalidChecksumException extends SieException {
+    /**
+     * Creates a new SieInvalidChecksumException with the given description.
+     *
+     * @param description a message describing the checksum mismatch
+     */
+    public SieInvalidChecksumException(String description) {
         super(description);
     }
 
 }
-
-

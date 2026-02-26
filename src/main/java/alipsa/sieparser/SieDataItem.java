@@ -26,11 +26,15 @@ SOFTWARE.
 package alipsa.sieparser;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * Represents a parsed line (data item) from a SIE file.
+ * Each line consists of an item type (e.g. #KONTO, #VER) followed by data fields.
+ * This class handles parsing the raw line and provides typed accessors for the fields.
+ */
 public class SieDataItem {
     private SieDocumentReader documentReader;
     private SieDocument document;
@@ -38,7 +42,7 @@ public class SieDataItem {
     private List<String> data;
     private String rawData;
 
-    public SieDataItem(String line, SieDocumentReader documentReader, SieDocument doc) throws Exception {
+    public SieDataItem(String line, SieDocumentReader documentReader, SieDocument doc) {
         setRawData(line);
         setDocumentReader(documentReader);
         document = doc;
@@ -48,8 +52,8 @@ public class SieDataItem {
             setItemType(l);
             setData(new ArrayList<>());
         } else {
-            setItemType(l.substring(0, (0) + (p)));
-            setData(splitLine(l.substring(p + 1, (p + 1) + (l.length() - (p + 1)))));
+            setItemType(l.substring(0, p));
+            setData(splitLine(l.substring(p + 1)));
         }
     }
 
@@ -85,37 +89,30 @@ public class SieDataItem {
         rawData = value;
     }
 
-    private int firstWhiteSpace(String str) throws Exception {
+    private int firstWhiteSpace(String str) {
         int a = str.indexOf(" ");
         int b = str.indexOf("\t");
-        if (a == -1 && b == -1)
-            return -1;
-
-        if (a == -1 && b != -1)
-            return b;
-
-        if (b == -1)
-            return a;
-
-        if (a <= b) {
-            return a;
-        } else {
-            return b;
-        }
+        if (a == -1 && b == -1) return -1;
+        if (a == -1) return b;
+        if (b == -1) return a;
+        return Math.min(a, b);
     }
 
-    private List<String> splitLine(String untrimmedData) throws Exception {
+    List<String> splitLine(String untrimmedData) {
         String data = untrimmedData.trim();
         List<String> ret = new ArrayList<>();
         int isInField = 0;
         boolean isInObject = false;
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
         boolean skipNext = false;
         for (char c : data.toCharArray()) {
-            if (skipNext) {
+            // Fix: only skip if the next char after backslash is a quote
+            if (skipNext && c == '"') {
                 skipNext = false;
+                buffer.append(c);
                 continue;
             }
+            skipNext = false;
 
             if (c == '\\') {
                 skipNext = true;
@@ -127,104 +124,88 @@ public class SieDataItem {
                 continue;
             }
 
-            if (c == '{')
-                isInObject = true;
-
-            if (c == '}')
-                isInObject = false;
+            if (c == '{') isInObject = true;
+            if (c == '}') isInObject = false;
 
             if ((c == ' ' || c == '\t') && (isInField != 1) && !isInObject) {
-                String trimBuf = buffer.trim();
+                String trimBuf = buffer.toString().trim();
                 if (trimBuf.length() > 0 || isInField == 2) {
                     ret.add(trimBuf);
-                    buffer = "";
+                    buffer = new StringBuilder();
                 }
-
                 isInField = 0;
+            } else {
+                buffer.append(c);
             }
-
-            buffer += c;
         }
         if (buffer.length() > 0) {
-            ret.add(buffer.trim());
+            ret.add(buffer.toString().trim());
         }
 
         return ret;
     }
 
-    public long getLong(int field) throws Exception {
-        if (getData().size() <= field)
-            return 0;
-
-        long i = 0;
-        i = Long.parseLong(getData().get(field));
-        return i;
+    public long getLong(int field) {
+        if (getData().size() <= field) return 0;
+        return Long.parseLong(getData().get(field));
     }
 
-    public int getInt(int field) throws Exception {
+    public int getInt(int field) {
         Integer foo = getIntNull(field);
         return foo != null ? foo : 0;
     }
 
-    public Integer getIntNull(int field) throws Exception {
-        if (getData().size() <= field)
-            return null;
-
-        int i = 0;
+    public Integer getIntNull(int field) {
+        if (getData().size() <= field) return null;
         try {
-            i = Integer.parseInt(getData().get(field));
+            return Integer.parseInt(getData().get(field));
         } catch (NumberFormatException e) {
             return null;
         }
-        return i;
     }
 
-    public BigDecimal getDecimal(int field) throws Exception {
+    public BigDecimal getDecimal(int field) {
         BigDecimal foo = getDecimalNull(field);
-        return foo != null ? foo : new BigDecimal(0);
+        return foo != null ? foo : BigDecimal.ZERO;
     }
 
-    public BigDecimal getDecimalNull(int field) throws Exception {
-        if (getData().size() <= field)
+    public BigDecimal getDecimalNull(int field) {
+        if (getData().size() <= field) return null;
+        try {
+            return new BigDecimal(getData().get(field));
+        } catch (NumberFormatException e) {
             return null;
-
-        return new BigDecimal(getData().get(field));
+        }
     }
 
-    public String getString(int field) throws Exception {
-        if (getData().size() <= field)
-            return "";
-
+    public String getString(int field) {
+        if (getData().size() <= field) return "";
         String s = getData().get(field).trim();
         s = StringUtil.trim(s, new char[]{'"'});
         return s;
     }
 
-    public Date getDate(int field) throws Exception {
-        if (getData().size() <= field)
-            return null;
+    public LocalDate getDate(int field) {
+        if (getData().size() <= field) return null;
 
         String foo = getData().get(field).trim();
-
-        if (foo.length()==0)
-            return null;
+        if (foo.isEmpty()) return null;
 
         if (foo.length() != 8) {
             getDocumentReader().callbacks.callbackException(new SieDateException(foo + " is not a valid date"));
             return null;
         }
-        int y = Integer.parseInt(foo.substring(0,4));
-        int m = Integer.parseInt(foo.substring(4,6));;
-        int d = Integer.parseInt(foo.substring(6,8));;
-        return new GregorianCalendar(y, m - 1, d).getTime();
+        int y = Integer.parseInt(foo.substring(0, 4));
+        int m = Integer.parseInt(foo.substring(4, 6));
+        int d = Integer.parseInt(foo.substring(6, 8));
+        return LocalDate.of(y, m, d);
     }
 
-    public List<SieObject> getObjects() throws Exception {
-        String dimNumber = null;
-        String objectNumber = null;
-        List<SieObject> ret = new ArrayList<SieObject>();
-        if (getRawData().contains("{}"))
-            return null;
+    public List<SieObject> getObjects() {
+        String dimNumber;
+        String objectNumber;
+        List<SieObject> ret = new ArrayList<>();
+        if (getRawData().contains("{}")) return null;
 
         String data = null;
         for (String i : getData()) {
@@ -232,7 +213,6 @@ public class SieDataItem {
                 data = i.trim().replace("{", "").replace("}", "");
                 break;
             }
-
         }
         if (data == null) {
             getDocumentReader().callbacks.callbackException(new SieMissingObjectException(getRawData()));
@@ -242,24 +222,31 @@ public class SieDataItem {
         List<String> dimData = splitLine(data);
         for (int i = 0; i < dimData.size(); i += 2) {
             dimNumber = dimData.get(i);
-            //TODO: not sure how this would be possible
-            //Add temporary Dimension if the dimensions hasn't been loaded yet.
+            // Look up UNDERDIM/TEMPDIM first, then fall back to DIM
             if (!document.getDIM().containsKey(dimNumber)) {
-                document.getDIM().put(dimNumber, new SieDimension(dimNumber, "[TEMP]"));
+                if (document.getUNDERDIM().containsKey(dimNumber)) {
+                    SieDimension underDim = document.getUNDERDIM().get(dimNumber);
+                    document.getDIM().put(dimNumber, underDim);
+                } else {
+                    // Check TEMPDIM
+                    if (document.getTEMPDIM().containsKey(dimNumber)) {
+                        SieDimension tempDim = document.getTEMPDIM().get(dimNumber);
+                        document.getDIM().put(dimNumber, tempDim);
+                    } else {
+                        document.getDIM().put(dimNumber, new SieDimension(dimNumber, "[TEMP]"));
+                        document.getTEMPDIM().put(dimNumber, document.getDIM().get(dimNumber));
+                    }
+                }
             }
 
             SieDimension d = document.getDIM().get(dimNumber);
             objectNumber = dimData.get(i + 1);
-            //Add temporary object if the objects hasn't been loaded yet.
-            if (!d.objects.containsKey(objectNumber)) {
-                d.objects.put(objectNumber, new SieObject(d,objectNumber, "[TEMP]"));
+            if (!d.getObjects().containsKey(objectNumber)) {
+                d.getObjects().put(objectNumber, new SieObject(d, objectNumber, "[TEMP]"));
             }
 
-            ret.add(d.objects.get(objectNumber));
+            ret.add(d.getObjects().get(objectNumber));
         }
         return ret;
     }
-
 }
-
-
