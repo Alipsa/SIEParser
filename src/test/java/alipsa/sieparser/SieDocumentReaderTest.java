@@ -255,4 +255,32 @@ public class SieDocumentReaderTest {
         assertTrue(collected.stream().anyMatch(e -> e instanceof SieDateException),
                 "Should report a SieDateException for invalid date");
     }
+
+    @Test
+    public void rtransMirrorTransIsIgnoredWhenRtransHandled(@TempDir Path tempDir) throws IOException {
+        String content = "#FLAGGA 0\n"
+                + "#PROGRAM \"Test\" 1.0\n"
+                + "#FORMAT PC8\n"
+                + "#GEN 20240101 Test\n"
+                + "#SIETYP 4\n"
+                + "#FNAMN \"Test\"\n"
+                + "#VER \"A\" \"1\" 20240101 \"Adj\"\n"
+                + "{\n"
+                + "#TRANS 1910 {} -100\n"
+                + "#RTRANS 1910 {} 100\n"
+                + "#TRANS 1910 {} 100\n"
+                + "}\n";
+        Path sieFile = tempDir.resolve("rtrans_mirror.SE");
+        Files.writeString(sieFile, content, Encoding.getCharset());
+
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.setAllowUnbalancedVoucher(true);
+        SieDocument doc = reader.readDocument(sieFile.toString());
+
+        assertEquals(1, doc.getVER().size(), "Expected one voucher");
+        assertEquals(2, doc.getVER().get(0).getRows().size(),
+                "Expected mirror #TRANS after #RTRANS to be ignored");
+        assertEquals("#TRANS", doc.getVER().get(0).getRows().get(0).getToken());
+        assertEquals("#RTRANS", doc.getVER().get(0).getRows().get(1).getToken());
+    }
 }

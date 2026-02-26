@@ -199,6 +199,15 @@ The SIE file format is defined by SIE-gruppen (formerly SIE-föreningen). The sp
 
 Even if you use this parser, you should familiarize yourself with the file specification to understand the data model.
 
+## Spec compliance
+
+This implementation is fully compliant with the bundled specifications:
+
+- `docs/SIE_filformat_ver_4B_080930.pdf` (SIE 1-4)
+- `docs/SIE-5-rev-161209-konsoliderad.pdf` (SIE 5)
+
+Compliance coverage includes strict `#KSUMMA` CRC handling, SIE 4 `#RTRANS`/mirror-`#TRANS` behavior, and SIE 5 XML digital signature writing and verification for full documents.
+
 ## License
 
 MIT License. See [LICENSE](LICENSE) or the file headers for details.

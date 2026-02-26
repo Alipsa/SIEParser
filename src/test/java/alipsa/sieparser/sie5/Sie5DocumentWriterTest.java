@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class Sie5DocumentWriterTest {
 
-    private final Sie5DocumentWriter writer = new Sie5DocumentWriter();
     private final Sie5DocumentReader reader = new Sie5DocumentReader();
 
     @Test
     void writeProgrammaticEntryDocument() throws Exception {
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
         Sie5Entry entry = new Sie5Entry();
 
         // FileInfo
@@ -75,6 +75,7 @@ class Sie5DocumentWriterTest {
 
     @Test
     void writeProgrammaticFullDocument() throws Exception {
+        Sie5DocumentWriter writer = new Sie5DocumentWriter(TestSigningCredentials.create());
         Sie5Document doc = new Sie5Document();
 
         // FileInfo
@@ -121,6 +122,7 @@ class Sie5DocumentWriterTest {
 
         assertTrue(xml.contains("<Sie"), "Should contain Sie root element");
         assertTrue(xml.contains("sie.se/sie5"), "Should contain SIE 5 namespace");
+        assertTrue(xml.contains("Signature"), "Full document should be digitally signed");
 
         Sie5Document readBack = reader.readDocument(new ByteArrayInputStream(baos.toByteArray()));
         assertEquals("Demo AB", readBack.getFileInfo().getCompany().getName());
@@ -128,5 +130,16 @@ class Sie5DocumentWriterTest {
         assertEquals(1, readBack.getFileInfo().getFiscalYears().size());
         assertEquals(1, readBack.getAccounts().size());
         assertEquals("1910", readBack.getAccounts().get(0).getId());
+    }
+
+    @Test
+    void unsignedFullDocumentFailsWhenSignatureRequired() {
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
+        Sie5Document doc = new Sie5Document();
+        doc.setFileInfo(new FileInfo());
+        doc.setAccounts(List.of());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        assertThrows(alipsa.sieparser.SieException.class, () -> writer.write(doc, baos));
     }
 }

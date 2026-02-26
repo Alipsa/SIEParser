@@ -5,6 +5,11 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.YearMonth;
+import java.time.ZoneOffset;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -131,5 +136,83 @@ class Sie5DocumentReaderTest {
                 assertEquals(original.getAccounts().get(i).getType(), roundTripped.getAccounts().get(i).getType());
             }
         }
+    }
+
+    @Test
+    void invalidSignatureRejected() throws Exception {
+        Sie5Document doc = new Sie5Document();
+        FileInfo fileInfo = new FileInfo();
+        SoftwareProduct sp = new SoftwareProduct();
+        sp.setName("TestApp");
+        sp.setVersion("2.0");
+        fileInfo.setSoftwareProduct(sp);
+
+        FileCreation fc = new FileCreation();
+        fc.setTime(OffsetDateTime.of(2024, 6, 1, 12, 0, 0, 0, ZoneOffset.UTC));
+        fc.setBy("Admin");
+        fileInfo.setFileCreation(fc);
+
+        Company company = new Company();
+        company.setOrganizationId("556789-1234");
+        company.setName("Demo AB");
+        fileInfo.setCompany(company);
+
+        FiscalYear fy = new FiscalYear();
+        fy.setStart(YearMonth.of(2024, 1));
+        fy.setEnd(YearMonth.of(2024, 12));
+        fy.setPrimary(true);
+        fileInfo.setFiscalYears(List.of(fy));
+
+        AccountingCurrency currency = new AccountingCurrency();
+        currency.setCurrency("SEK");
+        fileInfo.setAccountingCurrency(currency);
+        doc.setFileInfo(fileInfo);
+
+        Account acc = new Account();
+        acc.setId("1910");
+        acc.setName("Kassa");
+        acc.setType(AccountTypeValue.ASSET);
+        doc.setAccounts(List.of(acc));
+
+        Sie5DocumentWriter signedWriter = new Sie5DocumentWriter(TestSigningCredentials.create());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        signedWriter.write(doc, baos);
+
+        String tampered = baos.toString(StandardCharsets.UTF_8).replace("Demo AB", "Hacked AB");
+        assertThrows(alipsa.sieparser.SieException.class,
+            () -> reader.readDocument(new ByteArrayInputStream(tampered.getBytes(StandardCharsets.UTF_8))));
+    }
+
+    @Test
+    void unsignedFullDocumentRejectedByDefault() throws Exception {
+        Sie5Document doc = new Sie5Document();
+        FileInfo fileInfo = new FileInfo();
+        SoftwareProduct sp = new SoftwareProduct();
+        sp.setName("TestApp");
+        sp.setVersion("2.0");
+        fileInfo.setSoftwareProduct(sp);
+
+        FileCreation fc = new FileCreation();
+        fc.setTime(OffsetDateTime.of(2024, 6, 1, 12, 0, 0, 0, ZoneOffset.UTC));
+        fc.setBy("Admin");
+        fileInfo.setFileCreation(fc);
+
+        Company company = new Company();
+        company.setOrganizationId("556789-1234");
+        company.setName("Demo AB");
+        fileInfo.setCompany(company);
+        fileInfo.setFiscalYears(List.of());
+        fileInfo.setAccountingCurrency(new AccountingCurrency());
+        fileInfo.getAccountingCurrency().setCurrency("SEK");
+        doc.setFileInfo(fileInfo);
+        doc.setAccounts(List.of());
+
+        Sie5DocumentWriter unsignedWriter = new Sie5DocumentWriter();
+        unsignedWriter.setRequireSignatureForFullDocuments(false);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        unsignedWriter.write(doc, baos);
+
+        assertThrows(alipsa.sieparser.SieException.class,
+            () -> reader.readDocument(new ByteArrayInputStream(baos.toByteArray())));
     }
 }

@@ -140,6 +140,12 @@ public class SieDocumentWriterTest {
 
         String output = baos.toString(Encoding.getCharset());
         assertTrue(output.contains("#KSUMMA"), "Output should contain KSUMMA when enabled");
+
+        String tempFile = createTempFileFromBytes(baos.toByteArray());
+        SieDocumentReader reader = new SieDocumentReader();
+        reader.readDocument(tempFile);
+        assertTrue(reader.getValidationExceptions().stream().noneMatch(e -> e instanceof SieInvalidChecksumException),
+                "Generated KSUMMA should validate successfully");
     }
 
     private SieDocument createMinimalDocument() {

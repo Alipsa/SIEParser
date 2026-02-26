@@ -2,9 +2,11 @@ package alipsa.sieparser.sie5;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +68,9 @@ public class Sie5Document {
 
     @XmlElement(name = "Documents")
     private Documents documents;
+
+    @XmlAnyElement
+    private List<Element> anyElements = new ArrayList<>();
 
 
     /** Creates a new instance. */
@@ -237,4 +242,34 @@ public class Sie5Document {
      * @param documents the documents container
      */
     public void setDocuments(Documents documents) { this.documents = documents; }
+
+    /**
+     * Returns all root-level XML elements that are not explicitly modeled by this class.
+     *
+     * @return list of unmapped root-level elements
+     */
+    public List<Element> getAnyElements() { return anyElements; }
+
+    /**
+     * Sets all root-level XML elements that are not explicitly modeled by this class.
+     *
+     * @param anyElements list of unmapped root-level elements
+     */
+    public void setAnyElements(List<Element> anyElements) { this.anyElements = anyElements; }
+
+    /**
+     * Returns all XMLDSig signature elements under this document root.
+     *
+     * @return signatures as DOM elements
+     */
+    public List<Element> getSignatures() {
+        List<Element> signatures = new ArrayList<>();
+        for (Element e : anyElements) {
+            if ("http://www.w3.org/2000/09/xmldsig#".equals(e.getNamespaceURI())
+                && "Signature".equals(e.getLocalName())) {
+                signatures.add(e);
+            }
+        }
+        return signatures;
+    }
 }

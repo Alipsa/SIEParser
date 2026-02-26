@@ -60,6 +60,7 @@ public class SieDocumentReader {
     private String fileName;
     private int parsingLineNumber = 0;
     private SieVoucher curVoucher;
+    private String pendingRTRANSMirrorData;
     private boolean abortParsing;
     private final Map<String, Consumer<SieDataItem>> handlers = new LinkedHashMap<>();
 
@@ -264,6 +265,7 @@ public class SieDocumentReader {
     public SieDocument readDocument(String fileName) throws IOException {
         this.fileName = fileName;
         curVoucher = null;
+        pendingRTRANSMirrorData = null;
         abortParsing = false;
 
         if (throwErrors) {
@@ -300,7 +302,12 @@ public class SieDocumentReader {
                 } else if ("}".equals(itemType)) {
                     if (curVoucher != null) closeVoucher(curVoucher);
                     curVoucher = null;
+                    pendingRTRANSMirrorData = null;
                 } else {
+                    // #RTRANS mirror rows only apply to the immediate next #TRANS row
+                    if (pendingRTRANSMirrorData != null && !SIE.TRANS.equals(itemType)) {
+                        pendingRTRANSMirrorData = null;
+                    }
                     Consumer<SieDataItem> handler = handlers.get(itemType);
                     if (handler != null) {
                         handler.accept(di);
@@ -389,6 +396,7 @@ public class SieDocumentReader {
                 callbacks.callbackException(new SieParseException(
                     "#RTRANS outside #VER block at line " + parsingLineNumber));
             } else {
+                pendingRTRANSMirrorData = rowDataWithoutTag(di);
                 parseTRANS(di, curVoucher);
             }
         }
@@ -399,6 +407,15 @@ public class SieDocumentReader {
             callbacks.callbackException(new SieParseException(
                 "#TRANS outside #VER block at line " + parsingLineNumber));
         } else {
+            if (pendingRTRANSMirrorData != null) {
+                String transData = rowDataWithoutTag(di);
+                if (pendingRTRANSMirrorData.equals(transData)) {
+                    // SIE 4B: when #RTRANS is handled, the directly following mirror #TRANS is ignored.
+                    pendingRTRANSMirrorData = null;
+                    return;
+                }
+                pendingRTRANSMirrorData = null;
+            }
             parseTRANS(di, curVoucher);
         }
     }
@@ -700,12 +717,19 @@ public class SieDocumentReader {
         SieVoucher v = new SieVoucher();
         v.setSeries(di.getString(0));
         v.setNumber(di.getString(1));
-        v.setVoucherDate(di.getDate(2) != null ? di.getDate(2) : LocalDate.now());
+        v.setVoucherDate(di.getDate(2));
         v.setText(di.getString(3));
         v.setCreatedDate(di.getDate(4));
         v.setCreatedBy(di.getString(5));
         v.setToken(di.getItemType());
         return v;
+    }
+
+    private String rowDataWithoutTag(SieDataItem di) {
+        String raw = di.getRawData() == null ? "" : di.getRawData().trim();
+        int p = raw.indexOf(' ');
+        if (p < 0 || p >= raw.length() - 1) return "";
+        return raw.substring(p + 1).trim();
     }
 
     private void addValidationException(boolean isException, Exception ex) {

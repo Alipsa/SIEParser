@@ -42,6 +42,7 @@ public class SieDocumentWriter {
     private SieDocument sieDoc;
     private BufferedWriter writer;
     private WriteOptions options;
+    private SieCRC32 activeCrc;
 
     /**
      * Creates a writer for the given SIE document with default options.
@@ -104,14 +105,13 @@ public class SieDocumentWriter {
     }
 
     private void writeContent() throws IOException {
-        SieCRC32 crc = null;
+        activeCrc = null;
+        writeLine(getFLAGGA());
         if (options.isWriteKSUMMA()) {
-            crc = new SieCRC32();
-            crc.start();
+            activeCrc = new SieCRC32();
+            activeCrc.start();
             writeLine(SIE.KSUMMA);
         }
-
-        writeLine(getFLAGGA());
         writeLine(getPROGRAM());
         writeLine(getFORMAT());
         writeLine(getGEN());
@@ -147,8 +147,10 @@ public class SieDocumentWriter {
         writePeriodValue(SIE.RES, sieDoc.getRES());
         writeVER();
 
-        if (options.isWriteKSUMMA() && crc != null) {
-            writeLine(SIE.KSUMMA + " " + crc.checksum());
+        if (options.isWriteKSUMMA() && activeCrc != null) {
+            long checksum = activeCrc.checksum();
+            writeLine(SIE.KSUMMA + " " + checksum);
+            activeCrc = null;
         }
     }
 
@@ -385,6 +387,12 @@ public class SieDocumentWriter {
     private void writeLine(String line) throws IOException {
         writer.write(line);
         writer.newLine();
+        if (activeCrc != null) {
+            SieDataItem di = new SieDataItem(line, null, null);
+            if (!SIE.KSUMMA.equals(di.getItemType())) {
+                activeCrc.addData(di);
+            }
+        }
     }
 
     private String makeField(String data) {
