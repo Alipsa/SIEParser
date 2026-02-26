@@ -9,7 +9,7 @@ plugins {
     id("se.alipsa.nexus-release-plugin") version '2.0.1'
 }
 
-group = 'com.github.pernyfelt.sieparser'
+group = 'se.alipsa'
 version = '2.0-SNAPSHOT'
 
 base {
@@ -55,9 +55,9 @@ publishing {
             from components.java
             pom {
                 name = 'SIEParser'
-                description = 'A Java parser for SIE files that can read files of version 1 to 4 (including 4i)'
+                description = 'A Java parser for SIE files (version 1 to 4 including 4i, and SIE 5 XML format)'
                 artifactId = 'SieParser'
-                url = 'http://github.com/perNyfelt/SIEParser'
+                url = 'https://github.com/Alipsa/SIEParser'
                 packaging = 'jar'
                 licenses {
                     license {
@@ -79,12 +79,12 @@ publishing {
                 }
                 issueManagement {
                     system = 'github'
-                    url = 'http://github.com/perNyfelt/SIEParser/issues'
+                    url = 'https://github.com/Alipsa/SIEParser/issues'
                 }
                 scm {
-                    url = 'http://github.com/perNyfelt/SIEParser'
-                    connection = 'scm:git:http://github.com/perNyfelt/SIEParser.git'
-                    developerConnection = 'scm:git:git@github.com:perNyfelt/SIEParser.git'
+                    url = 'https://github.com/Alipsa/SIEParser'
+                    connection = 'scm:git:https://github.com/Alipsa/SIEParser.git'
+                    developerConnection = 'scm:git:git@github.com:Alipsa/SIEParser.git'
                 }
             }
         }

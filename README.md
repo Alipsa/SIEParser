@@ -10,6 +10,24 @@ Originally ported from the .NET [jsisie](https://github.com/idstam/jsisie) parse
 - Java 17 or later
 - Gradle 9+ (wrapper included)
 
+## Installation
+
+**Gradle:**
+```groovy
+implementation 'se.alipsa:SieParser:2.0'
+```
+
+**Maven:**
+```xml
+<dependency>
+    <groupId>se.alipsa</groupId>
+    <artifactId>SieParser</artifactId>
+    <version>2.0</version>
+</dependency>
+```
+
+> **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`. The old coordinates include a relocation POM pointing to the new group ID.
+
 ## Read a SIE file
 
 ```java

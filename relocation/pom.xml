@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.pernyfelt.sieparser</groupId>
+    <artifactId>SieParser</artifactId>
+    <version>2.0</version>
+    <packaging>pom</packaging>
+
+    <name>SIEParser (relocated)</name>
+    <description>This artifact has been relocated to se.alipsa:SieParser</description>
+    <url>https://github.com/Alipsa/SIEParser</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>perNyfelt</id>
+            <name>Per Nyfelt</name>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/Alipsa/SIEParser</url>
+        <connection>scm:git:https://github.com/Alipsa/SIEParser.git</connection>
+        <developerConnection>scm:git:git@github.com:Alipsa/SIEParser.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <relocation>
+            <groupId>se.alipsa</groupId>
+            <artifactId>SieParser</artifactId>
+            <message>The artifact has moved to se.alipsa:SieParser</message>
+        </relocation>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.8</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.10.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <checksums>required</checksums>
+                    <deploymentName>${project.artifactId}-${project.version}</deploymentName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
