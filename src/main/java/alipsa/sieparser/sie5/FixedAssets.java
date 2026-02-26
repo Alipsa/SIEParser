@@ -17,6 +17,9 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixedAssets extends SubdividedAccount {
 
+    /** Creates a new instance. */
+    public FixedAssets() {}
+
     @XmlElement(name = "FixedAsset")
     private List<FixedAsset> fixedAssets = new ArrayList<>();
 

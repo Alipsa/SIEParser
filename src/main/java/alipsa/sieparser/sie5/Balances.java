@@ -20,6 +20,9 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Balances {
 
+    /** Creates a new instance. */
+    public Balances() {}
+
     @XmlAttribute(name = "accountId")
     private String accountId;
 

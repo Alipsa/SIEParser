@@ -17,6 +17,9 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SupplierInvoices extends SubdividedAccount {
 
+    /** Creates a new instance. */
+    public SupplierInvoices() {}
+
     @XmlElement(name = "SupplierInvoice")
     private List<SupplierInvoice> supplierInvoices = new ArrayList<>();
 
