@@ -1,9 +1,6 @@
 pluginManagement {
   repositories {
-    if (gradle.startParameter.projectProperties.containsKey("useMavenLocal")) {
-      // Opt-in local plugin resolution: ./gradlew -PuseMavenLocal <task>
-      mavenLocal()
-    }
+    mavenLocal()
     mavenCentral()
     gradlePluginPortal()
   }

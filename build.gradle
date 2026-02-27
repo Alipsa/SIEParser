@@ -6,12 +6,12 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven-publish'
-    id("se.alipsa.nexus-release-plugin") version '2.0.1'
+    id("se.alipsa.nexus-release-plugin") version '2.1.1'
     id "com.github.ben-manes.versions" version "0.53.0"
 }
 
 group = 'se.alipsa'
-version = '2.0'
+version = '2.0.1-SNAPSHOT'
 
 base {
     archivesName = 'SieParser'
@@ -54,7 +54,7 @@ publishing {
             from components.java
             pom {
                 name = 'SIEParser'
-                description = 'A Java parser for SIE files (version 1 to 4 including 4i, and SIE 5 XML format)'
+                description = 'A Java parser and writer for SIE files (version 1 to 4 including 4i, and SIE 5 XML format)'
                 artifactId = 'SieParser'
                 url = 'https://github.com/Alipsa/SIEParser'
                 packaging = 'jar'
