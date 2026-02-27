@@ -143,6 +143,7 @@ public class JournalEntry {
      * @return a new list containing only active (non-overstriken) ledger entries
      */
     public List<LedgerEntry> getActiveLedgerEntries() {
+        if (ledgerEntries == null) return List.of();
         return ledgerEntries.stream()
             .filter(e -> e.getOverstrike() == null)
             .toList();

@@ -161,6 +161,7 @@ public class Sie5DocumentReader {
      * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Document readDocument(String fileName) {
+        validationWarnings = new ArrayList<>();
         try {
             Document document = parseDocument(new File(fileName));
             validateDocumentSignatures(document, true);
@@ -181,6 +182,7 @@ public class Sie5DocumentReader {
      * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Document readDocument(InputStream stream) {
+        validationWarnings = new ArrayList<>();
         try {
             Document document = parseDocument(stream);
             validateDocumentSignatures(document, true);
@@ -391,6 +393,9 @@ public class Sie5DocumentReader {
             Node signatureNode = signatures.item(i);
             try {
                 DOMValidateContext validateContext = new DOMValidateContext(keySelector, signatureNode);
+                // Secure validation is disabled because the SIE 5 spec predates SHA-1 deprecation
+                // and real-world SIE files commonly use RSA-SHA1 signatures which are rejected
+                // by secure validation. XXE protection is handled separately in createDocumentBuilderFactory().
                 validateContext.setProperty("org.jcp.xml.dsig.secureValidation", Boolean.FALSE);
                 XMLSignature signature = signatureFactory.unmarshalXMLSignature(validateContext);
                 boolean valid = signature.validate(validateContext);
