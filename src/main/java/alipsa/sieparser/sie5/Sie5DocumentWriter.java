@@ -128,7 +128,7 @@ public class Sie5DocumentWriter {
     public void write(Sie5Document doc, String fileName) {
         try (OutputStream out = new FileOutputStream(new File(fileName))) {
             write(doc, out);
-        } catch (IOException e) {
+        } catch (IOException | SieException e) {
             throw new SieException("Failed to write SIE 5 document: " + fileName, e);
         }
     }

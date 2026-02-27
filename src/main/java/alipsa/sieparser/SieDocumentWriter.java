@@ -292,7 +292,7 @@ public class SieDocumentWriter {
     }
 
     private String sieAmount(BigDecimal amount) {
-        if (amount.stripTrailingZeros().scale() > 2) {
+        if (amount.scale() > 2) {
             amount = amount.setScale(2, RoundingMode.HALF_UP);
         }
         return amount.toPlainString();
