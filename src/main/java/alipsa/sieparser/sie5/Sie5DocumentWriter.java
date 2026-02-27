@@ -270,6 +270,9 @@ public class Sie5DocumentWriter {
 
     private void writeDocument(Document document, OutputStream stream) throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
+        tf.setFeature(javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        tf.setAttribute(javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        tf.setAttribute(javax.xml.XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
         Transformer transformer = tf.newTransformer();
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty(OutputKeys.INDENT, "no");
