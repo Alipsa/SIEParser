@@ -78,7 +78,8 @@ public class SieCRC32 {
     public void addData(SieDataItem item) {
         crcAccumulate(Encoding.getBytes(item.getItemType()));
         for (String d : item.getData()) {
-            String foo = d.replace("{", "").replace("}", "");
+            String foo = d.replace("{", "").replace("}", "")
+                          .replace("\"", "").replace(" ", "").replace("\t", "");
             crcAccumulate(Encoding.getBytes(foo));
         }
     }

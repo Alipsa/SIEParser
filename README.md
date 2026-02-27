@@ -3,7 +3,9 @@ SIEParser
 
 A Java library for reading, writing, and comparing [SIE](https://sie.se/) files (the Swedish standard accounting file format). Supports SIE types 1 through 4 (including 4i) and SIE 5 (XML format).
 
-Originally ported from the .NET [jsisie](https://github.com/idstam/jsisie) parser. Version 2.0 has been substantially modernized: all upstream fixes ported, Java 17+ APIs adopted, and test coverage expanded.
+Originally ported from the .NET [jsisie](https://github.com/idstam/jsisie) parser.
+Version 2.0 has been substantially modernized: all upstream fixes ported, Java 17+ APIs adopted, and test coverage expanded.
+Several spec compliance fixes has also been applied making the SIEParser fully spec compliant.
 
 ## Requirements
 
@@ -26,7 +28,8 @@ implementation 'se.alipsa:SieParser:2.0'
 </dependency>
 ```
 
-> **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`. The old coordinates include a relocation POM pointing to the new group ID.
+> **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`.
+> The old coordinates include a relocation POM pointing to the new group ID.
 
 ## Read a SIE file
 

@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
@@ -181,6 +184,222 @@ class Sie5DocumentReaderTest {
         String tampered = baos.toString(StandardCharsets.UTF_8).replace("Demo AB", "Hacked AB");
         assertThrows(alipsa.sieparser.SieException.class,
             () -> reader.readDocument(new ByteArrayInputStream(tampered.getBytes(StandardCharsets.UTF_8))));
+    }
+
+    // === Phase 5 tests ===
+
+    @Test
+    void strictValidationFiscalYearPrimary() {
+        Sie5DocumentReader strictReader = new Sie5DocumentReader();
+        strictReader.setVerifySignatures(false);
+        strictReader.setStrictValidation(true);
+
+        Sie5Document doc = createMinimalSie5Doc();
+        // No fiscal year has primary=true
+        doc.getFileInfo().getFiscalYears().get(0).setPrimary(null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
+        writer.setRequireSignatureForFullDocuments(false);
+        writer.write(doc, baos);
+
+        Sie5Document result = strictReader.readDocument(new ByteArrayInputStream(baos.toByteArray()));
+        assertTrue(strictReader.getValidationWarnings().stream()
+                .anyMatch(w -> w.contains("primary")),
+                "Should warn about no primary fiscal year");
+    }
+
+    @Test
+    void strictValidationAccountingCurrencyMissing() {
+        Sie5DocumentReader strictReader = new Sie5DocumentReader();
+        strictReader.setVerifySignatures(false);
+        strictReader.setStrictValidation(true);
+
+        Sie5Document doc = createMinimalSie5Doc();
+        doc.getFileInfo().setAccountingCurrency(null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
+        writer.setRequireSignatureForFullDocuments(false);
+        writer.write(doc, baos);
+
+        Sie5Document result = strictReader.readDocument(new ByteArrayInputStream(baos.toByteArray()));
+        assertTrue(strictReader.getValidationWarnings().stream()
+                .anyMatch(w -> w.contains("AccountingCurrency")),
+                "Should warn about missing accounting currency");
+    }
+
+    @Test
+    void strictValidationJournalEntryIdOrder() {
+        Sie5DocumentReader strictReader = new Sie5DocumentReader();
+        strictReader.setVerifySignatures(false);
+        strictReader.setStrictValidation(true);
+
+        Sie5Document doc = createMinimalSie5Doc();
+        Journal journal = new Journal();
+        journal.setId("A");
+        journal.setName("Main");
+
+        JournalEntry e1 = createJournalEntry(BigInteger.valueOf(2), "2024-01-01");
+        JournalEntry e2 = createJournalEntry(BigInteger.valueOf(1), "2024-01-02");
+        journal.setJournalEntries(List.of(e1, e2));
+        doc.setJournals(List.of(journal));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
+        writer.setRequireSignatureForFullDocuments(false);
+        writer.write(doc, baos);
+
+        Sie5Document result = strictReader.readDocument(new ByteArrayInputStream(baos.toByteArray()));
+        assertTrue(strictReader.getValidationWarnings().stream()
+                .anyMatch(w -> w.contains("not strictly ascending")),
+                "Should warn about non-ascending journal entry IDs");
+    }
+
+    @Test
+    void strictValidationQuantitySignMismatch() {
+        Sie5DocumentReader strictReader = new Sie5DocumentReader();
+        strictReader.setVerifySignatures(false);
+        strictReader.setStrictValidation(true);
+
+        Sie5Document doc = createMinimalSie5Doc();
+        Journal journal = new Journal();
+        journal.setId("A");
+        journal.setName("Main");
+
+        JournalEntry entry = createJournalEntry(BigInteger.ONE, "2024-01-01");
+        LedgerEntry le = new LedgerEntry();
+        le.setAccountId("1910");
+        le.setAmount(new BigDecimal("100"));
+        le.setQuantity(new BigDecimal("-5"));  // sign mismatch
+        entry.setLedgerEntries(List.of(le));
+        journal.setJournalEntries(List.of(entry));
+        doc.setJournals(List.of(journal));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
+        writer.setRequireSignatureForFullDocuments(false);
+        writer.write(doc, baos);
+
+        Sie5Document result = strictReader.readDocument(new ByteArrayInputStream(baos.toByteArray()));
+        assertTrue(strictReader.getValidationWarnings().stream()
+                .anyMatch(w -> w.contains("quantity sign")),
+                "Should warn about quantity sign mismatch");
+    }
+
+    @Test
+    void strictValidationForeignCurrencySignMismatch() {
+        Sie5DocumentReader strictReader = new Sie5DocumentReader();
+        strictReader.setVerifySignatures(false);
+        strictReader.setStrictValidation(true);
+
+        Sie5Document doc = createMinimalSie5Doc();
+        Journal journal = new Journal();
+        journal.setId("A");
+        journal.setName("Main");
+
+        JournalEntry entry = createJournalEntry(BigInteger.ONE, "2024-01-01");
+        LedgerEntry le = new LedgerEntry();
+        le.setAccountId("1910");
+        le.setAmount(new BigDecimal("100"));
+        ForeignCurrencyAmount fca = new ForeignCurrencyAmount();
+        fca.setAmount(new BigDecimal("-50"));  // sign mismatch
+        fca.setCurrency("USD");
+        le.setForeignCurrencyAmount(fca);
+        entry.setLedgerEntries(List.of(le));
+        journal.setJournalEntries(List.of(entry));
+        doc.setJournals(List.of(journal));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Sie5DocumentWriter writer = new Sie5DocumentWriter();
+        writer.setRequireSignatureForFullDocuments(false);
+        writer.write(doc, baos);
+
+        Sie5Document result = strictReader.readDocument(new ByteArrayInputStream(baos.toByteArray()));
+        assertTrue(strictReader.getValidationWarnings().stream()
+                .anyMatch(w -> w.contains("foreign currency")),
+                "Should warn about foreign currency amount sign mismatch");
+    }
+
+    @Test
+    void noWarningsWithoutStrictValidation() throws Exception {
+        try (InputStream is = getClass().getResourceAsStream("/samples/sie5/Sample.sie")) {
+            assertNotNull(is, "Sample.sie not found on classpath");
+            Sie5Document doc = reader.readDocument(is);
+            assertTrue(reader.getValidationWarnings().isEmpty(),
+                    "Should have no warnings when strict validation is disabled");
+        }
+    }
+
+    @Test
+    void getActiveLedgerEntriesFiltersOverstriken() {
+        JournalEntry entry = new JournalEntry();
+        LedgerEntry active = new LedgerEntry();
+        active.setAccountId("1910");
+        active.setAmount(new BigDecimal("100"));
+
+        LedgerEntry overstriken = new LedgerEntry();
+        overstriken.setAccountId("2440");
+        overstriken.setAmount(new BigDecimal("-100"));
+        Overstrike os = new Overstrike();
+        os.setDate(LocalDate.of(2024, 1, 15));
+        os.setBy("Admin");
+        overstriken.setOverstrike(os);
+
+        entry.setLedgerEntries(List.of(active, overstriken));
+
+        assertEquals(2, entry.getLedgerEntries().size(), "All entries should be in full list");
+        assertEquals(1, entry.getActiveLedgerEntries().size(), "Only active entries should be returned");
+        assertEquals("1910", entry.getActiveLedgerEntries().get(0).getAccountId());
+    }
+
+    private Sie5Document createMinimalSie5Doc() {
+        Sie5Document doc = new Sie5Document();
+        FileInfo fileInfo = new FileInfo();
+        SoftwareProduct sp = new SoftwareProduct();
+        sp.setName("TestApp");
+        sp.setVersion("1.0");
+        fileInfo.setSoftwareProduct(sp);
+
+        FileCreation fc = new FileCreation();
+        fc.setTime(OffsetDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC));
+        fc.setBy("Test");
+        fileInfo.setFileCreation(fc);
+
+        Company company = new Company();
+        company.setOrganizationId("556677-8899");
+        company.setName("Test AB");
+        fileInfo.setCompany(company);
+
+        FiscalYear fy = new FiscalYear();
+        fy.setStart(YearMonth.of(2024, 1));
+        fy.setEnd(YearMonth.of(2024, 12));
+        fy.setPrimary(true);
+        fileInfo.setFiscalYears(List.of(fy));
+
+        AccountingCurrency currency = new AccountingCurrency();
+        currency.setCurrency("SEK");
+        fileInfo.setAccountingCurrency(currency);
+        doc.setFileInfo(fileInfo);
+
+        Account acc = new Account();
+        acc.setId("1910");
+        acc.setName("Kassa");
+        acc.setType(AccountTypeValue.ASSET);
+        doc.setAccounts(List.of(acc));
+
+        return doc;
+    }
+
+    private JournalEntry createJournalEntry(BigInteger id, String dateStr) {
+        JournalEntry entry = new JournalEntry();
+        entry.setId(id);
+        entry.setJournalDate(LocalDate.parse(dateStr));
+        EntryInfo info = new EntryInfo();
+        info.setDate(LocalDate.parse(dateStr));
+        info.setBy("Test");
+        entry.setEntryInfo(info);
+        return entry;
     }
 
     @Test

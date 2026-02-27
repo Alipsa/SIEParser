@@ -20,8 +20,12 @@ import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,6 +55,8 @@ public class Sie5DocumentReader {
     private boolean verifySignatures = true;
     private boolean allowUnsignedDocuments = false;
     private boolean allowInvalidSignatures = false;
+    private boolean strictValidation = false;
+    private List<String> validationWarnings = new ArrayList<>();
 
     static {
         try {
@@ -118,6 +124,36 @@ public class Sie5DocumentReader {
     }
 
     /**
+     * Returns whether strict SIE 5 spec validation is enabled.
+     *
+     * @return {@code true} if strict validation is enabled
+     */
+    public boolean isStrictValidation() {
+        return strictValidation;
+    }
+
+    /**
+     * Sets whether strict SIE 5 spec validation is enabled.
+     * When enabled, the reader validates fiscal year, currency, journal entry ordering,
+     * quantity/amount sign consistency, and foreign currency amount sign consistency.
+     *
+     * @param strictValidation {@code true} to enable strict validation
+     */
+    public void setStrictValidation(boolean strictValidation) {
+        this.strictValidation = strictValidation;
+    }
+
+    /**
+     * Returns the list of validation warnings collected during reading.
+     * Only populated when {@link #isStrictValidation()} is {@code true}.
+     *
+     * @return the validation warnings
+     */
+    public List<String> getValidationWarnings() {
+        return validationWarnings;
+    }
+
+    /**
      * Reads a full SIE 5 document from a file path.
      *
      * @param fileName the path to the SIE 5 XML file
@@ -129,7 +165,9 @@ public class Sie5DocumentReader {
             Document document = parseDocument(new File(fileName));
             validateDocumentSignatures(document, true);
             Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-            return unmarshaller.unmarshal(document, Sie5Document.class).getValue();
+            Sie5Document doc = unmarshaller.unmarshal(document, Sie5Document.class).getValue();
+            if (strictValidation) validate(doc);
+            return doc;
         } catch (JAXBException | ParserConfigurationException | SAXException | java.io.IOException e) {
             throw new SieException("Failed to read SIE 5 document: " + fileName, e);
         }
@@ -147,7 +185,9 @@ public class Sie5DocumentReader {
             Document document = parseDocument(stream);
             validateDocumentSignatures(document, true);
             Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-            return unmarshaller.unmarshal(document, Sie5Document.class).getValue();
+            Sie5Document doc = unmarshaller.unmarshal(document, Sie5Document.class).getValue();
+            if (strictValidation) validate(doc);
+            return doc;
         } catch (JAXBException | ParserConfigurationException | SAXException | java.io.IOException e) {
             throw new SieException("Failed to read SIE 5 document from stream", e);
         }
@@ -189,6 +229,121 @@ public class Sie5DocumentReader {
             return unmarshaller.unmarshal(document, Sie5Entry.class).getValue();
         } catch (JAXBException | ParserConfigurationException | SAXException | java.io.IOException e) {
             throw new SieException("Failed to read SIE 5 entry from stream", e);
+        }
+    }
+
+    private void validate(Sie5Document doc) {
+        validationWarnings = new ArrayList<>();
+        if (doc.getFileInfo() != null) {
+            validateFiscalYears(doc.getFileInfo().getFiscalYears());
+            validateAccountingCurrency(doc.getFileInfo());
+            validateBalanceCompleteness(doc.getAccounts(), doc.getFileInfo().getFiscalYears());
+        }
+        validateJournals(doc.getJournals());
+    }
+
+    private void validateFiscalYears(List<FiscalYear> fiscalYears) {
+        if (fiscalYears == null || fiscalYears.isEmpty()) return;
+
+        int primaryCount = 0;
+        for (FiscalYear fy : fiscalYears) {
+            if (Boolean.TRUE.equals(fy.getPrimary())) primaryCount++;
+        }
+        if (primaryCount == 0) {
+            validationWarnings.add("No FiscalYear has primary=true");
+        } else if (primaryCount > 1) {
+            validationWarnings.add("Multiple FiscalYears have primary=true (" + primaryCount + ")");
+        }
+
+        for (int i = 1; i < fiscalYears.size(); i++) {
+            FiscalYear prev = fiscalYears.get(i - 1);
+            FiscalYear curr = fiscalYears.get(i);
+            if (prev.getEnd() != null && curr.getStart() != null
+                && !curr.getStart().isAfter(prev.getEnd())) {
+                validationWarnings.add("FiscalYear starting " + curr.getStart()
+                    + " does not start after previous end " + prev.getEnd());
+            }
+        }
+    }
+
+    private void validateAccountingCurrency(FileInfo fileInfo) {
+        if (fileInfo.getAccountingCurrency() == null) {
+            validationWarnings.add("AccountingCurrency is missing in full document");
+        }
+    }
+
+    private void validateBalanceCompleteness(List<Account> accounts, List<FiscalYear> fiscalYears) {
+        if (accounts == null || fiscalYears == null || fiscalYears.isEmpty()) return;
+        for (Account acc : accounts) {
+            if (acc.getType() != AccountTypeValue.ASSET
+                && acc.getType() != AccountTypeValue.LIABILITY
+                && acc.getType() != AccountTypeValue.EQUITY) continue;
+            for (FiscalYear fy : fiscalYears) {
+                if (fy.getStart() == null) continue;
+                boolean hasOpening = acc.getOpeningBalances().stream()
+                    .anyMatch(b -> b.getMonth() != null && !b.getMonth().isBefore(fy.getStart())
+                        && (fy.getEnd() == null || !b.getMonth().isAfter(fy.getEnd())));
+                boolean hasClosing = acc.getClosingBalances().stream()
+                    .anyMatch(b -> b.getMonth() != null && !b.getMonth().isBefore(fy.getStart())
+                        && (fy.getEnd() == null || !b.getMonth().isAfter(fy.getEnd())));
+                if (!hasOpening && !hasClosing) continue;
+                if (!hasOpening) {
+                    validationWarnings.add("Account " + acc.getId()
+                        + " lacks opening balance for fiscal year " + fy.getStart() + "-" + fy.getEnd());
+                }
+                if (!hasClosing) {
+                    validationWarnings.add("Account " + acc.getId()
+                        + " lacks closing balance for fiscal year " + fy.getStart() + "-" + fy.getEnd());
+                }
+            }
+        }
+    }
+
+    private void validateJournals(List<Journal> journals) {
+        if (journals == null) return;
+        for (Journal journal : journals) {
+            validateJournalEntryOrder(journal);
+            for (JournalEntry entry : journal.getJournalEntries()) {
+                validateLedgerEntries(entry, journal.getId());
+            }
+        }
+    }
+
+    private void validateJournalEntryOrder(Journal journal) {
+        List<JournalEntry> entries = journal.getJournalEntries();
+        if (entries == null || entries.size() < 2) return;
+        for (int i = 1; i < entries.size(); i++) {
+            BigInteger prevId = entries.get(i - 1).getId();
+            BigInteger currId = entries.get(i).getId();
+            if (prevId != null && currId != null && currId.compareTo(prevId) <= 0) {
+                validationWarnings.add("JournalEntry id " + currId
+                    + " is not strictly ascending after " + prevId
+                    + " in journal '" + journal.getId() + "'");
+            }
+        }
+    }
+
+    private void validateLedgerEntries(JournalEntry entry, String journalId) {
+        for (LedgerEntry le : entry.getLedgerEntries()) {
+            // Quantity sign check
+            if (le.getQuantity() != null && le.getAmount() != null
+                && le.getAmount().signum() != 0
+                && le.getQuantity().signum() != 0
+                && le.getQuantity().signum() != le.getAmount().signum()) {
+                validationWarnings.add("LedgerEntry in journal '" + journalId
+                    + "' entry " + entry.getId()
+                    + ": quantity sign differs from amount sign");
+            }
+            // Foreign currency amount sign check
+            if (le.getForeignCurrencyAmount() != null && le.getAmount() != null
+                && le.getAmount().signum() != 0
+                && le.getForeignCurrencyAmount().getAmount() != null
+                && le.getForeignCurrencyAmount().getAmount().signum() != 0
+                && le.getForeignCurrencyAmount().getAmount().signum() != le.getAmount().signum()) {
+                validationWarnings.add("LedgerEntry in journal '" + journalId
+                    + "' entry " + entry.getId()
+                    + ": foreign currency amount sign differs from accounting amount sign");
+            }
         }
     }
 

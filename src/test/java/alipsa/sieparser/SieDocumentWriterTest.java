@@ -148,6 +148,130 @@ public class SieDocumentWriterTest {
                 "Generated KSUMMA should validate successfully");
     }
 
+    // === Phase 2 tests ===
+
+    @Test
+    public void nullOrgIdentifierOmitsOrgnr() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        doc.getFNAMN().setOrgIdentifier(null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        assertFalse(output.contains("#ORGNR"), "Output should not contain #ORGNR when orgIdentifier is null");
+    }
+
+    @Test
+    public void noDimForType1() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        doc.setSIETYP(1);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        assertFalse(output.contains("#DIM"), "Type 1 should not have #DIM");
+        assertFalse(output.contains("#UNDERDIM"), "Type 1 should not have #UNDERDIM");
+    }
+
+    @Test
+    public void skipDefaultDimWithoutObjects() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        // Default dimensions should be skipped if they have no objects
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        // Default dimensions 1-19 with no objects should not appear
+        assertFalse(output.contains("#DIM 1 "), "Default dim 1 with no objects should not be written");
+    }
+
+    @Test
+    public void writePeriodValueQuantity() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        SieAccount acct = new SieAccount("1910", "Kassa");
+        doc.getKONTO().put("1910", acct);
+
+        SiePeriodValue ib = new SiePeriodValue();
+        ib.setYearNr(0);
+        ib.setAccount(acct);
+        ib.setAmount(new BigDecimal("1000.00"));
+        ib.setQuantity(new BigDecimal("5"));
+        ib.setToken("#IB");
+        doc.getIB().add(ib);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        // IB line should include quantity
+        assertTrue(output.contains("1000.00") || output.contains("1000"), "Should contain amount");
+        assertTrue(output.lines().anyMatch(l -> l.startsWith("#IB") && l.contains("5")),
+                "IB line should include quantity");
+    }
+
+    @Test
+    public void writeBkod() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        doc.getFNAMN().setSni(12345);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        assertTrue(output.contains("#BKOD 12345"), "Output should contain #BKOD 12345");
+
+        // Read back and verify
+        String tempFile = createTempFileFromBytes(baos.toByteArray());
+        SieDocumentReader reader = new SieDocumentReader();
+        SieDocument readBack = reader.readDocument(tempFile);
+        assertEquals(12345, readBack.getFNAMN().getSni());
+    }
+
+    @Test
+    public void genDateNullFallsBackToToday() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        doc.setGEN_DATE(null);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        assertFalse(output.contains("00000000"), "Should not contain 00000000 for null GEN date");
+        // Should contain today's date in YYYYMMDD format
+        String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        assertTrue(output.contains(today), "Should contain today's date: " + today);
+    }
+
+    @Test
+    public void amountTruncatedTo2Decimals() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        SieAccount acct = new SieAccount("1910", "Kassa");
+        doc.getKONTO().put("1910", acct);
+
+        SiePeriodValue ib = new SiePeriodValue();
+        ib.setYearNr(0);
+        ib.setAccount(acct);
+        ib.setAmount(new BigDecimal("123.456"));
+        ib.setToken("#IB");
+        doc.getIB().add(ib);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(baos);
+
+        String output = baos.toString(Encoding.getCharset());
+        assertTrue(output.contains("123.46"), "Amount should be rounded to 2 decimals");
+        assertFalse(output.contains("123.456"), "Original 3-decimal amount should not appear");
+    }
+
     private SieDocument createMinimalDocument() {
         SieDocument doc = new SieDocument();
         doc.setFLAGGA(0);

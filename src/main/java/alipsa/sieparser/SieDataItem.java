@@ -176,7 +176,7 @@ public class SieDataItem {
                 buffer.append(c);
             }
         }
-        if (buffer.length() > 0) {
+        if (buffer.length() > 0 || isInField == 2) {
             ret.add(buffer.toString().trim());
         }
 
