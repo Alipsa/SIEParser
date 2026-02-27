@@ -136,6 +136,20 @@ public class JournalEntry {
     public List<LedgerEntry> getLedgerEntries() { return ledgerEntries; }
 
     /**
+     * Returns only ledger entries that have not been overstriken.
+     * An overstriken entry has a non-null {@link Overstrike} element and
+     * should be excluded from balance computations.
+     *
+     * @return a new list containing only active (non-overstriken) ledger entries
+     */
+    public List<LedgerEntry> getActiveLedgerEntries() {
+        if (ledgerEntries == null) return List.of();
+        return ledgerEntries.stream()
+            .filter(e -> e.getOverstrike() == null)
+            .toList();
+    }
+
+    /**
      * Sets the list of ledger entry rows to set.
      * @param ledgerEntries the list of ledger entry rows to set
      */

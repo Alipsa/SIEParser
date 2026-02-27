@@ -27,6 +27,7 @@ package alipsa.sieparser;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +43,7 @@ public class SieDocumentWriter {
     private SieDocument sieDoc;
     private BufferedWriter writer;
     private WriteOptions options;
+    private SieCRC32 activeCrc;
 
     /**
      * Creates a writer for the given SIE document with default options.
@@ -104,14 +106,13 @@ public class SieDocumentWriter {
     }
 
     private void writeContent() throws IOException {
-        SieCRC32 crc = null;
+        activeCrc = null;
+        writeLine(getFLAGGA());
         if (options.isWriteKSUMMA()) {
-            crc = new SieCRC32();
-            crc.start();
+            activeCrc = new SieCRC32();
+            activeCrc.start();
             writeLine(SIE.KSUMMA);
         }
-
-        writeLine(getFLAGGA());
         writeLine(getPROGRAM());
         writeLine(getFORMAT());
         writeLine(getGEN());
@@ -120,17 +121,23 @@ public class SieDocumentWriter {
             writeLine(SIE.PROSA + " \"" + sieText(sieDoc.getPROSA()) + "\"");
         }
         writeFNR();
-        writeLine(getORGNR());
+        String orgnr = getORGNR();
+        if (orgnr != null) writeLine(orgnr);
         writeLine(getFNAMN());
         writeADRESS();
         writeFTYP();
+        writeBKOD();
         writeKPTYP();
         writeVALUTA();
         writeTAXAR();
-        writeOMFATTN();
+        if (sieDoc.getSIETYP() > 1) {
+            writeOMFATTN();
+        }
         writeRAR();
-        writeDIM();
-        writeUNDERDIM();
+        if (sieDoc.getSIETYP() >= 3) {
+            writeDIM();
+            writeUNDERDIM();
+        }
         writeKONTO();
         writePeriodValue(SIE.IB, sieDoc.getIB());
         writePeriodValue(SIE.UB, sieDoc.getUB());
@@ -147,8 +154,10 @@ public class SieDocumentWriter {
         writePeriodValue(SIE.RES, sieDoc.getRES());
         writeVER();
 
-        if (options.isWriteKSUMMA() && crc != null) {
-            writeLine(SIE.KSUMMA + " " + crc.checksum());
+        if (options.isWriteKSUMMA() && activeCrc != null) {
+            long checksum = activeCrc.checksum();
+            writeLine(SIE.KSUMMA + " " + checksum);
+            activeCrc = null;
         }
     }
 
@@ -213,6 +222,7 @@ public class SieDocumentWriter {
 
     private void writeDIM() throws IOException {
         for (SieDimension d : sieDoc.getDIM().values()) {
+            if (d.isDefault() && d.getObjects().isEmpty()) continue;
             writeLine(SIE.DIM + " " + d.getNumber() + " \"" + sieText(d.getName()) + "\"");
             for (SieObject o : d.getObjects().values()) {
                 // Fix: quote object number
@@ -235,11 +245,16 @@ public class SieDocumentWriter {
                 objekt = "";
             }
             if (v.getAccount() != null) {
-                writeLine(name + " " +
-                        v.getYearNr() + " " +
-                        v.getAccount().getNumber() + " " +
-                        objekt + " " +
-                        sieAmount(v.getAmount()));
+                StringBuilder sb = new StringBuilder();
+                sb.append(name).append(" ")
+                  .append(v.getYearNr()).append(" ")
+                  .append(v.getAccount().getNumber()).append(" ")
+                  .append(objekt).append(" ")
+                  .append(sieAmount(v.getAmount()));
+                if (v.getQuantity() != null && v.getQuantity().compareTo(BigDecimal.ZERO) != 0) {
+                    sb.append(" ").append(sieAmount(v.getQuantity()));
+                }
+                writeLine(sb.toString());
             }
         }
     }
@@ -279,6 +294,9 @@ public class SieDocumentWriter {
     }
 
     private String sieAmount(BigDecimal amount) {
+        if (amount.scale() > 2) {
+            amount = amount.setScale(2, RoundingMode.HALF_UP);
+        }
         return amount.toPlainString();
     }
 
@@ -318,6 +336,12 @@ public class SieDocumentWriter {
         }
     }
 
+    private void writeBKOD() throws IOException {
+        if (sieDoc.getFNAMN().getSni() > 0) {
+            writeLine(SIE.BKOD + " " + sieDoc.getFNAMN().getSni());
+        }
+    }
+
     private void writeKPTYP() throws IOException {
         String kpTyp = sieDoc.getKPTYP();
         if (kpTyp != null && !kpTyp.trim().isEmpty()) {
@@ -342,7 +366,9 @@ public class SieDocumentWriter {
     }
 
     private String getORGNR() {
-        return SIE.ORGNR + " " + sieDoc.getFNAMN().getOrgIdentifier();
+        String orgId = sieDoc.getFNAMN().getOrgIdentifier();
+        if (orgId == null || orgId.trim().isEmpty()) return null;
+        return SIE.ORGNR + " " + orgId;
     }
 
     private void writeFNR() throws IOException {
@@ -357,7 +383,8 @@ public class SieDocumentWriter {
 
     private String getGEN() {
         StringBuilder ret = new StringBuilder(SIE.GEN + " ");
-        ret.append(makeSieDate(sieDoc.getGEN_DATE())).append(" ");
+        LocalDate genDate = sieDoc.getGEN_DATE() != null ? sieDoc.getGEN_DATE() : LocalDate.now();
+        ret.append(makeSieDate(genDate)).append(" ");
         ret.append(makeField(sieDoc.getGEN_NAMN()));
         return ret.toString();
     }
@@ -385,6 +412,12 @@ public class SieDocumentWriter {
     private void writeLine(String line) throws IOException {
         writer.write(line);
         writer.newLine();
+        if (activeCrc != null) {
+            SieDataItem di = new SieDataItem(line, null, null);
+            if (!SIE.KSUMMA.equals(di.getItemType())) {
+                activeCrc.addData(di);
+            }
+        }
     }
 
     private String makeField(String data) {

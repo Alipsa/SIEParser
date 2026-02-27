@@ -3,7 +3,9 @@ SIEParser
 
 A Java library for reading, writing, and comparing [SIE](https://sie.se/) files (the Swedish standard accounting file format). Supports SIE types 1 through 4 (including 4i) and SIE 5 (XML format).
 
-Originally ported from the .NET [jsisie](https://github.com/idstam/jsisie) parser. Version 2.0 has been substantially modernized: all upstream fixes ported, Java 17+ APIs adopted, and test coverage expanded.
+Originally ported from the .NET [jsisie](https://github.com/idstam/jsisie) parser.
+Version 2.0 has been substantially modernized: all upstream fixes ported, Java 17+ APIs adopted, and test coverage expanded.
+Several spec compliance fixes have also been applied, bringing the parser to full spec compliance.
 
 ## Requirements
 
@@ -26,7 +28,8 @@ implementation 'se.alipsa:SieParser:2.0'
 </dependency>
 ```
 
-> **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`. The old coordinates include a relocation POM pointing to the new group ID.
+> **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`.
+> The old coordinates include a relocation POM pointing to the new group ID.
 
 ## Read a SIE file
 
@@ -198,6 +201,15 @@ new Sie5DocumentWriter().writeEntry(entry, "new-entry.sie");
 The SIE file format is defined by SIE-gruppen (formerly SIE-föreningen). The specification is available at [sie.se](https://sie.se/).
 
 Even if you use this parser, you should familiarize yourself with the file specification to understand the data model.
+
+## Spec compliance
+
+This implementation targets full compliance with the bundled specifications:
+
+- `docs/SIE_filformat_ver_4B_080930.pdf` (SIE 1-4)
+- `docs/SIE-5-rev-161209-konsoliderad.pdf` (SIE 5)
+
+All identified compliance issues have been resolved. See [`spec-compliance-report.md`](spec-compliance-report.md) for a detailed list of issues and their fix status. Coverage includes strict `#KSUMMA` CRC handling, SIE 4 `#RTRANS`/mirror-`#TRANS` behavior, mandatory-field and forbidden-record validation, and SIE 5 XML digital signature writing and verification for full documents.
 
 ## License
 

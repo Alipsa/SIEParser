@@ -31,9 +31,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -49,7 +52,7 @@ public class SieDocumentReader {
     private boolean ignoreRTRANS = false;
     private boolean allowUnbalancedVoucher = false;
     private boolean ignoreKSUMMA = false;
-    private boolean allowUnderDimensions = false;
+    private boolean allowUnderDimensions = true;
     private boolean ignoreMissingDIM = false;
     private EnumSet<SieType> acceptSIETypes = null;
     private SieDocument sieDocument;
@@ -60,8 +63,14 @@ public class SieDocumentReader {
     private String fileName;
     private int parsingLineNumber = 0;
     private SieVoucher curVoucher;
+    private String pendingRTRANSMirrorData;
     private boolean abortParsing;
     private final Map<String, Consumer<SieDataItem>> handlers = new LinkedHashMap<>();
+    private final Set<String> seenRecordTypes = new HashSet<>();
+    private boolean sieTypSeen = false;
+    private boolean formatSeen = false;
+    private final Map<String, Integer> lastVoucherNumberBySeries = new HashMap<>();
+    private List<Exception> validationWarnings = new ArrayList<>();
 
     /**
      * Returns the callbacks invoked during document reading.
@@ -213,6 +222,11 @@ public class SieDocumentReader {
     public SieDocumentReader() {
         sieDocument = new SieDocument();
         setValidationExceptions(new ArrayList<>());
+        validationWarnings = new ArrayList<>();
+        seenRecordTypes.clear();
+        sieTypSeen = false;
+        formatSeen = false;
+        lastVoucherNumberBySeries.clear();
         initHandlers();
     }
 
@@ -263,7 +277,16 @@ public class SieDocumentReader {
      */
     public SieDocument readDocument(String fileName) throws IOException {
         this.fileName = fileName;
+        sieDocument = new SieDocument();
+        CRC = new SieCRC32();
+        setValidationExceptions(new ArrayList<>());
+        validationWarnings = new ArrayList<>();
+        seenRecordTypes.clear();
+        sieTypSeen = false;
+        formatSeen = false;
+        lastVoucherNumberBySeries.clear();
         curVoucher = null;
+        pendingRTRANSMirrorData = null;
         abortParsing = false;
 
         if (throwErrors) {
@@ -300,13 +323,19 @@ public class SieDocumentReader {
                 } else if ("}".equals(itemType)) {
                     if (curVoucher != null) closeVoucher(curVoucher);
                     curVoucher = null;
+                    pendingRTRANSMirrorData = null;
                 } else {
+                    // #RTRANS mirror rows only apply to the immediate next #TRANS row
+                    if (pendingRTRANSMirrorData != null && !SIE.TRANS.equals(itemType)) {
+                        pendingRTRANSMirrorData = null;
+                    }
+                    seenRecordTypes.add(itemType);
                     Consumer<SieDataItem> handler = handlers.get(itemType);
                     if (handler != null) {
                         handler.accept(di);
                         if (abortParsing) return null;
                     } else {
-                        callbacks.callbackException(new UnsupportedOperationException(di.getItemType()));
+                        // Unknown labels are silently ignored per the SIE spec
                     }
                 }
             }
@@ -330,7 +359,7 @@ public class SieDocumentReader {
         handlers.put(SIE.FLAGGA, di -> sieDocument.setFLAGGA(di.getInt(0)));
         handlers.put(SIE.FNAMN, di -> sieDocument.getFNAMN().setName(di.getString(0)));
         handlers.put(SIE.FNR, di -> sieDocument.getFNAMN().setCode(di.getString(0)));
-        handlers.put(SIE.FORMAT, di -> sieDocument.setFORMAT(di.getString(0)));
+        handlers.put(SIE.FORMAT, di -> { formatSeen = true; sieDocument.setFORMAT(di.getString(0)); });
         handlers.put(SIE.FTYP, di -> sieDocument.getFNAMN().setOrgType(di.getString(0)));
         handlers.put(SIE.GEN, this::handleGEN);
         handlers.put(SIE.IB, this::parseIB);
@@ -341,7 +370,7 @@ public class SieDocumentReader {
         handlers.put(SIE.OBJEKT, this::parseOBJEKT);
         handlers.put(SIE.OIB, this::handleOIB);
         handlers.put(SIE.OUB, this::handleOUB);
-        handlers.put(SIE.ORGNR, di -> sieDocument.getFNAMN().setOrgIdentifier(di.getString(0)));
+        handlers.put(SIE.ORGNR, this::handleORGNR);
         handlers.put(SIE.OMFATTN, di -> sieDocument.setOMFATTN(di.getDate(0)));
         handlers.put(SIE.PBUDGET, this::handlePBUDGET);
         handlers.put(SIE.PROGRAM, di -> sieDocument.setPROGRAM(di.getData()));
@@ -372,6 +401,19 @@ public class SieDocumentReader {
         sieDocument.setGEN_NAMN(di.getString(1));
     }
 
+    private void handleORGNR(SieDataItem di) {
+        String orgNr = di.getString(0);
+        if (orgNr.isEmpty()) {
+            sieDocument.getFNAMN().setOrgIdentifier(null);
+        } else {
+            sieDocument.getFNAMN().setOrgIdentifier(orgNr);
+            if (!orgNr.matches("^\\d{6}-\\d{4}$")) {
+                addSoftValidation(new SieParseException(
+                    "ORGNR '" + orgNr + "' does not match expected format NNNNNN-NNNN"));
+            }
+        }
+    }
+
     private void handleBTRANS(SieDataItem di) {
         if (!ignoreBTRANS) {
             if (curVoucher == null) {
@@ -389,6 +431,7 @@ public class SieDocumentReader {
                 callbacks.callbackException(new SieParseException(
                     "#RTRANS outside #VER block at line " + parsingLineNumber));
             } else {
+                pendingRTRANSMirrorData = rowDataWithoutTag(di);
                 parseTRANS(di, curVoucher);
             }
         }
@@ -399,6 +442,15 @@ public class SieDocumentReader {
             callbacks.callbackException(new SieParseException(
                 "#TRANS outside #VER block at line " + parsingLineNumber));
         } else {
+            if (pendingRTRANSMirrorData != null) {
+                String transData = rowDataWithoutTag(di);
+                if (pendingRTRANSMirrorData.equals(transData)) {
+                    // SIE 4B: when #RTRANS is handled, the directly following mirror #TRANS is ignored.
+                    pendingRTRANSMirrorData = null;
+                    return;
+                }
+                pendingRTRANSMirrorData = null;
+            }
             parseTRANS(di, curVoucher);
         }
     }
@@ -414,6 +466,7 @@ public class SieDocumentReader {
     }
 
     private void handleSIETYP(SieDataItem di) {
+        sieTypSeen = true;
         sieDocument.setSIETYP(di.getInt(0));
         if (acceptSIETypes != null) {
             try {
@@ -479,6 +532,11 @@ public class SieDocumentReader {
     }
 
     private void parseUnderDimension(SieDataItem di) {
+        if (!allowUnderDimensions) {
+            callbacks.callbackException(new SieInvalidFeatureException(
+                "#UNDERDIM is not allowed (allowUnderDimensions=false)"));
+            return;
+        }
         String number = di.getString(0);
         String name = di.getString(1);
         String superDimNumber = di.getString(2);
@@ -525,6 +583,7 @@ public class SieDocumentReader {
         v.setYearNr(di.getInt(0));
         v.setAccount(sieDocument.getKONTO().get(di.getString(1)));
         v.setAmount(di.getDecimal(2));
+        warnIfExcessDecimals(v.getAmount(), "#IB");
         v.setQuantity(di.getDecimal(3));
         v.setToken(di.getItemType());
         callbacks.callbackIB(v);
@@ -534,6 +593,10 @@ public class SieDocumentReader {
     private void parseKONTO(SieDataItem di) {
         String number = di.getString(0);
         String name = di.getString(1);
+        if (!number.matches("\\d+")) {
+            addSoftValidation(new SieParseException(
+                "Account number '" + number + "' is not numeric at line " + parsingLineNumber));
+        }
         if (sieDocument.getKONTO().containsKey(number)) {
             sieDocument.getKONTO().get(number).setName(name);
         } else {
@@ -564,7 +627,7 @@ public class SieDocumentReader {
         String number = di.getString(1);
         String name = di.getString(2);
         if (!sieDocument.getDIM().containsKey(dimNumber)) {
-            sieDocument.getDIM().put(dimNumber, new SieDimension(number));
+            sieDocument.getDIM().put(dimNumber, new SieDimension(dimNumber));
         }
 
         SieDimension dim = sieDocument.getDIM().get(dimNumber);
@@ -600,6 +663,21 @@ public class SieDocumentReader {
         String accountNum = di.getString(2);
         if (!sieDocument.getKONTO().containsKey(accountNum)) {
             sieDocument.getKONTO().put(accountNum, new SieAccount(accountNum));
+        }
+
+        // Validate period format: should be YYYYMM (6 digits, month 01-12)
+        String periodStr = di.getString(1);
+        if (!periodStr.isEmpty()) {
+            if (!periodStr.matches("\\d{6}")) {
+                addSoftValidation(new SieParseException(
+                    "Invalid period format '" + periodStr + "', expected YYYYMM at line " + parsingLineNumber));
+            } else {
+                int month = Integer.parseInt(periodStr.substring(4));
+                if (month < 1 || month > 12) {
+                    addSoftValidation(new SieParseException(
+                        "Invalid month in period '" + periodStr + "' at line " + parsingLineNumber));
+                }
+            }
         }
 
         if (sieDocument.getSIETYP() == 1) {
@@ -667,6 +745,7 @@ public class SieDocumentReader {
         vr.setAccount(sieDocument.getKONTO().get(number));
         vr.setObjects(di.getObjects());
         vr.setAmount(di.getDecimal(1 + objOffset));
+        warnIfExcessDecimals(vr.getAmount(), di.getItemType());
         if (di.getDate(2 + objOffset) != null) vr.setRowDate(di.getDate(2 + objOffset));
         else vr.setRowDate(v.getVoucherDate());
         vr.setText(di.getString(3 + objOffset));
@@ -687,6 +766,7 @@ public class SieDocumentReader {
         v.setYearNr(di.getInt(0));
         v.setAccount(sieDocument.getKONTO().get(number));
         v.setAmount(di.getDecimal(2));
+        warnIfExcessDecimals(v.getAmount(), "#UB");
         v.setQuantity(di.getDecimal(3));
         v.setToken(di.getItemType());
         callbacks.callbackUB(v);
@@ -694,18 +774,55 @@ public class SieDocumentReader {
     }
 
     private SieVoucher parseVER(SieDataItem di) {
-        if (di.getDate(2) == null)
+        LocalDate voucherDate = di.getDate(2);
+        if (voucherDate == null) {
             callbacks.callbackException(new MissingFieldException("Voucher date"));
+            voucherDate = LocalDate.now();
+        }
 
         SieVoucher v = new SieVoucher();
         v.setSeries(di.getString(0));
         v.setNumber(di.getString(1));
-        v.setVoucherDate(di.getDate(2) != null ? di.getDate(2) : LocalDate.now());
+        v.setVoucherDate(voucherDate);
         v.setText(di.getString(3));
         v.setCreatedDate(di.getDate(4));
         v.setCreatedBy(di.getString(5));
         v.setToken(di.getItemType());
         return v;
+    }
+
+    private String rowDataWithoutTag(SieDataItem di) {
+        String raw = di.getRawData();
+        if (raw == null) return "";
+        raw = raw.trim();
+        if (raw.isEmpty()) return "";
+        int p = -1;
+        for (int i = 0; i < raw.length(); i++) {
+            if (Character.isWhitespace(raw.charAt(i))) {
+                p = i;
+                break;
+            }
+        }
+        if (p < 0 || p >= raw.length() - 1) return "";
+        return raw.substring(p + 1).trim();
+    }
+
+    private void warnIfExcessDecimals(BigDecimal amount, String context) {
+        if (amount != null && amount.stripTrailingZeros().scale() > 2) {
+            addSoftValidation(new SieParseException(
+                "Amount " + amount.toPlainString() + " has more than 2 decimal places in " + context
+                + " at line " + parsingLineNumber));
+        }
+    }
+
+    private void addSoftValidation(Exception ex) {
+        validationWarnings.add(ex);
+    }
+
+    private void addSoftValidation(boolean condition, Exception ex) {
+        if (condition) {
+            validationWarnings.add(ex);
+        }
     }
 
     private void addValidationException(boolean isException, Exception ex) {
@@ -731,7 +848,35 @@ public class SieDocumentReader {
         validationExceptions = value;
     }
 
+    /**
+     * Returns the list of soft validation warnings collected during reading.
+     * These are spec compliance issues that do not prevent parsing
+     * (e.g. missing mandatory fields, non-standard formats).
+     * @return the validation warnings
+     */
+    public List<Exception> getValidationWarnings() {
+        return validationWarnings;
+    }
+
     private void closeVoucher(SieVoucher v) {
+        // Check voucher number ordering per series
+        String series = v.getSeries() != null ? v.getSeries() : "";
+        String numStr = v.getNumber();
+        if (numStr != null && !numStr.isEmpty()) {
+            try {
+                int num = Integer.parseInt(numStr);
+                Integer lastNum = lastVoucherNumberBySeries.get(series);
+                if (lastNum != null && num < lastNum) {
+                    addSoftValidation(new SieParseException(
+                        "Voucher number " + num + " in series '" + series
+                        + "' is not in ascending order (previous was " + lastNum + ")"));
+                }
+                lastVoucherNumberBySeries.put(series, num);
+            } catch (NumberFormatException e) {
+                // Non-numeric voucher number, skip ordering check
+            }
+        }
+
         if (!allowUnbalancedVoucher) {
             BigDecimal check = BigDecimal.ZERO;
             for (SieVoucherRow r : v.getRows()) {
@@ -762,6 +907,33 @@ public class SieDocumentReader {
         if (!ignoreKSUMMA) {
             addValidationException((CRC.isStarted()) && (sieDocument.getKSUMMA() == 0),
                 new SieInvalidChecksumException(fileName));
+        }
+
+        // Issue #8: Mandatory field validation (soft — added to list, not thrown)
+        addSoftValidation(sieDocument.getPROGRAM().isEmpty(),
+            new SieParseException("#PROGRAM is missing in " + fileName));
+        addSoftValidation(!formatSeen,
+            new SieParseException("#FORMAT is missing in " + fileName));
+        addSoftValidation(sieDocument.getFNAMN().getName() == null || sieDocument.getFNAMN().getName().isEmpty(),
+            new SieParseException("#FNAMN is missing or empty in " + fileName));
+        addSoftValidation(!sieTypSeen,
+            new SieParseException("#SIETYP is missing in " + fileName));
+        addSoftValidation(sieDocument.getKONTO().isEmpty(),
+            new SieParseException("#KONTO is missing in " + fileName));
+        addSoftValidation(sieDocument.getRars().isEmpty(),
+            new SieParseException("#RAR is missing in " + fileName));
+
+        // Issue #9: Forbidden record enforcement (soft)
+        int sieTyp = sieDocument.getSIETYP();
+        if (sieTyp == 1 || sieTyp == 2) {
+            addSoftValidation(seenRecordTypes.contains(SIE.DIM),
+                new SieInvalidFeatureException("#DIM is not allowed in SIE type " + sieTyp));
+            addSoftValidation(seenRecordTypes.contains(SIE.UNDERDIM),
+                new SieInvalidFeatureException("#UNDERDIM is not allowed in SIE type " + sieTyp));
+        }
+        if (sieTyp == 1) {
+            addSoftValidation(seenRecordTypes.contains(SIE.OMFATTN),
+                new SieInvalidFeatureException("#OMFATTN is not allowed in SIE type 1"));
         }
     }
 }

@@ -117,4 +117,14 @@ public class SieDataItemTest {
         SieDataItem item = new SieDataItem("#IB 0 1910 12345.67", null, null);
         assertEquals(0, item.getDecimal(2).compareTo(new java.math.BigDecimal("12345.67")));
     }
+
+    @Test
+    public void trailingEmptyQuotedString() {
+        // Issue #14: trailing empty quoted string should be preserved
+        SieDataItem item = new SieDataItem("#GEN 20080101 \"\"", null, null);
+        assertEquals("#GEN", item.getItemType());
+        assertEquals(2, item.getData().size(), "Should have 2 data fields");
+        assertEquals("20080101", item.getData().get(0));
+        assertEquals("", item.getData().get(1));
+    }
 }
