@@ -115,7 +115,13 @@ signing {
 }
 
 nexusReleasePlugin {
-    userName = project.ext.properties.sonatypeUsername
-    password = project.ext.properties.sonatypePassword
+    def sonatypeUsername = findProperty('sonatypeUsername')
+    def sonatypePassword = findProperty('sonatypePassword')
+    if (sonatypeUsername != null && sonatypePassword != null) {
+        userName = sonatypeUsername
+        password = sonatypePassword
+    } else {
+        project.logger.debug("sonatypeUsername/sonatypePassword are not defined, skipping release credential configuration...")
+    }
     mavenPublication = publishing.publications.maven
 }

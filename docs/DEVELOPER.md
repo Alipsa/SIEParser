@@ -194,8 +194,8 @@ SIE files use IBM437 (also called PC8 or Codepage 437). The `Encoding` class pro
 
 Test results are written to `build/reports/tests/test/index.html`.
 
-The test suite includes 112 tests:
-- **Round-trip tests** (`TestSieDocument`): reads each of the 49 sample SIE files, writes the document to a temp file, reads it back, and compares the two documents for structural equality. 8 files are skipped due to known issues (invalid checksums, 4i parsing).
+The current suite executes 150+ tests (158 as of 2026-02-27):
+- **Round-trip tests** (`TestSieDocument`): reads sample SIE files, writes each document to a temp file, reads it back, and compares the two documents for structural equality. Files with intentionally invalid checksums are excluded from round-trip assertions.
 - **Encoding tests** (`TestEncoding`): verifies IBM437 read/write round-trip.
 - **Unit tests**: cover line parsing, reader flags, writer output, comparison logic, CRC32 checksums, and string utilities.
 
@@ -212,6 +212,16 @@ Output goes to `build/docs/javadoc/`.
 ```bash
 ./gradlew clean
 ```
+
+### Pre-release gates
+
+Before changing `version` from `-SNAPSHOT` to a release version, verify:
+
+1. `./gradlew clean build` passes.
+2. `./gradlew publishToMavenLocal` passes.
+3. A clean-home build works (for example with a fresh `GRADLE_USER_HOME`) without relying on local-only repositories.
+4. README examples match runtime behavior (notably SIE 5 full-document signing requirements).
+5. Round-trip regression tests cover all supported formats, including SIE 4i.
 
 ## Adding a new SIE record type
 

@@ -64,9 +64,6 @@ public class TestSieDocument {
     @MethodSource("sampleFiles")
     public void verifySampleFile(File sourceFile) throws IOException {
         switch (sourceFile.getName()) {
-            case "4_BL0001_typ4I.SI":
-                // TODO, something not working with 4I yet
-                return;
             case "37_Norstedts Bokslut SIE 1.se":
             case "38_Bokslut Norstedts SIE 4E.se":
             case "39_Norstedts Bokslut SIE 4I.si":
@@ -111,9 +108,6 @@ public class TestSieDocument {
                 case "2_BL0001_typ3.SE":
                 case "1_BL0001_typ2.SE":
                     verifyDocument(sourceFile, outFile, true);
-                    break;
-                case "4_BL0001_typ4I.SI":
-                    // TODO, something not working with 4I yet
                     break;
                 case "37_Norstedts Bokslut SIE 1.se":
                 case "38_Bokslut Norstedts SIE 4E.se":

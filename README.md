@@ -16,7 +16,7 @@ Several spec compliance fixes have also been applied, bringing the parser to ful
 
 **Gradle:**
 ```groovy
-implementation 'se.alipsa:SieParser:2.0'
+implementation 'se.alipsa:SieParser:2.0-SNAPSHOT'
 ```
 
 **Maven:**
@@ -24,12 +24,13 @@ implementation 'se.alipsa:SieParser:2.0'
 <dependency>
     <groupId>se.alipsa</groupId>
     <artifactId>SieParser</artifactId>
-    <version>2.0</version>
+    <version>2.0-SNAPSHOT</version>
 </dependency>
 ```
 
 > **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`.
 > The old coordinates include a relocation POM pointing to the new group ID.
+> The `2.0` release version will be published when the release checklist is complete.
 
 ## Read a SIE file
 
@@ -157,7 +158,10 @@ Sie5Entry entry = reader.readEntry("path/to/entry.sie");
 ### Write a SIE 5 file
 
 ```java
-Sie5DocumentWriter writer = new Sie5DocumentWriter();
+PrivateKey privateKey = ...;
+X509Certificate certificate = ...;
+Sie5SigningCredentials credentials = new Sie5SigningCredentials(privateKey, certificate);
+Sie5DocumentWriter writer = new Sie5DocumentWriter(credentials);
 
 // Write full document
 writer.write(doc, "output.sie");
@@ -222,7 +226,7 @@ MIT License. See [LICENSE](LICENSE) or the file headers for details.
 - Java 17 minimum, `java.time.LocalDate` throughout, `java.util.function.Consumer` callbacks
 - `#UNDERDIM` support, `#KSUMMA` writing, stream I/O, SIE type filtering
 - Exception hierarchy (`SieException` base class), proper field encapsulation
-- 112 tests across 8 test classes for SIE 1-4
+- Expanded automated test coverage across SIE 1-4 and SIE 5
 - SIE 5 (XML) read/write support via JAXB (`alipsa.sieparser.sie5` package)
 - New dependencies
   - jakarta.xml.bind:jakarta.xml.bind-api [4.0.5]
