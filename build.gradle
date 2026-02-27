@@ -34,9 +34,6 @@ repositories {
 }
 
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    // implementation 'org.slf4j:slf4j-api:2.0.17'
-
     // JAXB for SIE 5 XML support
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.6'

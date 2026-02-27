@@ -30,7 +30,6 @@ implementation 'se.alipsa:SieParser:2.0-SNAPSHOT'
 
 > **Note:** Prior to version 2.0, this library was published under `com.github.pernyfelt.sieparser:SieParser`.
 > The old coordinates include a relocation POM pointing to the new group ID.
-> The `2.0` release version will be published when the release checklist is complete.
 
 ## Read a SIE file
 

@@ -307,7 +307,6 @@ Entry variants typically have fewer required fields and may use string types whe
 
 The following SIE 5 features are not yet implemented:
 
-- XML digital signatures (`dsig:Signature`)
 - XSD schema validation during reading
 - SIE 5 document comparison
 - Conversion utilities between SIE 1-4 and SIE 5
@@ -316,9 +315,9 @@ The following SIE 5 features are not yet implemented:
 
 | Dependency | Scope | Purpose |
 |-----------|-------|---------|
-| `org.slf4j:slf4j-api:2.0.16` | compile (api) | Logging facade |
-| `jakarta.xml.bind:jakarta.xml.bind-api:4.0.2` | compile (api) | JAXB API for SIE 5 XML binding |
-| `org.glassfish.jaxb:jaxb-runtime:4.0.5` | runtime | JAXB implementation |
-| `org.junit.jupiter:junit-jupiter:5.11.4` | test | JUnit 5 test framework |
+| `jakarta.xml.bind:jakarta.xml.bind-api:4.0.5` | compile | JAXB API for SIE 5 XML binding |
+| `org.glassfish.jaxb:jaxb-runtime:4.0.6` | runtime | JAXB implementation |
+| `org.bouncycastle:bcpkix-jdk18on:1.80` | test | PKI support for SIE 5 signing tests |
+| `org.junit.jupiter:junit-jupiter:6.0.3` | test | JUnit 5 test framework |
 | `org.junit.platform:junit-platform-launcher` | test runtime | JUnit platform launcher |
-| `org.slf4j:slf4j-simple:2.0.16` | test runtime | Simple SLF4J binding for test output |
+| `org.slf4j:slf4j-simple:2.0.17` | test runtime | Simple SLF4J binding for test output |
