@@ -149,9 +149,10 @@ public class Sie5DocumentWriter {
                 sign(xmlDocument, signingCredentials);
                 writeDocument(xmlDocument, stream);
             } else {
-                if (requireSignatureForFullDocuments && doc.getSignatures().isEmpty()) {
-                    throw new SieException("Full SIE 5 documents require at least one XMLDSig signature. "
-                        + "Configure signing credentials or provide a Signature element.");
+                if (requireSignatureForFullDocuments) {
+                    throw new SieException(
+                        "Full SIE 5 documents require XMLDSig signing credentials. "
+                            + "Existing Signature elements cannot be preserved through JAXB marshalling.");
                 }
                 marshaller.marshal(doc, stream);
             }

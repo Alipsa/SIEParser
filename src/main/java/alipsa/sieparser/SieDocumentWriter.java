@@ -130,7 +130,9 @@ public class SieDocumentWriter {
         writeKPTYP();
         writeVALUTA();
         writeTAXAR();
-        writeOMFATTN();
+        if (sieDoc.getSIETYP() > 1) {
+            writeOMFATTN();
+        }
         writeRAR();
         if (sieDoc.getSIETYP() >= 3) {
             writeDIM();
