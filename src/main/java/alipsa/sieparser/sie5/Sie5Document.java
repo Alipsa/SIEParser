@@ -263,6 +263,7 @@ public class Sie5Document {
      * @return signatures as DOM elements
      */
     public List<Element> getSignatures() {
+        if (anyElements == null) return List.of();
         List<Element> signatures = new ArrayList<>();
         for (Element e : anyElements) {
             if ("http://www.w3.org/2000/09/xmldsig#".equals(e.getNamespaceURI())

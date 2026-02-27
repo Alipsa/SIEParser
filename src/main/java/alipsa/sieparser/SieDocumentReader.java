@@ -766,13 +766,16 @@ public class SieDocumentReader {
     }
 
     private SieVoucher parseVER(SieDataItem di) {
-        if (di.getDate(2) == null)
+        LocalDate voucherDate = di.getDate(2);
+        if (voucherDate == null) {
             callbacks.callbackException(new MissingFieldException("Voucher date"));
+            voucherDate = LocalDate.now();
+        }
 
         SieVoucher v = new SieVoucher();
         v.setSeries(di.getString(0));
         v.setNumber(di.getString(1));
-        v.setVoucherDate(di.getDate(2));
+        v.setVoucherDate(voucherDate);
         v.setText(di.getString(3));
         v.setCreatedDate(di.getDate(4));
         v.setCreatedBy(di.getString(5));

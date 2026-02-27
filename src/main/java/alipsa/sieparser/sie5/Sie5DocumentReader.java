@@ -203,6 +203,7 @@ public class Sie5DocumentReader {
      * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Entry readEntry(String fileName) {
+        validationWarnings = new ArrayList<>();
         try {
             Document document = parseDocument(new File(fileName));
             validateDocumentSignatures(document, false);
@@ -224,6 +225,7 @@ public class Sie5DocumentReader {
      * @throws SieException if the XML cannot be parsed or does not conform to the expected structure
      */
     public Sie5Entry readEntry(InputStream stream) {
+        validationWarnings = new ArrayList<>();
         try {
             Document document = parseDocument(stream);
             validateDocumentSignatures(document, false);

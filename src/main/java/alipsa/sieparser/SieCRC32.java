@@ -78,9 +78,16 @@ public class SieCRC32 {
     public void addData(SieDataItem item) {
         crcAccumulate(Encoding.getBytes(item.getItemType()));
         for (String d : item.getData()) {
-            String foo = d.replace("{", "").replace("}", "")
-                          .replace("\"", "").replace(" ", "").replace("\t", "");
-            crcAccumulate(Encoding.getBytes(foo));
+            String dataForCrc;
+            // Normalize only object-list style fields (containing '{' or '}'),
+            // leave regular string fields (e.g. company names with spaces) unchanged.
+            if (d.contains("{") || d.contains("}")) {
+                dataForCrc = d.replace("{", "").replace("}", "")
+                              .replace("\"", "").replace(" ", "").replace("\t", "");
+            } else {
+                dataForCrc = d;
+            }
+            crcAccumulate(Encoding.getBytes(dataForCrc));
         }
     }
 
