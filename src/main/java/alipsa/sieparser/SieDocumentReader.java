@@ -277,6 +277,14 @@ public class SieDocumentReader {
      */
     public SieDocument readDocument(String fileName) throws IOException {
         this.fileName = fileName;
+        sieDocument = new SieDocument();
+        CRC = new SieCRC32();
+        setValidationExceptions(new ArrayList<>());
+        validationWarnings = new ArrayList<>();
+        seenRecordTypes.clear();
+        sieTypSeen = false;
+        formatSeen = false;
+        lastVoucherNumberBySeries.clear();
         curVoucher = null;
         pendingRTRANSMirrorData = null;
         abortParsing = false;
@@ -399,7 +407,7 @@ public class SieDocumentReader {
             sieDocument.getFNAMN().setOrgIdentifier(null);
         } else {
             sieDocument.getFNAMN().setOrgIdentifier(orgNr);
-            if (!orgNr.matches("\\d+-\\d+")) {
+            if (!orgNr.matches("^\\d{6}-\\d{4}$")) {
                 addSoftValidation(new SieParseException(
                     "ORGNR '" + orgNr + "' does not match expected format NNNNNN-NNNN"));
             }
@@ -784,8 +792,17 @@ public class SieDocumentReader {
     }
 
     private String rowDataWithoutTag(SieDataItem di) {
-        String raw = di.getRawData() == null ? "" : di.getRawData().trim();
-        int p = raw.indexOf(' ');
+        String raw = di.getRawData();
+        if (raw == null) return "";
+        raw = raw.trim();
+        if (raw.isEmpty()) return "";
+        int p = -1;
+        for (int i = 0; i < raw.length(); i++) {
+            if (Character.isWhitespace(raw.charAt(i))) {
+                p = i;
+                break;
+            }
+        }
         if (p < 0 || p >= raw.length() - 1) return "";
         return raw.substring(p + 1).trim();
     }
