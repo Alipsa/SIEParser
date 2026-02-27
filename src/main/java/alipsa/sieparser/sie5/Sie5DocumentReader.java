@@ -307,7 +307,9 @@ public class Sie5DocumentReader {
         if (journals == null) return;
         for (Journal journal : journals) {
             validateJournalEntryOrder(journal);
-            for (JournalEntry entry : journal.getJournalEntries()) {
+            List<JournalEntry> entries = journal.getJournalEntries();
+            if (entries == null) continue;
+            for (JournalEntry entry : entries) {
                 validateLedgerEntries(entry, journal.getId());
             }
         }
@@ -328,7 +330,9 @@ public class Sie5DocumentReader {
     }
 
     private void validateLedgerEntries(JournalEntry entry, String journalId) {
-        for (LedgerEntry le : entry.getLedgerEntries()) {
+        List<LedgerEntry> ledgerEntries = entry.getLedgerEntries();
+        if (ledgerEntries == null || ledgerEntries.isEmpty()) return;
+        for (LedgerEntry le : ledgerEntries) {
             // Quantity sign check
             if (le.getQuantity() != null && le.getAmount() != null
                 && le.getAmount().signum() != 0
