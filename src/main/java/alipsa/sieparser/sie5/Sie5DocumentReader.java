@@ -26,6 +26,7 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -55,6 +56,7 @@ public class Sie5DocumentReader {
     private boolean verifySignatures = true;
     private boolean allowUnsignedDocuments = false;
     private boolean allowInvalidSignatures = false;
+    private boolean allowLegacyInsecureSignatureAlgorithms = false;
     private boolean strictValidation = false;
     private List<String> validationWarnings = new ArrayList<>();
 
@@ -121,6 +123,27 @@ public class Sie5DocumentReader {
      */
     public void setAllowInvalidSignatures(boolean allowInvalidSignatures) {
         this.allowInvalidSignatures = allowInvalidSignatures;
+    }
+
+    /**
+     * Returns whether compatibility fallback to insecure XMLDSig validation
+     * is enabled for legacy signatures.
+     *
+     * @return {@code true} if fallback for legacy signatures is enabled
+     */
+    public boolean isAllowLegacyInsecureSignatureAlgorithms() {
+        return allowLegacyInsecureSignatureAlgorithms;
+    }
+
+    /**
+     * Sets whether compatibility fallback to insecure XMLDSig validation
+     * is enabled for legacy signatures (for example SHA-1 based signatures).
+     * Secure validation remains the default and is attempted first.
+     *
+     * @param allowLegacyInsecureSignatureAlgorithms {@code true} to allow fallback validation for legacy signatures
+     */
+    public void setAllowLegacyInsecureSignatureAlgorithms(boolean allowLegacyInsecureSignatureAlgorithms) {
+        this.allowLegacyInsecureSignatureAlgorithms = allowLegacyInsecureSignatureAlgorithms;
     }
 
     /**
@@ -397,23 +420,57 @@ public class Sie5DocumentReader {
         KeySelector keySelector = new EmbeddedKeySelector();
         for (int i = 0; i < signatures.getLength(); i++) {
             Node signatureNode = signatures.item(i);
+            boolean valid;
             try {
-                DOMValidateContext validateContext = new DOMValidateContext(keySelector, signatureNode);
-                // Secure validation is disabled because the SIE 5 spec predates SHA-1 deprecation
-                // and real-world SIE files commonly use RSA-SHA1 signatures which are rejected
-                // by secure validation. XXE protection is handled separately in createDocumentBuilderFactory().
-                validateContext.setProperty("org.jcp.xml.dsig.secureValidation", Boolean.FALSE);
-                XMLSignature signature = signatureFactory.unmarshalXMLSignature(validateContext);
-                boolean valid = signature.validate(validateContext);
-                if (!valid && !allowInvalidSignatures) {
-                    throw new SieException("Invalid XMLDSig signature in SIE 5 document.");
-                }
+                valid = validateSignature(signatureFactory, keySelector, signatureNode, true);
             } catch (XMLSignatureException | MarshalException e) {
-                if (!allowInvalidSignatures) {
-                    throw new SieException("Failed to validate XMLDSig signature in SIE 5 document.", e);
+                if (allowLegacyInsecureSignatureAlgorithms && isSecureValidationRestriction(e)) {
+                    try {
+                        valid = validateSignature(signatureFactory, keySelector, signatureNode, false);
+                    } catch (XMLSignatureException | MarshalException legacyException) {
+                        if (!allowInvalidSignatures) {
+                            throw new SieException("Failed to validate XMLDSig signature in SIE 5 document.", legacyException);
+                        }
+                        continue;
+                    }
+                } else {
+                    if (!allowInvalidSignatures) {
+                        throw new SieException("Failed to validate XMLDSig signature in SIE 5 document.", e);
+                    }
+                    continue;
                 }
             }
+
+            if (!valid && !allowInvalidSignatures) {
+                throw new SieException("Invalid XMLDSig signature in SIE 5 document.");
+            }
         }
+    }
+
+    private boolean validateSignature(XMLSignatureFactory signatureFactory, KeySelector keySelector, Node signatureNode,
+                                      boolean secureValidation) throws MarshalException, XMLSignatureException {
+        DOMValidateContext validateContext = new DOMValidateContext(keySelector, signatureNode);
+        validateContext.setProperty("org.jcp.xml.dsig.secureValidation", secureValidation);
+        XMLSignature signature = signatureFactory.unmarshalXMLSignature(validateContext);
+        return signature.validate(validateContext);
+    }
+
+    private boolean isSecureValidationRestriction(Exception exception) {
+        Throwable current = exception;
+        while (current != null) {
+            String msg = current.getMessage();
+            if (msg != null) {
+                String text = msg.toLowerCase(Locale.ROOT);
+                if (text.contains("secure validation")
+                    || (text.contains("algorithm") && (text.contains("forbidden")
+                    || text.contains("not allowed")
+                    || text.contains("disallowed")))) {
+                    return true;
+                }
+            }
+            current = current.getCause();
+        }
+        return false;
     }
 
     private static final class EmbeddedKeySelector extends KeySelector {

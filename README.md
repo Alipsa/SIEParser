@@ -16,7 +16,7 @@ Several spec compliance fixes have also been applied, bringing the parser to ful
 
 **Gradle:**
 ```groovy
-implementation 'se.alipsa:SieParser:2.0-SNAPSHOT'
+implementation 'se.alipsa:SieParser:2.0'
 ```
 
 **Maven:**
@@ -24,7 +24,7 @@ implementation 'se.alipsa:SieParser:2.0-SNAPSHOT'
 <dependency>
     <groupId>se.alipsa</groupId>
     <artifactId>SieParser</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0</version>
 </dependency>
 ```
 
@@ -154,6 +154,13 @@ for (Journal journal : doc.getJournals()) {
 Sie5Entry entry = reader.readEntry("path/to/entry.sie");
 ```
 
+`Sie5DocumentReader` verifies signatures using XMLDSig secure validation by default.  
+If you need to read legacy SIE 5 documents signed with deprecated algorithms (for example RSA-SHA1), enable compatibility mode explicitly:
+
+```java
+reader.setAllowLegacyInsecureSignatureAlgorithms(true);
+```
+
 ### Write a SIE 5 file
 
 ```java
@@ -220,7 +227,7 @@ MIT License. See [LICENSE](LICENSE) or the file headers for details.
 
 ## Change log
 
-**Version 2.0** (in development):
+**Version 2.0**:
 - Ported all upstream bug fixes and features from jsisie (2017-2026)
 - Java 17 minimum, `java.time.LocalDate` throughout, `java.util.function.Consumer` callbacks
 - `#UNDERDIM` support, `#KSUMMA` writing, stream I/O, SIE type filtering

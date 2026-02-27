@@ -78,31 +78,33 @@ public class SieDocumentWriter {
 
     /**
      * Writes the SIE document to an output stream.
+     * The stream is flushed but not closed by this method.
      * @param outputStream the output stream to write to
      * @throws IOException if an I/O error occurs
      */
     public void write(OutputStream outputStream) throws IOException {
         Charset charset = Encoding.getCharset();
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset))) {
-            writer = bw;
-            writeContent();
-        }
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset));
+        writer = bw;
+        writeContent();
+        bw.flush();
     }
 
     /**
      * Writes only the given vouchers to an output stream, without any header or metadata.
+     * The stream is flushed but not closed by this method.
      * @param outputStream the output stream to write to
      * @param vouchers the vouchers to write
      * @throws IOException if an I/O error occurs
      */
     public void addVouchers(OutputStream outputStream, List<SieVoucher> vouchers) throws IOException {
         Charset charset = Encoding.getCharset();
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset))) {
-            writer = bw;
-            for (SieVoucher v : vouchers) {
-                writeVoucherEntry(v);
-            }
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream, charset));
+        writer = bw;
+        for (SieVoucher v : vouchers) {
+            writeVoucherEntry(v);
         }
+        bw.flush();
     }
 
     private void writeContent() throws IOException {

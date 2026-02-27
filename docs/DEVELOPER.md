@@ -317,7 +317,7 @@ The following SIE 5 features are not yet implemented:
 |-----------|-------|---------|
 | `jakarta.xml.bind:jakarta.xml.bind-api:4.0.5` | compile | JAXB API for SIE 5 XML binding |
 | `org.glassfish.jaxb:jaxb-runtime:4.0.6` | runtime | JAXB implementation |
-| `org.bouncycastle:bcpkix-jdk18on:1.80` | test | PKI support for SIE 5 signing tests |
+| `org.bouncycastle:bcpkix-jdk18on:1.83` | test | PKI support for SIE 5 signing tests |
 | `org.junit.jupiter:junit-jupiter:6.0.3` | test | JUnit 5 test framework |
 | `org.junit.platform:junit-platform-launcher` | test runtime | JUnit platform launcher |
 | `org.slf4j:slf4j-simple:2.0.17` | test runtime | Simple SLF4J binding for test output |

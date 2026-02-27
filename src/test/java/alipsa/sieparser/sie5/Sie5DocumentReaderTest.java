@@ -18,7 +18,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class Sie5DocumentReaderTest {
 
-    private final Sie5DocumentReader reader = new Sie5DocumentReader();
+    private final Sie5DocumentReader reader = createReader();
+
+    private static Sie5DocumentReader createReader() {
+        Sie5DocumentReader reader = new Sie5DocumentReader();
+        // Sample fixtures contain legacy signatures that require compatibility mode.
+        reader.setAllowLegacyInsecureSignatureAlgorithms(true);
+        return reader;
+    }
+
+    @Test
+    void legacyInsecureSignatureFallbackDisabledByDefault() {
+        Sie5DocumentReader defaultReader = new Sie5DocumentReader();
+        assertFalse(defaultReader.isAllowLegacyInsecureSignatureAlgorithms());
+    }
 
     @Test
     void readSampleDocument() throws Exception {

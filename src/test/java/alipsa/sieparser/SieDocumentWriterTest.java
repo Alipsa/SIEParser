@@ -33,6 +33,18 @@ public class SieDocumentWriterTest {
     }
 
     @Test
+    public void writeToStreamDoesNotCloseProvidedStream() throws IOException {
+        SieDocument doc = createMinimalDocument();
+        CloseTrackingOutputStream stream = new CloseTrackingOutputStream();
+
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.write(stream);
+
+        assertFalse(stream.isClosed(), "Writer should not close caller-provided stream");
+        stream.write('x');
+    }
+
+    @Test
     public void writeToFile() throws IOException {
         SieDocument doc = createMinimalDocument();
 
@@ -120,6 +132,32 @@ public class SieDocumentWriterTest {
         assertTrue(output.contains("#VER"));
         assertTrue(output.contains("#TRANS"));
         assertTrue(output.contains("1910"));
+    }
+
+    @Test
+    public void addVouchersDoesNotCloseProvidedStream() throws IOException {
+        SieVoucher v = new SieVoucher();
+        v.setSeries("A");
+        v.setNumber("1");
+        v.setVoucherDate(LocalDate.of(2024, 1, 15));
+        v.setText("Test voucher");
+        v.setToken("#VER");
+
+        SieVoucherRow row = new SieVoucherRow();
+        row.setAccount(new SieAccount("1910", "Kassa"));
+        row.setAmount(new BigDecimal("500"));
+        row.setRowDate(LocalDate.of(2024, 1, 15));
+        row.setText("Debit");
+        row.setToken("#TRANS");
+        v.getRows().add(row);
+
+        SieDocument doc = createMinimalDocument();
+        CloseTrackingOutputStream stream = new CloseTrackingOutputStream();
+        SieDocumentWriter writer = new SieDocumentWriter(doc);
+        writer.addVouchers(stream, List.of(v));
+
+        assertFalse(stream.isClosed(), "Writer should not close caller-provided stream");
+        stream.write('x');
     }
 
     @Test
@@ -289,5 +327,19 @@ public class SieDocumentWriterTest {
         tmp.deleteOnExit();
         java.nio.file.Files.write(tmp.toPath(), data);
         return tmp.getAbsolutePath();
+    }
+
+    private static class CloseTrackingOutputStream extends ByteArrayOutputStream {
+        private boolean closed;
+
+        @Override
+        public void close() throws IOException {
+            closed = true;
+            super.close();
+        }
+
+        private boolean isClosed() {
+            return closed;
+        }
     }
 }

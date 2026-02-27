@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'se.alipsa'
-version = '2.0-SNAPSHOT'
+version = '2.0'
 
 base {
     archivesName = 'sieparser'
@@ -38,7 +38,7 @@ dependencies {
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
 
-    testImplementation 'org.bouncycastle:bcpkix-jdk18on:1.80'
+    testImplementation 'org.bouncycastle:bcpkix-jdk18on:1.83'
     testImplementation 'org.junit.jupiter:junit-jupiter:6.0.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.17'
